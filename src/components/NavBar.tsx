@@ -27,8 +27,8 @@ export default function NavBar() {
   ];
 
   return (
-    <nav className="w-full sticky top-0 z-20 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#0b0c0f] px-4 py-3">
-      <div className="max-w-7xl mx-auto flex flex-wrap sm:flex-nowrap justify-between items-center gap-4">
+    <nav role="navigation" className="w-full sticky top-0 z-20 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#0b0c0f] px-4 py-3">
+      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:justify-between items-center gap-4">
         {/* Logo & Branding */}
         <div className="flex items-center gap-3">
           <Image
@@ -43,7 +43,7 @@ export default function NavBar() {
         </div>
 
         {/* Navigation Buttons */}
-        <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-end text-sm font-medium">
+        <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2 text-sm font-medium">
           {navButtons.map((btn) => (
             <Link
               key={btn.name}
