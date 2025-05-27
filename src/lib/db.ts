@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Mongoose } from 'mongoose';
 
 const MONGODB_URI = process.env.MONGODB_URI as string;
 
@@ -6,27 +6,30 @@ if (!MONGODB_URI) {
   throw new Error("❌ MONGODB_URI is not defined in environment variables");
 }
 
+// Extend globalThis to include our mongoose connection cache
 declare global {
-  var mongoose: {
-    conn: typeof mongoose | null;
-    promise: Promise<typeof mongoose> | null;
+  var mongooseCache: {
+    conn: Mongoose | null;
+    promise: Promise<Mongoose> | null;
   };
 }
 
-global.mongoose ||= { conn: null, promise: null };
+if (!global.mongooseCache) {
+  global.mongooseCache = { conn: null, promise: null };
+}
 
-async function connect(): Promise<typeof mongoose> {
-  if (global.mongoose.conn) return global.mongoose.conn;
+async function connect(): Promise<Mongoose> {
+  if (global.mongooseCache.conn) return global.mongooseCache.conn;
 
-  if (!global.mongoose.promise) {
-    global.mongoose.promise = mongoose.connect(MONGODB_URI, {
+  if (!global.mongooseCache.promise) {
+    global.mongooseCache.promise = mongoose.connect(MONGODB_URI, {
       dbName: "element_of_life",
       bufferCommands: false,
     });
   }
 
-  global.mongoose.conn = await global.mongoose.promise;
-  return global.mongoose.conn;
+  global.mongooseCache.conn = await global.mongooseCache.promise;
+  return global.mongooseCache.conn;
 }
 
 export default connect;
