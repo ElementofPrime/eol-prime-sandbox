@@ -63,6 +63,14 @@ export default function NavBar() {
             >
               {resolvedTheme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>
+          {!session ? (
+            <button onClick={() => signIn()} className="px-4 py-2 bg-primary text-white rounded-xl">
+             Sign In
+            </button>
+          ) : (
+           <button onClick={() => signOut()} className="px-4 py-2 bg-neutral text-black rounded-xl">
+              Sign Out
+            </button>
           )}
         </div>
       </div>
