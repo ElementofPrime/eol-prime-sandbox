@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
-const MONGO_URI = process.env.MONGO_URI;
+const MONGODB_URI = process.env.MONGODB_URI as string;
 
-if (!MONGO_URI) {
-  throw new Error('MONGO_URI not defined in environment');
+if (!MONGODB_URI) {
+  throw new Error('❌ MONGODB_URI is not defined in environment variables');
 }
 
 let cached = global.mongoose || { conn: null, promise: null };
@@ -12,13 +12,16 @@ async function connect() {
   if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGO_URI, {
+    cached.promise = mongoose.connect(MONGODB_URI, {
+      dbName: 'element_of_life',
       bufferCommands: false,
     }).then((mongoose) => {
       return mongoose;
     });
   }
+
   cached.conn = await cached.promise;
+  global.mongoose = cached;
   return cached.conn;
 }
 
