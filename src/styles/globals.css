@@ -1,15 +1,25 @@
-/* Tailwind base styles */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Smooth color transitions when switching themes */
+/* Apply smooth transitions for dark/light themes */
 html {
   @apply transition-colors duration-300;
 }
 
-/* Improve font rendering */
+/* Apply base font smoothing and no override of colors or background */
 body {
-  @apply antialiased;
-  font-family: Arial, Helvetica, sans-serif;
+  @apply antialiased font-sans;
+}
+
+/* Optional: Custom scrollbar (clean across themes) */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(100, 100, 100, 0.6);
 }
