@@ -24,7 +24,10 @@ if (process.env.NODE_ENV === 'development') {
 export async function connectToDatabase() {
   const client = await clientPromise;
   return {
-    db: client.db(), // You can optionally pass a db name like client.db('eol')
+    db: client.db(),
     client,
   };
 }
+
+// 👇 Add this line for default export (used by auth.ts)
+export default clientPromise;
