@@ -1,24 +1,24 @@
-// src/lib/mongodb.ts
-import mongoose from 'mongoose';
+import { MongoClient } from 'mongodb';
 
-const MONGODB_URI = process.env.MONGODB_URI || '';
+const uri = process.env.MONGODB_URI!;
+const options = {};
 
-if (!MONGODB_URI) {
-  throw new Error('⚠️ MONGODB_URI not defined in .env.local');
+let client;
+let clientPromise: Promise<MongoClient>;
+
+if (!process.env.MONGODB_URI) {
+  throw new Error('Please define the MONGODB_URI environment variable');
 }
 
-let cached = (global as any).mongoose || { conn: null, promise: null };
-
-export async function connectToDatabase() {
-  if (cached.conn) return cached.conn;
-
-  if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI, {
-      bufferCommands: false,
-    });
+if (process.env.NODE_ENV === 'development') {
+  if (!(global as any)._mongoClientPromise) {
+    client = new MongoClient(uri, options);
+    (global as any)._mongoClientPromise = client.connect();
   }
-  cached.conn = await cached.promise;
-  return cached.conn;
+  clientPromise = (global as any)._mongoClientPromise;
+} else {
+  client = new MongoClient(uri, options);
+  clientPromise = client.connect();
 }
 
-(global as any).mongoose = cached;
+export default clientPromise;
