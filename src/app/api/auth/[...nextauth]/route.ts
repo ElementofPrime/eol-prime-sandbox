@@ -5,3 +5,8 @@ const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST }; // ✅ Only valid route exports
 
+export const authOptions = {
+  providers: [...],
+  callbacks: {...},
+  // etc.
+};
