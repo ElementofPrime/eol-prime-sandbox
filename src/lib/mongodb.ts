@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import connectToDatabase from '@/lib/mongodb';
 
 const uri = process.env.MONGODB_URI!;
 const options = {};
