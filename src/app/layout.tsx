@@ -1,6 +1,6 @@
 'use client';
 
-import './globals.css';
+import '@/styles/globals.css';
 import { Inter } from 'next/font/google';
 import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider } from 'next-themes';
