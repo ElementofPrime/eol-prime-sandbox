@@ -1,31 +1,23 @@
-'use client';
-
-import '@/styles/globals.css';
+import '../styles/globals.css'; // ← Important: Adjusted path for styles/globals.css
 import { Inter } from 'next/font/google';
-import { SessionProvider } from 'next-auth/react';
-import { ThemeProvider } from 'next-themes';
-import NavBar from '@/components/NavBar';
+import type { Metadata } from 'next';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export const metadata: Metadata = {
+  title: 'Element of Life',
+  description: 'Illuminate with intelligence.',
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <head>
-        <meta charSet="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#3b7a57" />
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="icon" href="/logo.png" />
-        <title>Element of Life</title>
-      </head>
-      <body className={`${inter.className} bg-white dark:bg-black text-black dark:text-white transition-colors duration-300`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <SessionProvider>
-            <NavBar />
-            <main className="min-h-screen">{children}</main>
-          </SessionProvider>
-        </ThemeProvider>
+    <html lang="en">
+      <body className={`${inter.className} min-h-screen bg-black text-white font-sans flex items-center justify-center`}>
+        <div className="w-full max-w-5xl p-4">{children}</div>
       </body>
     </html>
   );
