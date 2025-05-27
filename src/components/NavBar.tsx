@@ -1,13 +1,15 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useTheme } from 'next-themes';
 import { Sun, Moon } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 export default function NavBar() {
   const { theme, setTheme, resolvedTheme } = useTheme();
+  const { data: session } = useSession();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
@@ -36,7 +38,7 @@ export default function NavBar() {
           <span className="text-lg font-semibold tracking-wide">Element of Life</span>
         </div>
 
-        {/* Nav Buttons */}
+        {/* Nav Buttons + Controls */}
         <div className="flex flex-wrap justify-center sm:justify-end items-center gap-2 text-sm mt-2 sm:mt-0">
           {navButtons.map((btn) => (
             <Link
@@ -55,6 +57,7 @@ export default function NavBar() {
             About
           </Link>
 
+          {/* Theme Toggle */}
           {mounted && (
             <button
               onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
@@ -63,14 +66,25 @@ export default function NavBar() {
             >
               {resolvedTheme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>
-          {!session ? (
-            <button onClick={() => signIn()} className="px-4 py-2 bg-primary text-white rounded-xl">
-             Sign In
-            </button>
-          ) : (
-           <button onClick={() => signOut()} className="px-4 py-2 bg-neutral text-black rounded-xl">
-              Sign Out
-            </button>
+          )}
+
+          {/* Sign In / Sign Out */}
+          {mounted && (
+            !session ? (
+              <button
+                onClick={() => signIn()}
+                className="ml-2 px-4 py-2 bg-primary text-white rounded-xl"
+              >
+                Sign In
+              </button>
+            ) : (
+              <button
+                onClick={() => signOut()}
+                className="ml-2 px-4 py-2 bg-neutral text-black rounded-xl"
+              >
+                Sign Out
+              </button>
+            )
           )}
         </div>
       </div>
