@@ -22,65 +22,62 @@ export default function NavBar() {
     { name: 'Reminders', href: '/reminders' },
     { name: 'New Beginning', href: '/New Beginning' },
     { name: 'Fix-It', href: '/fixit' },
+    { name: 'Core', href: '/core' },
+    { name: 'About', href: '/about' },
   ];
 
   return (
-    <nav className="w-full px-4 py-3 shadow-sm bg-baseLight dark:bg-baseDark text-black dark:text-white sticky top-0 z-10">
-      <div className="flex flex-col sm:flex-row sm:justify-between items-center gap-3">
-        {/* Logo + Title */}
+    <nav className="w-full sticky top-0 z-20 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#0b0c0f] px-4 py-3">
+      <div className="max-w-7xl mx-auto flex flex-wrap sm:flex-nowrap justify-between items-center gap-4">
+        {/* Logo & Branding */}
         <div className="flex items-center gap-3">
           <Image
             src="/EOL Transparent Logo 500x500 px - Custom dimensions.png"
             alt="Element of Life Logo"
-            width={36}
-            height={36}
+            width={40}
+            height={40}
           />
-          <span className="text-lg font-semibold tracking-wide">Element of Life</span>
+          <span className="text-xl font-bold tracking-wide text-gray-800 dark:text-gray-100">
+            Element of Life
+          </span>
         </div>
 
-        {/* Nav Buttons + Controls */}
-        <div className="flex flex-wrap justify-center sm:justify-end items-center gap-2 text-sm mt-2 sm:mt-0">
+        {/* Navigation Buttons */}
+        <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-end text-sm font-medium">
           {navButtons.map((btn) => (
             <Link
               key={btn.name}
               href={btn.href}
-              className="px-3 py-1 rounded-lg bg-primary hover:bg-accent text-white transition"
+              className="px-3 py-1.5 rounded-md bg-primary hover:bg-accent text-white transition"
             >
               {btn.name}
             </Link>
           ))}
 
-          <Link href="/core" className="hover:underline text-sm">
-            Core
-          </Link>
-          <Link href="/about" className="hover:underline text-sm">
-            About
-          </Link>
-
-          {/* Theme Toggle */}
+          {/* Theme Switch */}
           {mounted && (
             <button
               onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-              className="ml-2 p-2 rounded-full bg-neutral dark:bg-gray-700 hover:scale-105 transition"
-              aria-label="Toggle Theme"
+              className="p-2 ml-1 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:scale-105 transition"
+              aria-label="Toggle theme"
             >
               {resolvedTheme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>
           )}
 
-          {/* Sign In / Sign Out */}
+          {/* Auth Buttons */}
           {mounted && (
             !session ? (
               <button
                 onClick={() => signIn()}
-                className="ml-2 px-4 py-2 bg-primary text-white rounded-xl"
+                className="px-4 py-1.5 rounded-lg bg-primary text-white hover:bg-accent transition ml-2"
               >
                 Sign In
               </button>
             ) : (
               <button
                 onClick={() => signOut()}
-                className="ml-2 px-4 py-2 bg-neutral text-black rounded-xl"
+                className="px-4 py-1.5 rounded-lg bg-gray-300 dark:bg-gray-600 text-black dark:text-white hover:opacity-90 transition ml-2"
               >
                 Sign Out
               </button>

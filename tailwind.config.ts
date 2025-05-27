@@ -5,14 +5,17 @@ const config: Config = {
   content: ['./src/**/*.{ts,tsx}'],
   theme: {
     extend: {
-      colors: {
-        primary: '#5b4eff',
-        accent: '#a78bfa',
-        baseLight: '#f3f4f6',
-        baseDark: '#1f2937',
-        neutral: '#9ca3af',
-      },
+     colors: {
+      primary: '#3b7a57', // Forest green
+      accent: '#f5b841',  // Warm gold
+      baseLight: '#fafafa',
+      baseDark: '#0b0c0f',
+      muted: '#6b7280',
     },
+     fontFamily: {
+     sans: ['Inter', 'Arial', 'sans-serif'],
+    },
+   },
   },
   plugins: [],
 };
