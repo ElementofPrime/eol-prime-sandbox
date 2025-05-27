@@ -1,0 +1,11 @@
+html {
+  @apply transition-colors duration-300;
+}
+
+body {
+  @apply antialiased;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
