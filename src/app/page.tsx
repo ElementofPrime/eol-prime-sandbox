@@ -24,14 +24,14 @@ export default function Home() {
         alt="Decorative vines"
         width={160}
         height={160}
-        className="absolute top-0 left-0 opacity-10 dark:opacity-20 z-0 h-auto w-auto"
+        className="absolute top-0 left-0 opacity-10 dark:opacity-20 z-[-1] pointer-events-none select-none"
       />
       <Image
         src="/tree.svg.png"
         alt="Decorative tree"
         width={160}
         height={160}
-        className="absolute bottom-0 right-0 opacity-10 dark:opacity-20 z-0 h-auto w-auto"
+        className="absolute bottom-0 right-0 opacity-10 dark:opacity-20 z-[-1] pointer-events-none select-none"
       />
 
       {/* Hero */}
@@ -46,7 +46,7 @@ export default function Home() {
         />
 
         <motion.h1
-          className="text-4xl md:text-5xl font-bold mb-3"
+          className=""text-3xl md:text-5xl font-bold mb-3""
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.8 }}
@@ -55,7 +55,7 @@ export default function Home() {
         </motion.h1>
 
         <motion.p
-          className="text-lg max-w-2xl mb-10"
+          className="text-base md:text-lg text-black dark:text-white max-w-2xl mb-10""
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.8 }}

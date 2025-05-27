@@ -25,7 +25,7 @@ export default function NavBar() {
   ];
 
   return (
-    <nav className="w-full flex flex-col md:flex-row md:justify-between items-center px-6 py-4 shadow-sm bg-white dark:bg-zinc-900 text-black dark:text-white sticky top-0 z-50">
+    <nav className="w-full flex flex-wrap md:flex-row md:justify-between items-center px-4 py-3 bg-baseLight dark:bg-baseDark text-black dark:text-white sticky top-0 z-10">
       <div className="flex items-center gap-3 mb-2 md:mb-0">
         <Image
           src="/EOL Transparent Logo 500x500 px - Custom dimensions.png"
@@ -36,7 +36,7 @@ export default function NavBar() {
         <span className="text-xl font-semibold tracking-wide">Element of Life</span>
       </div>
 
-      <div className="flex items-center flex-wrap gap-4">
+        <div className="flex flex-col md:flex-row items-center md:gap-4 gap-2 text-sm md:text-base">
         {navButtons.map((btn) => (
           <Link
             key={btn.name}
