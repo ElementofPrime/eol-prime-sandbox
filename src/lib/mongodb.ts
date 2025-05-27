@@ -1,12 +1,12 @@
-import connectToDatabase from '@/lib/mongodb';
+import { MongoClient } from 'mongodb';
 
 const uri = process.env.MONGODB_URI!;
 const options = {};
 
-let client;
+let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
-if (!process.env.MONGODB_URI) {
+if (!uri) {
   throw new Error('Please define the MONGODB_URI environment variable');
 }
 
@@ -21,4 +21,10 @@ if (process.env.NODE_ENV === 'development') {
   clientPromise = client.connect();
 }
 
-export default clientPromise;
+export async function connectToDatabase() {
+  const client = await clientPromise;
+  return {
+    db: client.db(), // You can optionally pass a db name like client.db('eol')
+    client,
+  };
+}
