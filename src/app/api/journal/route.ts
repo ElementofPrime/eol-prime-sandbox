@@ -1,4 +1,3 @@
-// src/app/api/journal/route.ts
 import { connectToDatabase } from '@/lib/mongodb';
 import JournalEntry from '@/models/JournalEntry';
 import { NextRequest, NextResponse } from 'next/server';
