@@ -3,26 +3,30 @@ import mongoose from 'mongoose';
 const MONGODB_URI = process.env.MONGODB_URI as string;
 
 if (!MONGODB_URI) {
-  throw new Error('❌ MONGODB_URI is not defined in environment variables');
+  throw new Error("❌ MONGODB_URI is not defined in environment variables");
 }
 
-let cached = global.mongoose || { conn: null, promise: null };
+declare global {
+  var mongoose: {
+    conn: typeof mongoose | null;
+    promise: Promise<typeof mongoose> | null;
+  };
+}
 
-async function connect() {
-  if (cached.conn) return cached.conn;
+global.mongoose ||= { conn: null, promise: null };
 
-  if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI, {
-      dbName: 'element_of_life',
+async function connect(): Promise<typeof mongoose> {
+  if (global.mongoose.conn) return global.mongoose.conn;
+
+  if (!global.mongoose.promise) {
+    global.mongoose.promise = mongoose.connect(MONGODB_URI, {
+      dbName: "element_of_life",
       bufferCommands: false,
-    }).then((mongoose) => {
-      return mongoose;
     });
   }
 
-  cached.conn = await cached.promise;
-  global.mongoose = cached;
-  return cached.conn;
+  global.mongoose.conn = await global.mongoose.promise;
+  return global.mongoose.conn;
 }
 
 export default connect;
