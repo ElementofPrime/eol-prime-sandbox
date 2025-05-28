@@ -1,23 +1,18 @@
 'use client';
 
-export const dynamic = 'force-dynamic';
-
 import * as React from 'react';
 import { useSession, signIn } from 'next-auth/react';
 
 export default function ChatPage() {
-  const { data: session } = useSession();
-  const isGuest = !session;
-
+  const [sessionAvailable, setSessionAvailable] = React.useState(false);
+  const [chatUsed, setChatUsed] = React.useState(0);
   const [message, setMessage] = React.useState('');
   const [reply, setReply] = React.useState('');
-  const [chatUsed, setChatUsed] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     const today = new Date().toLocaleDateString();
     const usage = JSON.parse(localStorage.getItem('primeChat') || '{}');
-
     if (usage.date !== today) {
       localStorage.setItem('primeChat', JSON.stringify({ date: today, count: 0 }));
       setChatUsed(0);
@@ -26,10 +21,22 @@ export default function ChatPage() {
     }
   }, []);
 
+  React.useEffect(() => {
+    // Make sure useSession is invoked ONLY client-side
+    const checkSession = async () => {
+      const mod = await import('next-auth/react');
+      const { data: session } = mod.useSession();
+      if (session) {
+        setSessionAvailable(true);
+      }
+    };
+    checkSession();
+  }, []);
+
   const handleSend = async () => {
     if (!message.trim()) return;
 
-    if (isGuest && chatUsed >= 5) {
+    if (!sessionAvailable && chatUsed >= 5) {
       alert('You’ve hit your 5 daily guest chats. Sign in to continue.');
       return;
     }
@@ -57,7 +64,7 @@ export default function ChatPage() {
     <main className="min-h-screen px-6 py-12 bg-white dark:bg-zinc-900 text-black dark:text-white">
       <h1 className="text-3xl font-bold mb-6">💬 Chat with Prime</h1>
 
-      {isGuest && (
+      {!sessionAvailable && (
         <div className="bg-yellow-100 dark:bg-yellow-800 text-yellow-900 dark:text-yellow-100 p-4 rounded-xl mb-4">
           You’re chatting as a guest. Only 5 messages per day allowed.
           <br />
