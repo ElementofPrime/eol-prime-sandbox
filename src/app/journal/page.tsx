@@ -1,7 +1,5 @@
 'use client';
 
-export const dynamic = 'force-dynamic';
-
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import JournalForm from '@/components/JournalForm';
@@ -13,11 +11,15 @@ type Entry = {
 };
 
 export default function JournalPage() {
-  const { data: session } = useSession(); if (!session) {
-  return <p className="text-center text-gray-500">Please sign in to view your journal.</p>;
-}
+  const { data: session } = useSession();
   const [entries, setEntries] = useState<Entry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    fetchEntries();
+  }, []);
 
   const fetchEntries = async () => {
     const res = await fetch('/api/journal');
@@ -26,20 +28,20 @@ export default function JournalPage() {
     setLoading(false);
   };
 
-  useEffect(() => {
-    fetchEntries();
-  }, []);
+  if (!isClient) return null;
 
-  const handleNewEntry = () => {
-    fetchEntries();
-  };
+  if (!session) {
+    return (
+      <div className="p-6 text-center text-gray-500">
+        Please sign in to view your journal.
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-3xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">My Journal</h1>
-
-      <JournalForm onSuccess={handleNewEntry} />
-
+      <JournalForm onSuccess={fetchEntries} />
       <div className="mt-8 space-y-4">
         {loading ? (
           <p className="text-sm text-gray-500">Loading entries...</p>
