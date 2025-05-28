@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import JournalForm from '@/components/JournalForm';
@@ -11,7 +13,9 @@ type Entry = {
 };
 
 export default function JournalPage() {
-  const { data: session } = useSession();
+  const { data: session } = useSession(); if (!session) {
+  return <p className="text-center text-gray-500">Please sign in to view your journal.</p>;
+}
   const [entries, setEntries] = useState<Entry[]>([]);
   const [loading, setLoading] = useState(true);
 
