@@ -2,25 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --font-sans: 'Inter', sans-serif;
+}
+
 html {
   @apply transition-colors duration-300;
-  font-family: theme('fontFamily.sans');
 }
 
 body {
   @apply antialiased font-sans min-h-screen bg-white text-gray-900 dark:bg-black dark:text-gray-100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
 }
 
-/* Optional: Container wrapper to center all app content */
-#__next, main {
-  @apply w-full max-w-5xl;
-}
-
-/* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 6px;
 }

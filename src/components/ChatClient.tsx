@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { useEffect, useState } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 
@@ -47,6 +49,7 @@ export default function ChatClient() {
         body: JSON.stringify({ message }),
       });
 
+      if (!res.ok) throw new Error('Server error');
       const data = await res.json();
       setReply(data.reply);
       setMessage('');
@@ -91,7 +94,7 @@ export default function ChatClient() {
       {reply && (
         <div className="mt-4 p-4 bg-gray-100 rounded-xl dark:bg-zinc-800">
           <p className="text-sm font-semibold mb-1 text-brand-accent">Prime says:</p>
-          <p className="text-gray-800 dark:text-white">{reply}</p>
+          <p className="text-gray-800 dark:text-white whitespace-pre-wrap">{reply}</p>
         </div>
       )}
 

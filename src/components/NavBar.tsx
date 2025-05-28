@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
@@ -29,7 +31,6 @@ export default function NavBar() {
   return (
     <nav role="navigation" className="w-full sticky top-0 z-20 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#0b0c0f] px-4 py-3">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:justify-between items-center gap-4">
-        {/* Logo & Branding */}
         <div className="flex items-center gap-3">
           <Image
             src="/EOL Transparent Logo 500x500 px - Custom dimensions.png"
@@ -42,7 +43,6 @@ export default function NavBar() {
           </span>
         </div>
 
-        {/* Navigation Buttons */}
         <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2 text-sm font-medium">
           {navButtons.map((btn) => (
             <Link
@@ -54,7 +54,6 @@ export default function NavBar() {
             </Link>
           ))}
 
-          {/* Theme Switch */}
           {mounted && (
             <button
               onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
@@ -65,24 +64,21 @@ export default function NavBar() {
             </button>
           )}
 
-          {/* Auth Buttons */}
-          {mounted && (
-            !session ? (
-              <button
-                onClick={() => signIn()}
-                className="px-4 py-1.5 rounded-lg bg-primary text-white hover:bg-accent transition ml-2"
-              >
-                Sign In
-              </button>
-            ) : (
-              <button
-                onClick={() => signOut()}
-                className="px-4 py-1.5 rounded-lg bg-gray-300 dark:bg-gray-600 text-black dark:text-white hover:opacity-90 transition ml-2"
-              >
-                Sign Out
-              </button>
-            )
-          )}
+          {mounted && (!session ? (
+            <button
+              onClick={() => signIn()}
+              className="px-4 py-1.5 rounded-lg bg-primary text-white hover:bg-accent transition ml-2"
+            >
+              Sign In
+            </button>
+          ) : (
+            <button
+              onClick={() => signOut()}
+              className="px-4 py-1.5 rounded-lg bg-gray-300 dark:bg-gray-600 text-black dark:text-white hover:opacity-90 transition ml-2"
+            >
+              Sign Out
+            </button>
+          ))}
         </div>
       </div>
     </nav>
