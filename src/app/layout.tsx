@@ -1,5 +1,8 @@
-import '../styles/globals.css'; // ← Important: Adjusted path for styles/globals.css
+'use client'; // Required to use hooks like useSession
+
+import '../styles/globals.css';
 import { Inter } from 'next/font/google';
+import { SessionProvider } from 'next-auth/react';
 import type { Metadata } from 'next';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -16,8 +19,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} min-h-screen bg-black text-white font-sans flex items-center justify-center`}>
-        <div className="w-full max-w-5xl p-4">{children}</div>
+      <body className={`${inter.className} min-h-screen bg-black text-white font-sans`}>
+        <SessionProvider>
+          <div className="w-full max-w-5xl mx-auto p-4">{children}</div>
+        </SessionProvider>
       </body>
     </html>
   );
