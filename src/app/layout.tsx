@@ -1,9 +1,7 @@
-'use client'; // Required to use hooks like useSession
-
 import '../styles/globals.css';
 import { Inter } from 'next/font/google';
-import { SessionProvider } from 'next-auth/react';
 import type { Metadata } from 'next';
+import Providers from './providers'; // ← This will be your SessionProvider wrapper
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,9 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} min-h-screen bg-black text-white font-sans`}>
-        <SessionProvider>
+        <Providers>
           <div className="w-full max-w-5xl mx-auto p-4">{children}</div>
-        </SessionProvider>
+        </Providers>
       </body>
     </html>
   );
