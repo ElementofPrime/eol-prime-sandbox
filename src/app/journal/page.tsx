@@ -11,14 +11,20 @@ type Entry = {
 };
 
 export default function JournalPage() {
-  const { data: session } = useSession();
+  const [sessionAvailable, setSessionAvailable] = useState(false);
   const [entries, setEntries] = useState<Entry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
-    fetchEntries();
+    const checkSession = async () => {
+      const mod = await import('next-auth/react');
+      const { data: session } = mod.useSession();
+      if (session) {
+        setSessionAvailable(true);
+        fetchEntries();
+      }
+    };
+    checkSession();
   }, []);
 
   const fetchEntries = async () => {
@@ -28,9 +34,7 @@ export default function JournalPage() {
     setLoading(false);
   };
 
-  if (!isClient) return null;
-
-  if (!session) {
+  if (!sessionAvailable) {
     return (
       <div className="p-6 text-center text-gray-500">
         Please sign in to view your journal.
@@ -41,7 +45,9 @@ export default function JournalPage() {
   return (
     <div className="max-w-3xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">My Journal</h1>
+
       <JournalForm onSuccess={fetchEntries} />
+
       <div className="mt-8 space-y-4">
         {loading ? (
           <p className="text-sm text-gray-500">Loading entries...</p>
