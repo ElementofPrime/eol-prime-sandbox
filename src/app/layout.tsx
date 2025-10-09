@@ -1,8 +1,9 @@
-import '../styles/globals.css';
+import './globals.css';
 import { Inter } from 'next/font/google';
+import NavBar from '@/components/NavBar';
 import SessionProviderWrapper from '@/components/SessionProviderWrapper';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata = {
   title: 'Element of Life',
@@ -12,11 +13,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-black text-white font-sans`}>
-        <SessionProviderWrapper>
-          {children}
-        </SessionProviderWrapper>
-      </body>
+      <body className="font-sans antialiased bg-[rgb(252,252,251)]">{children}</body>
     </html>
   );
 }

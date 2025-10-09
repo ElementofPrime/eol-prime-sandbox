@@ -1,0 +1,8 @@
+/* Tailwind core (v4) */
+@import "tailwindcss";
+
+/* Base resets / optional */
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+
+/* If you want the default sans + antialias, do it in layout via className (step 2) */
