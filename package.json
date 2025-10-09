@@ -13,6 +13,7 @@
     "autoprefixer": "^10.4.21",
     "framer-motion": "^12.12.2",
     "lucide-react": "^0.511.0",
+    "mongodb": "^6.20.0",
     "mongoose": "^8.15.0",
     "next": "15.3.2",
     "next-auth": "^4.24.11",
@@ -24,6 +25,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/mongodb": "^4.0.7",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
