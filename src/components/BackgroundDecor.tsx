@@ -1,30 +1,16 @@
-interface BackgroundDecorProps {
-  showVines?: boolean;
-  showTree?: boolean;
-  className?: string; // Optional for extra styling like animation etc.
-}
-
-export default function BackgroundDecor({
-  showVines = true,
-  showTree = true,
-  className = '',
-}: BackgroundDecorProps) {
+export default function BackgroundDecor({ className = '' }: { className?: string }) {
   return (
-    <div className={`absolute inset-0 z-0 pointer-events-none ${className}`}>
-      {showTree && (
-        <img
-          src="/tree.svg.png"
-          alt="Tree of Life"
-          className="absolute bottom-0 right-0 w-64 opacity-20"
-        />
-      )}
-      {showVines && (
-        <img
-          src="/vines.svg.png"
-          alt="Decorative vines"
-          className="absolute top-0 left-0 w-48 opacity-30"
-        />
-      )}
+    <div className={`absolute inset-0 pointer-events-none -z-10 ${className}`}>
+      <img
+        src="/vines.svg.png"
+        alt=""
+        className="absolute top-6 left-[min(2rem,4vw)] w-36 sm:w-44 md:w-52 opacity-20 dark:opacity-25"
+      />
+      <img
+        src="/tree.svg.png"
+        alt=""
+        className="absolute bottom-10 right-[min(2rem,4vw)] w-40 sm:w-48 md:w-56 opacity-18 dark:opacity-24"
+      />
     </div>
   );
 }
