@@ -1,20 +1,38 @@
-import type { Config } from 'tailwindcss'
-import defaultTheme from 'tailwindcss/defaultTheme'
+import type { Config } from "tailwindcss";
 
 const config: Config = {
-  darkMode: 'class',
-  content: [
-  "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-  "./src/lib/**/*.{js,ts,jsx,tsx,mdx}"
-],
+  darkMode: "class",
+
   theme: {
     extend: {
-      fontFamily: {
-        sans: ['Inter', ...defaultTheme.fontFamily.sans], // ✅ clean fallback
+      colors: {
+        baseLight: "#f7f9fb",
+        baseDark: "#0a1d2e",
+      },
+
+      textColor: {
+        "muted-foreground": "#6b7280", // zinc-500-ish
+      },
+
+      borderColor: {
+        accent: "#22d3ee", // cyan-400
+      },
+
+      boxShadow: {
+        "eol-glow":
+          "0 0 28px rgba(34,211,238,.30), 0 0 64px rgba(59,130,246,.18)",
+      },
+
+      container: {
+        center: true,
+        padding: "1rem",
+        screens: {
+          "2xl": "1400px",
+        },
       },
     },
   },
+
   plugins: [],
 };
 

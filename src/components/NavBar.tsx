@@ -1,93 +1,35 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
-import { useTheme } from 'next-themes';
-import { Sun, Moon } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useTheme } from 'next-themes';
 
 export default function NavBar() {
-  const { theme, setTheme, resolvedTheme } = useTheme();
-  const { data: session } = useSession();
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-
   useEffect(() => setMounted(true), []);
+  if (!mounted) return <header className="w-full px-6 py-3" />;
 
-  const navButtons = [
-    { name: 'Home', href: '/' },
-    { name: 'Chat', href: '/chat' },
-    { name: 'Journal', href: '/journal' },
-    { name: 'Tasks', href: '/tasks' },
-    { name: 'Reminders', href: '/reminders' },
-    { name: 'New Beginning', href: '/New Beginning' },
-    { name: 'Fix-It', href: '/fixit' },
-  ];
+  const isDark = resolvedTheme === 'dark';
 
   return (
-    <nav className="w-full px-4 py-3 shadow-sm bg-baseLight dark:bg-baseDark text-black dark:text-white sticky top-0 z-10">
-      <div className="flex flex-col sm:flex-row sm:justify-between items-center gap-3">
-        {/* Logo + Title */}
-        <div className="flex items-center gap-3">
-          <Image
-            src="/EOL Transparent Logo 500x500 px - Custom dimensions.png"
-            alt="Element of Life Logo"
-            width={36}
-            height={36}
-          />
-          <span className="text-lg font-semibold tracking-wide">Element of Life</span>
-        </div>
+    <header className="relative header-beam w-full flex justify-between items-center px-6 md:px-8 py-3 md:py-4">
+      <h1 className="text-lg md:text-xl font-semibold text-cyan-500">
+        Element of Life — <span className="text-inherit">Prime OS</span>
+      </h1>
 
-        {/* Nav Buttons + Controls */}
-        <div className="flex flex-wrap justify-center sm:justify-end items-center gap-2 text-sm mt-2 sm:mt-0">
-          {navButtons.map((btn) => (
-            <Link
-              key={btn.name}
-              href={btn.href}
-              className="px-3 py-1 rounded-lg bg-primary hover:bg-accent text-white transition"
-            >
-              {btn.name}
-            </Link>
-          ))}
-
-          <Link href="/core" className="hover:underline text-sm">
-            Core
-          </Link>
-          <Link href="/about" className="hover:underline text-sm">
-            About
-          </Link>
-
-          {/* Theme Toggle */}
-          {mounted && (
-            <button
-              onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-              className="ml-2 p-2 rounded-full bg-neutral dark:bg-gray-700 hover:scale-105 transition"
-              aria-label="Toggle Theme"
-            >
-              {resolvedTheme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
-          )}
-
-          {/* Sign In / Sign Out */}
-          {mounted && (
-            !session ? (
-              <button
-                onClick={() => signIn()}
-                className="ml-2 px-4 py-2 bg-primary text-white rounded-xl"
-              >
-                Sign In
-              </button>
-            ) : (
-              <button
-                onClick={() => signOut()}
-                className="ml-2 px-4 py-2 bg-neutral text-black rounded-xl"
-              >
-                Sign Out
-              </button>
-            )
-          )}
-        </div>
-      </div>
-    </nav>
+      <nav className="flex items-center gap-4 md:gap-6 text-sm md:text-base">
+        <Link href="/core" className="hover:text-cyan-400 transition">Core</Link>
+        <Link href="/about" className="hover:text-cyan-400 transition">About</Link>
+        <Link href="/" className="hover:text-cyan-400 transition">Home</Link>
+        <button
+          onClick={() => setTheme(isDark ? 'light' : 'dark')}
+          className="border border-cyan-400 text-cyan-400 px-3 py-1 rounded-md hover:bg-cyan-400 hover:text-black transition"
+          aria-label="Toggle theme"
+        >
+          {isDark ? '🌙' : '☀️'}
+        </button>
+      </nav>
+    </header>
   );
 }
