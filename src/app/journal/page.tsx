@@ -2,5 +2,8 @@
 import JournalForm from '@/components/JournalForm';
 
 export default function JournalPage() {
-  return <JournalForm />;
+  const handleSuccess = () => {
+    console.log('Journal saved!');
+  };
+  return <JournalForm onSuccess={handleSuccess} />;
 }
