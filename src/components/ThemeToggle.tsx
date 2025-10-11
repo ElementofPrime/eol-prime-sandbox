@@ -6,13 +6,13 @@ export default function ThemeToggle() {
   const [isDark, setIsDark] = useState(false);
 
   // Initialize from localStorage or prefers-color-scheme
-  useEffect(() => {
-    const saved = localStorage.getItem('eol-theme');
-    const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
-    const dark = saved ? saved === 'dark' : prefersDark;
-    setIsDark(dark);
-    document.documentElement.classList.toggle('dark', dark);
-  }, []);
+ useEffect(() => {
+   const saved = localStorage.getItem('eol-theme');
+   const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+   const dark = saved ? saved === 'dark' : prefersDark;
+   setIsDark(dark);
+   document.documentElement.classList.toggle('dark', dark);
+ }, []); // <— add this empty array
 
   const toggle = () => {
     const next = !isDark;

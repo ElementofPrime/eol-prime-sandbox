@@ -36,4 +36,12 @@ const config: Config = {
   plugins: [],
 };
 
-export default config;
+export default {
+  darkMode: 'class',            // ← IMPORTANT
+  content: [
+    './src/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',      // if you have any at repo root
+  ],
+  theme: { extend: {} },
+  plugins: [],
+} satisfies Config

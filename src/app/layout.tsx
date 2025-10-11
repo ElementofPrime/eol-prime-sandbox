@@ -1,18 +1,17 @@
-import '../styles/globals.css';
+import '@/styles/globals.css';
+import type { ReactNode } from 'react';
 import NavBar from '@/components/NavBar';
 import Providers from './providers';
 import { Inter, Great_Vibes } from 'next/font/google';
-import Link from "next/link";
-import ThemeToggle from "@/components/ThemeToggle";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const greatVibes = Great_Vibes({ weight: '400', subsets: ['latin'], variable: '--font-greatvibes' });
 
 export const metadata = { title: 'Element of Life — Prime OS' };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${greatVibes.variable}`}>
       <body className="bg-baseLight dark:bg-baseDark text-black dark:text-white min-h-screen flex flex-col">
         <Providers>
           <NavBar />
