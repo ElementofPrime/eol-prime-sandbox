@@ -10,7 +10,7 @@ const JournalEntrySchema = new Schema(
   },
   { timestamps: true }
 );
-
+JournalEntrySchema.index({ title: 'text', content: 'text', tags: 'text' })
 // Avoid OverwriteModelError in dev
 const JournalEntry =
   models.JournalEntry || mongoose.model('JournalEntry', JournalEntrySchema);

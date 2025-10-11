@@ -19,11 +19,11 @@ export async function GET(req: NextRequest) {
   const rx = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
 
   const items = await JournalEntry.find({
-    userId: session.user.id,
-    $or: [{ title: rx }, { content: rx }, { tags: rx }],
-  })
-    .sort({ createdAt: -1 })
-    .limit(20)
+  userId: session.user.id,
+  $text: { $search: q },
+})
+.sort({ score: { $meta: 'textScore' } })
+.limit(20)
 
   return json({ items })
 }
