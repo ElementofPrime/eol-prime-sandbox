@@ -1,14 +1,19 @@
-// src/models/JournalEntry.ts
-import mongoose, { Schema, models } from 'mongoose';
+import mongoose, { Schema, InferSchemaType, models } from 'mongoose';
 
 const JournalEntrySchema = new Schema(
   {
-    email: { type: String, required: true },
+    userId: { type: String, required: true, index: true },
+    title: { type: String },
     content: { type: String, required: true },
-    date: { type: String, required: true },
-    audioUrl: { type: String },
+    mood: { type: String },
+    tags: [{ type: String }],
   },
   { timestamps: true }
 );
 
-export default models.JournalEntry || mongoose.model('JournalEntry', JournalEntrySchema);
+// Avoid OverwriteModelError in dev
+const JournalEntry =
+  models.JournalEntry || mongoose.model('JournalEntry', JournalEntrySchema);
+
+export type JournalEntryDoc = InferSchemaType<typeof JournalEntrySchema>;
+export default JournalEntry;

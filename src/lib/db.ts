@@ -1,35 +1,24 @@
-import mongoose, { Mongoose } from 'mongoose';
+import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI as string;
+const MONGODB_URI = process.env.MONGODB_URI!;
+const DB_NAME = process.env.MONGODB_DB || undefined;
 
-if (!MONGODB_URI) {
-  throw new Error("❌ MONGODB_URI is not defined in environment variables");
-}
+if (!MONGODB_URI) throw new Error('Missing MONGODB_URI');
 
-// Extend globalThis to include our mongoose connection cache
-declare global {
-  var mongooseCache: {
-    conn: Mongoose | null;
-    promise: Promise<Mongoose> | null;
-  };
-}
+let cached = (global as any)._mongoose as {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
+};
 
-if (!global.mongooseCache) {
-  global.mongooseCache = { conn: null, promise: null };
-}
+if (!cached) cached = (global as any)._mongoose = { conn: null, promise: null };
 
-async function connect(): Promise<Mongoose> {
-  if (global.mongooseCache.conn) return global.mongooseCache.conn;
-
-  if (!global.mongooseCache.promise) {
-    global.mongooseCache.promise = mongoose.connect(MONGODB_URI, {
-      dbName: "element_of_life",
-      bufferCommands: false,
-    });
+export async function dbConnect() {
+  if (cached.conn) return cached.conn;
+  if (!cached.promise) {
+    cached.promise = mongoose
+      .connect(MONGODB_URI, { dbName: DB_NAME, bufferCommands: false, maxPoolSize: 10 })
+      .then((m) => m);
   }
-
-  global.mongooseCache.conn = await global.mongooseCache.promise;
-  return global.mongooseCache.conn;
+  cached.conn = await cached.promise;
+  return cached.conn;
 }
-
-export default connect;
