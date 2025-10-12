@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import Image from "next/image";
+import { motion } from "framer-motion";
 import BackgroundDecor from '@/components/BackgroundDecor';
 
 const elements = [
@@ -22,21 +23,21 @@ export default function Home() {
 
       {/* Logo with scale-in + beam (no image blur) */}
       <motion.div
-        className="relative mx-auto mb-6 w-40 sm:w-52 md:w-60"
-        initial={{ opacity: 0, scale: 1.12 }}
+        className="relative mx-auto mb-6 w-40 sm:w-52 md:w-60 will-change-transform transform-gpu"
+        initial={{ opacity: 0, scale: 1.06 }}   // smaller delta prevents softening
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.9, ease: 'easeOut' }}
+        transition={{ duration: 0.7, ease: 'easeOut' }}
       >
-        {/* Beam (radial light) */}
+        {/* Light beam */}
         <div
           className="pointer-events-none absolute inset-0 -z-10 blur-2xl"
           aria-hidden
           style={{
-           background:
+            background:
               'radial-gradient(60% 60% at 50% 45%, rgba(59,130,246,0.35), rgba(34,211,238,0.18) 45%, transparent 70%)',
           }}
-        />
-        {/* Dark theme beam tint */}
+         />
+         {/* Dark beam */}
         <div
           className="pointer-events-none absolute inset-0 -z-10 blur-2xl hidden dark:block"
           aria-hidden
@@ -45,11 +46,16 @@ export default function Home() {
               'radial-gradient(60% 60% at 50% 45%, rgba(129,230,217,0.25), rgba(34,197,94,0.20) 45%, transparent 70%)',
           }}
         />
-        {/* Emblem with adaptive glow (no pulse/blur) */}
-        <img
+
+        {/* Logo — crisp (no filters), with adaptive glow */}
+        <Image
           src="/logo.png"
           alt="Element of Life Logo"
-          className="eol-glow eol-glow-transition w-full h-auto rounded-full object-contain"
+          width={480}
+          height={480}
+          priority
+          className="eol-glow eol-glow-transition w-full h-auto rounded-full select-none [backface-visibility:hidden]"
+          draggable={false}
         />
       </motion.div>
 
