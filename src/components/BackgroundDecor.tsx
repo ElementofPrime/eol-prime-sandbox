@@ -12,8 +12,7 @@ export default function BackgroundDecor() {
         fill
         sizes="100vw"
         priority
-        className="object-left-top object-contain mix-blend-soft-light eol-ambient
-                   opacity-[0.12] dark:opacity-[0.16]"  /* ↑ raise to verify; drop to .08/.12 later */
+        className="object-left-top object-contain opacity-30 eol-ambient"
       />
 
       {/* Right/bottom tree */}
