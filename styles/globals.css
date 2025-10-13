@@ -1,8 +1,4 @@
-/* Tailwind v4 core:
-   - @tailwind base     → @import "tailwindcss/preflight";
-   - @tailwind components (removed in v4)
-   - @tailwind utilities stays
-*/
+@import "tailwindcss";
 @import "tailwindcss/preflight";
 @tailwind utilities;
 
