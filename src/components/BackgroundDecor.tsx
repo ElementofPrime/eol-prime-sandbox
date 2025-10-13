@@ -4,42 +4,30 @@ import Image from "next/image";
 export default function BackgroundDecor() {
   return (
     <div aria-hidden className="fixed inset-0 z-0 pointer-events-none select-none overflow-hidden">
-      {/* Soft vignette to keep UI readable */}
-      <div className="absolute inset-0 -z-10 
-        [background:radial-gradient(60%_50%_at_50%_35%,rgba(59,130,246,.18)_0%,rgba(2,6,23,0)_70%)]
-      " />
+      {/* gentle global vignette for readability */}
+      <div className="absolute inset-0 -z-10 [background:radial-gradient(55%_45%_at_50%_35%,rgba(59,130,246,.10)_0%,rgba(2,6,23,0)_70%)]" />
 
-      {/* Optional overall dimmer (stronger in dark mode) */}
-      <div className="absolute inset-0 bg-white/14 dark:bg-slate-950/35" />
+      {/* small vine - top-left */}
+      <div className="absolute top-4 left-4 sm:top-6 sm:left-6 md:top-8 md:left-10
+                      w-[38vw] max-w-[360px] h-[38vw] max-h-[360px] opacity-25 dark:opacity-15">
+        <Image
+          src="/assets/vines.png"
+          alt=""
+          fill
+          priority
+          className="object-contain animate-vine"
+        />
+      </div>
 
-      {/* Vines: full-bleed, slightly higher crop toward the top for composition */}
-      <Image
-        src="/assets/vines.png"
-        alt=""
-        fill
-        priority
-        className="
-          object-cover object-[50%_18%]
-          opacity-35 dark:opacity-20
-          animate-vine
-        "
-      />
-
-      {/* Tree emblem glow behind the crest */}
-      <div
-        className="
-          absolute left-1/2 -translate-x-1/2
-          top-[16svh] md:top-[14svh]
-          w-[min(46vw,600px)] h-[min(46vw,600px)]
-          rounded-full animate-tree-glow
-        "
-      >
+      {/* small tree - bottom-right */}
+      <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-10
+                      w-[40vw] max-w-[420px] h-[40vw] max-h-[420px] opacity-16 dark:opacity-12 rounded-full animate-tree-glow">
         <Image
           src="/assets/tree-emblem.png"
           alt=""
           fill
           priority
-          className="object-contain opacity-[0.18] dark:opacity-[0.12]"
+          className="object-contain"
         />
       </div>
     </div>

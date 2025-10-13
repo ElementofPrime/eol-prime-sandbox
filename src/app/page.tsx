@@ -1,28 +1,24 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import Image from 'next/image'
-import { motion } from 'framer-motion'
-import BackgroundDecor from '@/components/BackgroundDecor'
+import Link from 'next/link';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 const elements = [
-  { title: 'Chat', icon: '💬', link: '/chat' },
-  { title: 'Journal', icon: '📔', link: '/journal' },
-  { title: 'Tasks', icon: '✅', link: '/tasks' },
-  { title: 'Reminders', icon: '⏰', link: '/reminders' },
-  { title: 'Fix-It', icon: '🛠️', link: '/fixit' },
-  { title: 'New Beginning', icon: '🧠', link: '/new-beginning' },
-  { title: 'Core', icon: '🌿', link: '/core' },
-  { title: 'About', icon: '✨', link: '/about' },
-]
+  { title: 'Chat',         icon: '💬', link: '/chat' },
+  { title: 'Journal',      icon: '📔', link: '/journal' },
+  { title: 'Tasks',        icon: '✅', link: '/tasks' },
+  { title: 'Reminders',    icon: '⏰', link: '/reminders' },
+  { title: 'Fix-It',       icon: '🛠️', link: '/fixit' },
+  { title: 'New Beginning',icon: '🧠', link: '/new-beginning' },
+  { title: 'Core',         icon: '🌿', link: '/core' },
+  { title: 'About',        icon: '✨', link: '/about' },
+];
 
 export default function Home() {
   return (
     <div className="relative w-full max-w-6xl mx-auto text-center overflow-hidden">
-      {/* Background vines/tree under everything */}
-      <BackgroundDecor />
-
-      {/* Logo with scale-in + adaptive beam (no image blur) */}
+      {/* Logo with scale-in + adaptive beam (main focal point) */}
       <motion.div
         className="relative mx-auto mb-8 w-40 sm:w-52 md:w-60 transform-gpu will-change-transform eol-breathe"
         initial={{ opacity: 0, scale: 1.08 }}
@@ -58,7 +54,7 @@ export default function Home() {
         />
       </motion.div>
 
-      {/* New mantra */}
+      {/* Mantra */}
       <motion.p
         className="text-base sm:text-lg md:text-xl text-zinc-700 dark:text-zinc-300 max-w-3xl mx-auto leading-relaxed px-3"
         initial={{ opacity: 0, y: 12 }}
@@ -72,7 +68,6 @@ export default function Home() {
         growth, and growth becomes transformation.
       </motion.p>
 
-      {/* Section title (slightly smaller) */}
       <motion.h2
         className="text-sm sm:text-base md:text-lg font-semibold text-cyan-500 mt-6 mb-8"
         initial={{ opacity: 0 }}
@@ -88,14 +83,15 @@ export default function Home() {
           <Link key={el.title} href={el.link}>
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="bg-zinc-900/90 dark:bg-zinc-800 text-white rounded-2xl shadow-lg p-5 text-center ring-1 ring-black/5 dark:ring-white/5"
+              className="rounded-2xl shadow-lg p-5 text-center ring-1 ring-black/5 dark:ring-white/5
+                         bg-slate-900/45 dark:bg-slate-900/40 backdrop-blur"
             >
               <div className="text-2xl sm:text-3xl mb-2">{el.icon}</div>
-              <h3 className="text-sm sm:text-base font-semibold">{el.title}</h3>
+              <h3 className="text-sm sm:text-base font-semibold text-white">{el.title}</h3>
             </motion.div>
           </Link>
         ))}
       </div>
     </div>
-  )
+  );
 }
