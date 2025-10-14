@@ -1,24 +1,20 @@
 @import "tailwindcss";
-@import "tailwindcss/preflight";
-@tailwind utilities;
 
-/* ========================= */
-/* Base light/dark surfaces  */
-/* ========================= */
+/* =========================
+   Base light/dark surfaces
+   ========================= */
 @layer base {
-  html, body {
-    @apply bg-white text-slate-900;
-  }
-  .dark html, .dark body {
-    @apply bg-slate-950 text-slate-100;
-  }
-  h1,h2,h3,h4,h5,h6 { @apply text-slate-900 dark:text-slate-100; }
+  html, body { height: 100%; }
+  body { min-height: 100svh; }
+
+  html { @apply bg-white text-slate-900; }
+  html.dark { @apply bg-slate-950 text-slate-100; }
+
+  h1, h2, h3, h4, h5, h6 { @apply text-slate-900 dark:text-slate-100; }
   a { @apply text-sky-600 dark:text-sky-400; }
 }
 
-/* ========================= */
-/* Header beam divider       */
-/* ========================= */
+/* Divider */
 .header-beam::after {
   content:"";
   position:absolute; left:0; right:0; bottom:-1px; height:1px;
@@ -26,55 +22,33 @@
   filter: blur(.3px);
 }
 
-/* ========================= */
-/* Theme-reactive glow       */
-/* ========================= */
+/* Utilities: glow + breathing + bg animations */
 @layer utilities {
   .eol-glow {
-    /* Light mode glow */
-    --glow-color-1: rgba(59,130,246,0.8);
-    --glow-color-2: rgba(34,211,238,0.6);
-    box-shadow:
-      0 0 12px var(--glow-color-1),
-      0 0 32px var(--glow-color-2),
-      0 0 64px var(--glow-color-1);
-    transition: box-shadow 0.4s ease;
+    --glow-color-1: rgba(59,130,246,.8);
+    --glow-color-2: rgba(34,211,238,.6);
+    box-shadow: 0 0 12px var(--glow-color-1), 0 0 32px var(--glow-color-2), 0 0 64px var(--glow-color-1);
+    transition: box-shadow .4s ease;
     border-radius: 9999px;
   }
-  .dark .eol-glow {
-    /* Dark mode glow */
-    --glow-color-1: rgba(129,230,217,0.4);
-    --glow-color-2: rgba(34,197,94,0.5);
-    box-shadow:
-      0 0 8px var(--glow-color-1),
-      0 0 24px var(--glow-color-2),
-      0 0 48px var(--glow-color-1);
+  html.dark .eol-glow {
+    --glow-color-1: rgba(129,230,217,.4);
+    --glow-color-2: rgba(34,197,94,.5);
+    box-shadow: 0 0 8px var(--glow-color-1), 0 0 24px var(--glow-color-2), 0 0 48px var(--glow-color-1);
   }
-  .eol-glow-transition { transition: box-shadow 0.4s ease, filter 0.3s ease; }
-}
+  .eol-glow-transition { transition: box-shadow .4s, filter .3s; }
 
-/* ========================= */
-/* Subtle breathing + ambient */
-/* ========================= */
-@keyframes eol-breathe {
-  0%, 100% { transform: scale(1);     filter: brightness(1);   }
-  50%      { transform: scale(1.012); filter: brightness(1.06);}
-}
-@keyframes eol-ambient {
-  0%, 100% { opacity: 0.18; }
-  50%      { opacity: 0.26; }
-}
+  @keyframes eol-breathe { 0%,100%{transform:scale(1);filter:brightness(1)} 50%{transform:scale(1.012);filter:brightness(1.06)} }
+  @keyframes eol-ambient { 0%,100%{opacity:.18} 50%{opacity:.26} }
+  .eol-breathe { animation: eol-breathe 4.5s ease-in-out infinite; will-change: transform, filter; }
+  .eol-ambient { animation: eol-ambient 6.5s ease-in-out infinite; }
 
-.eol-breathe {
-  animation: eol-breathe 4.5s ease-in-out infinite;
-  will-change: transform, filter;
-}
-.eol-ambient {
-  animation: eol-ambient 6.5s ease-in-out infinite;
-}
+  @keyframes eolVineDrift { 0%{transform:translateY(0) rotate(0)} 50%{transform:translateY(-10px) rotate(-.6deg)} 100%{transform:translateY(0) rotate(0)} }
+  @keyframes eolTreeGlow { 0%{box-shadow:0 0 0 rgba(34,211,238,0)}50%{box-shadow:0 0 36px rgba(59,130,246,.18)}100%{box-shadow:0 0 0 rgba(34,211,238,0)} }
+  .animate-vine{ animation: eolVineDrift 18s ease-in-out infinite; }
+  .animate-tree-glow{ animation: eolTreeGlow 7s ease-in-out infinite; }
 
-/* Respect user motion preference */
-@media (prefers-reduced-motion: reduce) {
-  .eol-breathe, .eol-ambient { animation: none !important; }
+  @media (prefers-reduced-motion: reduce) {
+    .eol-breathe, .eol-ambient, .animate-vine, .animate-tree-glow { animation: none !important; }
+  }
 }
-

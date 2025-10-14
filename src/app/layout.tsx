@@ -13,8 +13,7 @@ export const metadata = { title: "Element of Life — Prime OS" };
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${greatVibes.variable}`}>
-      {/* Tailwind is set to darkMode:'class'; ThemeToggle should add/remove 'dark' on <html> */}
-      <body className="min-h-screen bg-slate-950 text-slate-100">
+      <body className="min-h-screen antialiased">   {/* no hard bg/text colors here */}
         <BackgroundDecor />
         <Providers>
           <NavBar />
