@@ -14,14 +14,14 @@ const elements = [
   { title: 'Core',         icon: '🌿', link: '/core' },
   { title: 'About',        icon: '✨', link: '/about' },
 ];
-
 export default function Home() {
   return (
-    <div className="relative w-full max-w-6xl mx-auto text-center overflow-hidden">
+    <div className="relative mx-auto max-w-6xl w-full text-center overflow-hidden
+                    flex flex-col items-center">  {/* added flex + items-center */}
       {/* Logo with scale-in + adaptive beam (main focal point) */}
       <motion.div
         className="relative mx-auto mb-8 w-40 sm:w-52 md:w-60 transform-gpu will-change-transform eol-breathe"
-        initial={{ opacity: 0, scale: 1.08 }}
+        initial={{ opacity: 0, scale: 1.12 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.9, ease: 'easeOut' }}
       >

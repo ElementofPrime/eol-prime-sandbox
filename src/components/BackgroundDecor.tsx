@@ -20,8 +20,8 @@ export default function BackgroundDecor() {
       </div>
 
       {/* small tree - bottom-right */}
-      <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-10
-                      w-[40vw] max-w-[420px] h-[40vw] max-h-[420px] opacity-16 dark:opacity-12 rounded-full animate-tree-glow">
+      <div className="absolute bottom-6 right-6 w-[32vw] max-w-[360px] h-[32vw] max-h-[360px]
+                opacity-12 dark:opacity-10 rounded-full animate-tree-glow">
         <Image
           src="/assets/tree-emblem.png"
           alt=""
