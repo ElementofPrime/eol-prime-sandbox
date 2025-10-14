@@ -19,7 +19,7 @@ const nav = [
 
 export default function NavBar() {
   return (
-    <nav className="w-full px-4 py-3 sticky top-0 z-10 bg-baseLight dark:bg-baseDark text-black dark:text-white border-b border-black/5 dark:border-white/10">
+    <nav className="w-full px-4 py-3 sticky top-0 z-10 bg-baseLight dark:bg-baseDark text-black dark:text-">
       <div className="mx-auto max-w-6xl flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         {/* Brand */}
         <div className="flex items-center gap-3">
