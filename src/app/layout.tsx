@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <BackgroundDecor />
         <Providers>
           <NavBar />
-          <main className="relative z-10 pt-16bg-transparent overflow-visible">
+          <main className="relative z-10 pt-20 bg-transparent overflow-visible">
             {children}
           </main>
         </Providers>
