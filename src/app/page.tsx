@@ -17,12 +17,12 @@ const elements = [
 
 export default function Home() {
   return (
-    <div className="relative mx-auto max-w-7xl w-full text-center overflow-visible flex flex-col items-center">
+    <div className="relative mx-auto max-w-6xl w-full text-center overflow-visible flex flex-col items-center">
       {/* Logo focus */}
       <motion.div
         className="relative isolate mx-auto mb-8 mt-2 sm:mt-4 w-40 sm:w-52 md:w-60 eol-breathe"
-        initial={{ opacity: 0, scale: 1.25 }}
-        animate={{ opacity: 1, scale: 1.25 }}
+        initial={{ opacity: 0, scale: 1.15 }}
+        animate={{ opacity: 1, scale: 1.15 }}
         transition={{ duration: 1.0, ease: 'easeOut' }}
       >
         {/* circular aura (no rectangle) */}
