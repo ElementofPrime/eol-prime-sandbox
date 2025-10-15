@@ -19,9 +19,9 @@ export default function BackgroundDecor() {
             style={{
               opacity: 0.10,
               maskImage:
-                'radial-gradient(60% 60% at 40% 40%, #000 60%, transparent 100%)',
+                'radial-gradient(55% 55% at 55% 55%, #000 55%, transparent 65%)',
               WebkitMaskImage:
-                'radial-gradient(60% 60% at 40% 40%, #000 60%, transparent 100%)',
+                'radial-gradient(55% 55% at 55% 55%, #000 55%, transparent 65%)',
               transform: 'translateZ(0)',
             }}
           />
