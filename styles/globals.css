@@ -14,14 +14,6 @@
   a { @apply text-sky-600 dark:text-sky-400; }
 }
 
-/* Divider */
-.header-beam::after {
-  content:"";
-  position:absolute; left:0; right:0; bottom:-1px; height:1px;
-  background: linear-gradient(90deg, transparent, rgba(34,211,238,.7), rgba(59,130,246,.6), transparent);
-  filter: blur(.3px);
-}
-
 /* Utilities: glow + breathing + bg animations */
 @layer utilities {
   .eol-glow {

@@ -20,8 +20,8 @@ export default function NavBar() {
   return (
     <nav
       className="
-        sticky top-0 z-30 w-full px-4 py-3
-        bg-transparent backdrop-blur-sm
+        absolute top-0 left-0 right-0 z-30 px-4 py-3
+        bg-transparent backdrop-blur-0 shadow-none border-0
         text-inherit
       "
     >
