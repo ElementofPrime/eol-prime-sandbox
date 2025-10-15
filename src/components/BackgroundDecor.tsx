@@ -8,7 +8,7 @@ export default function BackgroundDecor() {
       className="fixed inset-0 -z-10 pointer-events-none select-none overflow-hidden [isolation:isolate]"
     >
       {/* VINE — top-left */}
-      <div className="absolute top-6 left-6 w-[22vw] max-w-[260px] h-[22vw] max-h-[260px]">
+      <div className="absolute top-6 left-6 w-[26vw] max-w-[300px] h-[26vw] max-h-[300px]">
         <div className="relative w-full h-full">{/* <- relative parent for fill */ }
           <Image
             src="/assets/vines.png"
