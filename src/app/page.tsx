@@ -20,32 +20,32 @@ export default function Home() {
     <div className="relative mx-auto max-w-6xl w-full text-center overflow-hidden flex flex-col items-center">
       {/* Logo focus */}
       <motion.div
-        className="relative mx-auto mb-8 w-40 sm:w-52 md:w-60 eol-breathe"
+        className="relative mx-auto mb-8 mt-2 sm:mt-4 w-40 sm:w-52 md:w-60 eol-breathe"
         initial={{ opacity: 0, scale: 1.08 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.9, ease: 'easeOut' }}
-      >
-        {/* beams */}
+    >
+        {/* circular aura (no rectangle) */}
         <div
-          className="pointer-events-none absolute inset-0 -z-10 blur-2xl eol-ambient"
           aria-hidden
-          style={{ background: 'radial-gradient(60% 60% at 50% 45%, rgba(59,130,246,.35), rgba(34,211,238,.18) 45%, transparent 70%)' }}
-        />
-        <div
-          className="pointer-events-none absolute inset-0 -z-10 blur-2xl hidden dark:block eol-ambient"
-          aria-hidden
-          style={{ background: 'radial-gradient(60% 60% at 50% 45%, rgba(129,230,217,.25), rgba(34,197,94,.20) 45%, transparent 70%)' }}
-        />
-        <Image
-          src="/logo.png"
-          alt="Element of Life Logo"
-          width={480}
-          height={480}
-          priority
-          className="w-full h-auto rounded-full select-none eol-glow eol-glow-transition"
-          draggable={false}
-        />
-      </motion.div>
+          className="pointer-events-none absolute inset-0 -z-10 rounded-full"
+          style={{
+            background:
+              'radial-gradient(50% 50% at 50% 50%, rgba(34,211,238,.35) 0%, rgba(59,130,246,.20) 38%, transparent 70%)',
+            filter: 'blur(14px)',
+          }}
+      />
+
+      <Image
+        src="/logo.png"
+        alt="Element of Life Logo"
+        width={480}
+        height={480}
+        priority
+        className="w-full h-auto rounded-full select-none eol-glow eol-glow-transition"
+        draggable={false}
+      />
+    </motion.div>
 
       {/* Mantra */}
       <motion.p

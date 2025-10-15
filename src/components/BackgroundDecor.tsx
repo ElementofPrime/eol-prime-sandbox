@@ -39,10 +39,11 @@ export default function BackgroundDecor() {
             className="object-right-bottom object-contain"
             style={{
               opacity: 0.10,
+              // tighter circle so any backdrop corners are fully clipped
               maskImage:
-                'radial-gradient(65% 65% at 60% 60%, #000 60%, transparent 100%)',
+                'radial-gradient(50% 50% at 50% 50%, #000 52%, transparent 62%)',
               WebkitMaskImage:
-                'radial-gradient(65% 65% at 60% 60%, #000 60%, transparent 100%)',
+                'radial-gradient(50% 50% at 50% 50%, #000 52%, transparent 62%)',
               transform: 'translateZ(0)',
             }}
           />
