@@ -17,14 +17,14 @@ const elements = [
 
 export default function Home() {
   return (
-    <div className="relative mx-auto max-w-6xl w-full text-center overflow-hidden flex flex-col items-center">
+    <div className="relative mx-auto max-w-6xl w-full text-center overflow-visible flex flex-col items-center">
       {/* Logo focus */}
       <motion.div
-        className="relative mx-auto mb-8 mt-2 sm:mt-4 w-40 sm:w-52 md:w-60 eol-breathe"
+        className="relative isolate mx-auto mb-8 mt-2 sm:mt-4 w-40 sm:w-52 md:w-60 eol-breathe"
         initial={{ opacity: 0, scale: 1.08 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.9, ease: 'easeOut' }}
-    >
+      >
         {/* circular aura (no rectangle) */}
         <div
           aria-hidden
@@ -33,19 +33,19 @@ export default function Home() {
             background:
               'radial-gradient(50% 50% at 50% 50%, rgba(34,211,238,.35) 0%, rgba(59,130,246,.20) 38%, transparent 70%)',
             filter: 'blur(14px)',
+            transform: 'translateZ(0)', // prevents sub-pixel seams on some GPUs
           }}
-      />
-
-      <Image
-        src="/logo.png"
-        alt="Element of Life Logo"
-        width={480}
-        height={480}
-        priority
-        className="w-full h-auto rounded-full select-none eol-glow eol-glow-transition"
-        draggable={false}
-      />
-    </motion.div>
+        />
+        <Image
+          src="/logo.png"
+          alt="Element of Life Logo"
+          width={480}
+          height={480}
+          priority
+          className="w-full h-auto rounded-full select-none eol-glow eol-glow-transition"
+          draggable={false}
+        />
+      </motion.div>
 
       {/* Mantra */}
       <motion.p
