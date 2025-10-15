@@ -39,8 +39,8 @@ export default function Home() {
         <Image
           src="/logo.png"
           alt="Element of Life Logo"
-          width={520}
-          height={520}
+          width={500}
+          height={500}
           priority
           className="w-full h-auto rounded-full select-none eol-glow eol-glow-transition"
           draggable={false}
