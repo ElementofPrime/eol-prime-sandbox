@@ -14,6 +14,9 @@
   a { @apply text-sky-600 dark:text-sky-400; }
 }
 
+/* in /styles/globals.css */
+nav { border: 0 !important; box-shadow: none !important; }
+
 /* Utilities: glow + breathing + bg animations */
 @layer utilities {
   .eol-glow {
