@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <BackgroundDecor />
         <Providers>
           <NavBar />
-          <main className="relative z-10 pt-12">{children}</main>
+          <main className="relative z-10 pt-24 sm:pt-28 md:pt-32">{children}</main>
         </Providers>
       </body>
     </html>
