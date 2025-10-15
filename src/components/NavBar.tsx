@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import ThemeToggle from '@/components/ThemeToggle'; // your manual toggle
+import ThemeToggle from '@/components/ThemeToggle';
 import AuthButton from '@/components/AuthButton';
 
 const nav = [
@@ -14,12 +14,17 @@ const nav = [
   { name: 'Fix-It', href: '/fixit' },
   { name: 'Core', href: '/core' },
   { name: 'About', href: '/about' },
-  // { name: 'New Beginning', href: '/new-beginning' }, // add when route is ready
 ];
 
 export default function NavBar() {
   return (
-    <nav className="w-full px-4 py-3 sticky top-0 z-10 bg-baseLight dark:bg-baseDark text-black dark:text-">
+    <nav
+      className="
+        sticky top-0 z-30 w-full px-4 py-3
+        bg-transparent backdrop-blur-0 shadow-none border-0
+        text-inherit
+      "
+    >
       <div className="mx-auto max-w-6xl flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         {/* Brand */}
         <div className="flex items-center gap-3">
@@ -33,12 +38,15 @@ export default function NavBar() {
             <Link
               key={i.name}
               href={i.href}
-              className="px-3 py-1 rounded-lg bg-zinc-900/90 dark:bg-zinc-800 text-white hover:opacity-90 transition"
+              className="
+                px-3 py-1 rounded-lg
+                bg-zinc-900/90 dark:bg-zinc-800 text-white
+                hover:opacity-90 transition
+              "
             >
               {i.name}
             </Link>
           ))}
-
           <ThemeToggle />
           <AuthButton />
         </div>
