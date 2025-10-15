@@ -15,6 +15,7 @@
 }
 
 /* in /styles/globals.css */
+.header-beam::after { content: none !important; }
 nav { border: 0 !important; box-shadow: none !important; }
 
 /* Utilities: glow + breathing + bg animations */
