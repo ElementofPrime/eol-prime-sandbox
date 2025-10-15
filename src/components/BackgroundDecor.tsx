@@ -41,9 +41,9 @@ export default function BackgroundDecor() {
               opacity: 0.10,
               // tighter circle so any backdrop corners are fully clipped
               maskImage:
-                'radial-gradient(50% 50% at 50% 50%, #000 52%, transparent 62%)',
+                'radial-gradient(55% 55% at 55% 55%, #000 55%, transparent 65%)',
               WebkitMaskImage:
-                'radial-gradient(50% 50% at 50% 50%, #000 52%, transparent 62%)',
+                'radial-gradient(55% 55% at 55% 55%, #000 55%, transparent 65%)',
               transform: 'translateZ(0)',
             }}
           />
