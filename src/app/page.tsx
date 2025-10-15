@@ -21,9 +21,9 @@ export default function Home() {
       {/* Logo focus */}
       <motion.div
         className="relative isolate mx-auto mb-8 mt-2 sm:mt-4 w-40 sm:w-52 md:w-60 eol-breathe"
-        initial={{ opacity: 0, scale: 1.15 }}
-        animate={{ opacity: 1, scale: 1.15 }}
-        transition={{ duration: 1.0, ease: 'easeOut' }}
+        initial={{ opacity: 0, scale: 1.05 }}
+        animate={{ opacity: 1, scale: 1.05 }}
+        transition={{ duration: 1.5, ease: 'easeOut' }}
       >
         {/* circular aura (no rectangle) */}
         <div
@@ -72,7 +72,7 @@ export default function Home() {
         {elements.map((el) => (
           <Link key={el.title} href={el.link}>
             <motion.div
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.00 }}
               className="rounded-2xl shadow-lg p-5 text-center ring-1 ring-black/5 dark:ring-white/5
                          bg-slate-900/45 dark:bg-slate-900/40 backdrop-blur"
             >
