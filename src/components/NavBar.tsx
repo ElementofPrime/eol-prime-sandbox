@@ -21,7 +21,7 @@ export default function NavBar() {
     <nav
       className="
         sticky top-0 z-30 w-full px-4 py-3
-        bg-transparent backdrop-blur-0 shadow-none border-0
+        bg-transparent backdrop-blur-sm
         text-inherit
       "
     >
