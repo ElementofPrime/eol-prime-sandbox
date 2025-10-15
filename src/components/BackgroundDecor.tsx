@@ -8,7 +8,7 @@ export default function BackgroundDecor() {
       className="fixed inset-0 -z-10 pointer-events-none select-none overflow-hidden [isolation:isolate]"
     >
       {/* VINE — top-left */}
-      <div className="absolute top-6 left-6 w-[26vw] max-w-[300px] h-[26vw] max-h-[300px]">
+      <div className="absolute top-4 left-4 w-[26vw] max-w-[300px] h-[26vw] max-h-[300px]">
         <div className="relative w-full h-full">{/* <- relative parent for fill */ }
           <Image
             src="/assets/vines.png"
@@ -17,11 +17,11 @@ export default function BackgroundDecor() {
             priority
             className="object-left-top object-contain"
             style={{
-              opacity: 0.10,
+              opacity: 0.20,
               maskImage:
-                'radial-gradient(65% 55% at 65% 55%, #000 65%, transparent 100%)',
+                'radial-gradient(65% 65% at 65% 65%, #000 65%, transparent 100%)',
               WebkitMaskImage:
-                'radial-gradient(65% 55% at 65% 55%, #000 65%, transparent 100%)',
+                'radial-gradient(65% 65% at 65% 65%, #000 65%, transparent 100%)',
               transform: 'translateZ(0)',
             }}
           />
@@ -29,7 +29,7 @@ export default function BackgroundDecor() {
       </div>
 
       {/* TREE — bottom-right */}
-      <div className="absolute bottom-6 right-6 w-[26vw] max-w-[300px] h-[26vw] max-h-[300px]">
+      <div className="absolute bottom-4 right-4 w-[26vw] max-w-[300px] h-[26vw] max-h-[300px]">
         <div className="relative w-full h-full">{/* <- relative parent for fill */ }
           <Image
             src="/assets/tree-emblem.png"
@@ -38,12 +38,12 @@ export default function BackgroundDecor() {
             priority
             className="object-right-bottom object-contain"
             style={{
-              opacity: 0.10,
+              opacity: 0.20,
               // tighter circle so any backdrop corners are fully clipped
               maskImage:
-                'radial-gradient(55% 55% at 55% 55%, #000 55%, transparent 65%)',
+                'radial-gradient(65% 65% at 65% 65%, #000 65%, transparent 100%)',
               WebkitMaskImage:
-                'radial-gradient(55% 55% at 55% 55%, #000 55%, transparent 65%)',
+                'radial-gradient(65% 65% at 65% 65%, #000 65%, transparent 100%)',
               transform: 'translateZ(0)',
             }}
           />
