@@ -28,12 +28,11 @@ export default function Home() {
         {/* circular aura (no rectangle) */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 rounded-full"
+          className="pointer-events-none absolute inset-0 -z-10 rounded-full animate-[pulseGlow_8s_ease-in-out_infinite]"
           style={{
             background:
-              'radial-gradient(50% 50% at 50% 50%, rgba(34,211,238,.35) 0%, rgba(59,130,246,.20) 38%, transparent 70%)',
-            filter: 'blur(14px)',
-            transform: 'translateZ(0)', // prevents sub-pixel seams on some GPUs
+             'radial-gradient(50% 50% at 50% 50%, rgba(34,211,238,.28) 0%, rgba(59,130,246,.16) 40%, transparent 70%)',
+            filter: 'blur(16px)',
           }}
         />
         <Image
@@ -72,9 +71,10 @@ export default function Home() {
         {elements.map((el) => (
           <Link key={el.title} href={el.link}>
             <motion.div
-              whileHover={{ scale: 1.00 }}
+              whileHover={{ scale: 1.06, y: -2 }}
+              transition={{ type: 'spring', stiffness: 250, damping: 14 }}
               className="rounded-2xl shadow-lg p-5 text-center ring-1 ring-black/5 dark:ring-white/5
-                         bg-slate-900/45 dark:bg-slate-900/40 backdrop-blur"
+                       bg-slate-900/45 dark:bg-slate-900/40 backdrop-blur"
             >
               <div className="text-2xl sm:text-3xl mb-2">{el.icon}</div>
               <h3 className="text-sm sm:text-base font-semibold text-white">{el.title}</h3>

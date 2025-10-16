@@ -13,7 +13,7 @@ export const metadata = { title: "Element of Life — Prime OS" };
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${greatVibes.variable}`}>
-      <body className="min-h-screen antialiased">   {/* no hard bg/text colors here */}
+      <body className="min-h-screen antialiased-smooth">
         <BackgroundDecor />
         <Providers>
           <NavBar />
