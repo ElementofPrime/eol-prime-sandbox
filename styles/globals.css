@@ -34,11 +34,18 @@ nav { border: 0 !important; box-shadow: none !important; }
     box-shadow: 0 0 8px var(--glow-color-1), 0 0 24px var(--glow-color-2), 0 0 48px var(--glow-color-1);
   }
   .eol-glow-transition { transition: box-shadow .4s, filter .3s; }
-  @keyframes pulseGlow {
-    0%,100% { opacity: .7; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.04); }
+  @keyframes eolPulseGlow {
+    0%,100% { opacity: .72; transform: scale(1); }
+    50%     { opacity: 1;   transform: scale(1.045); }
   }
-
+  .eol-pulse-glow {
+    animation: eolPulseGlow 8s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .eol-pulse-glow { animation: none !important; }
+  }
   @keyframes eol-breathe { 0%,100%{transform:scale(1);filter:brightness(1)} 50%{transform:scale(1.012);filter:brightness(1.06)} }
   @keyframes eol-ambient { 0%,100%{opacity:.18} 50%{opacity:.26} }
   .eol-breathe { animation: eol-breathe 4.5s ease-in-out infinite; will-change: transform, filter; }

@@ -20,54 +20,58 @@ export default function Home() {
     <div className="relative mx-auto max-w-6xl w-full text-center overflow-visible flex flex-col items-center">
       {/* Logo focus */}
       <motion.div
-        className="relative isolate mx-auto mb-8 mt-2 sm:mt-4 w-40 sm:w-52 md:w-60 eol-breathe"
-        initial={{ opacity: 0, scale: 1.05 }}
-        animate={{ opacity: 1, scale: 1.05 }}
-        transition={{ duration: 1.5, ease: 'easeOut' }}
+        className="relative isolate mx-auto mb-8 mt-2 sm:mt-4 w-36 sm:w-48 md:w-56 eol-breathe"
+        initial={{ opacity: 0, scale: 1.08 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.9, ease: 'easeOut' }}
       >
-        {/* circular aura (no rectangle) */}
+        {/* circular aura */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 rounded-full animate-[pulseGlow_8s_ease-in-out_infinite]"
+          className="pointer-events-none absolute inset-0 -z-10 rounded-full eol-pulse-glow"
           style={{
             background:
-             'radial-gradient(50% 50% at 50% 50%, rgba(34,211,238,.28) 0%, rgba(59,130,246,.16) 40%, transparent 70%)',
+              'radial-gradient(50% 50% at 50% 50%, rgba(34,211,238,.28) 0%, rgba(59,130,246,.16) 40%, transparent 70%)',
             filter: 'blur(16px)',
+            transform: 'translateZ(0)',
           }}
         />
         <Image
           src="/logo.png"
           alt="Element of Life Logo"
-          width={500}
-          height={500}
+          width={480}
+          height={480}
           priority
           className="w-full h-auto rounded-full select-none eol-glow eol-glow-transition"
           draggable={false}
         />
       </motion.div>
 
-      {/* Mantra */}
-      <motion.p
-        className="text-base sm:text-lg md:text-xl text-zinc-700 dark:text-zinc-300 max-w-3xl mx-auto leading-relaxed px-3"
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.6 }}
-      >
-        <span className="font-medium text-zinc-800 dark:text-zinc-200">Welcome to Element of Life —</span>{' '}
-        the foundation where <span className="text-cyan-500 dark:text-cyan-400">focus</span> becomes growth, and growth becomes transformation.
-      </motion.p>
+      {/* Mantra + subhead in a centered measure */}
+      <div className="mx-auto max-w-[68ch] px-4">
+        <motion.p
+          className="text-lg md:text-xl text-zinc-700 dark:text-zinc-300 leading-relaxed text-center"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+        >
+          <span className="font-medium text-zinc-800 dark:text-zinc-200">Welcome to Element of Life —</span>{' '}
+          the foundation where <span className="text-cyan-500 dark:text-cyan-400">focus</span> becomes growth,
+          and growth becomes transformation.
+        </motion.p>
 
-      <motion.h2
-        className="text-sm sm:text-base md:text-lg font-semibold text-cyan-500 mt-6 mb-8"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.6, duration: 0.5 }}
-      >
-        Guiding Tools to Discover Your Core Elements
-      </motion.h2>
+        <motion.h2
+          className="text-center text-cyan-400 text-sm sm:text-base font-semibold mt-6 mb-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6, duration: 0.5 }}
+        >
+          Guiding Tools to Discover Your Core Elements
+        </motion.h2>
+      </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-5 md:gap-6 px-3 pb-12">
+      <div className="mx-auto max-w-6xl grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-5 md:gap-6 px-3 pb-12 mt-2">
         {elements.map((el) => (
           <Link key={el.title} href={el.link}>
             <motion.div
