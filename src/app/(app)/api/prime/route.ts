@@ -1,39 +1,51 @@
 import { NextRequest } from "next/server";
 import { openai } from "@/lib/openai";
 
-export const runtime = "edge";
+// Start with Node for easier debugging; we can flip to "edge" after it's green.
+export const runtime = "nodejs";
+
+const MODEL = process.env.PRIME_MODEL || "gpt-4o-mini";
 
 export async function POST(req: NextRequest) {
-  const { messages } = await req.json();
+  try {
+    const { messages = [] } = await req.json();
 
-  const stream = await openai.chat.completions.create({
-    model: "gpt-5-thinking",
-    messages,
-    stream: true,
-    temperature: 0.7,
-  });
+    // Call a model you have access to
+    const stream = await openai.chat.completions.create({
+      model: MODEL,
+      messages,
+      stream: true,
+      temperature: 0.7,
+    });
 
-  const encoder = new TextEncoder();
-
-  const readable = new ReadableStream({
-    async start(controller) {
-      try {
-        for await (const chunk of stream) {
-          const delta = chunk?.choices?.[0]?.delta?.content ?? "";
-          if (delta) controller.enqueue(encoder.encode(delta));
+    const encoder = new TextEncoder();
+    const readable = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const chunk of stream) {
+            const delta = chunk?.choices?.[0]?.delta?.content ?? "";
+            if (delta) controller.enqueue(encoder.encode(delta));
+          }
+        } catch (e) {
+          controller.error(e);
+        } finally {
+          controller.close();
         }
-      } catch (err) {
-        controller.error(err);
-      } finally {
-        controller.close();
-      }
-    },
-  });
+      },
+    });
 
-  return new Response(readable, {
-    headers: {
-      "Content-Type": "text/plain; charset=utf-8",
-      "Cache-Control": "no-store",
-    },
-  });
+    return new Response(readable, {
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "no-store",
+      },
+    });
+  } catch (err: any) {
+    // Bubble helpful error info to the client (and your terminal)
+    console.error("prime route error:", err?.status, err?.message || err);
+    return new Response(
+      `Prime API error: ${err?.status ?? "unknown"} – ${err?.message ?? err}`,
+      { status: 500 },
+    );
+  }
 }
