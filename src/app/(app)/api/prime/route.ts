@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { openai } from "@/lib/openai";
 
 // Start with Node for easier debugging; we can flip to "edge" after it's green.
-export const runtime = "nodejs";
+export const runtime = "edge";
 
 const MODEL = process.env.PRIME_MODEL || "gpt-4o-mini";
 
