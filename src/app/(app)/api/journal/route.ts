@@ -4,6 +4,10 @@ import { dbConnect } from '@/lib/db';
 import JournalEntry from '@/models/JournalEntry';
 import { JournalCreateSchema } from '@/lib/validation/journal';
 import { json, error } from '@/lib/http';
+import { NextRequest } from "next/server";
+import { db } from "@/lib/mongo";
+
+export const runtime = "edge"; // optional; switch to node if using mongoose
 
 export async function GET() {
   const session = await getServerSession(authOptions);

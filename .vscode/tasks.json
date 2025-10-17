@@ -1,0 +1,9 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "Type Check", "type": "shell", "command": "pnpm tsc --noEmit", "group": "test" },
+    { "label": "Lint", "type": "shell", "command": "pnpm lint", "group": "test" },
+    { "label": "Dev", "type": "shell", "command": "pnpm dev", "problemMatcher": [] },
+    { "label": "Prime Verify", "type": "shell", "command": "node scripts/prime-health.mjs" }
+  ]
+}
