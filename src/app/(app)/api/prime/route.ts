@@ -33,13 +33,15 @@ export async function POST(req: NextRequest) {
         }
       },
     });
-
     return new Response(readable, {
       headers: {
         "Content-Type": "text/plain; charset=utf-8",
         "Cache-Control": "no-store",
       },
     });
+    if (!Array.isArray(messages) || messages.length === 0) {
+      return new Response("No messages", { status: 400 });
+    }
   } catch (err: any) {
     // Bubble helpful error info to the client (and your terminal)
     console.error("prime route error:", err?.status, err?.message || err);
