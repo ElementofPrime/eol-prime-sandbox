@@ -1,41 +1,53 @@
 export const runtime = "nodejs";
 
-import { NextRequest } from "next/server";
-import { getDb } from "@/lib/db";
+import { NextRequest, NextResponse } from 'next/server';
+import { dbConnect } from '@/lib/db';
+import JournalEntry from '@/models/JournalEntry';
+import PrimeInsight from '@/models/PrimeInsight';
+import { quickExtract, roughSentiment, inferTopics, makePrimePrompts, makePrimeSuggestions } from '@/lib/prime/journal/analyze';
 
-// GET ?limit=20
-export async function GET(req: NextRequest) {
-  try {
-    const { searchParams } = new URL(req.url);
-    const limit = Number(searchParams.get("limit") || 20);
-    const db = await getDb();
-    const items = await db
-      .collection("journal_entries")
-      .find({})
-      .sort({ createdAt: -1 })
-      .limit(isNaN(limit) ? 20 : limit)
-      .toArray();
 
-    return Response.json({ ok: true, items });
-  } catch (err: any) {
-    console.error("journal GET error:", err);
-    return Response.json({ ok: false, error: String(err?.message || err) }, { status: 500 });
-  }
+// NOTE: wire to your auth; here we stub user
+async function getUserId() { return 'stub-user'; }
+
+
+export async function GET() {
+await dbConnect();
+const userId = await getUserId();
+const items = await JournalEntry.find({ userId }).sort({ createdAt: -1 }).limit(50).lean();
+return NextResponse.json({ items });
 }
 
+
 export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json();
-    const db = await getDb();
-    const doc = {
-      ...body,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    const { insertedId } = await db.collection("journal_entries").insertOne(doc);
-    return Response.json({ ok: true, id: insertedId, doc });
-  } catch (err: any) {
-    console.error("journal POST error:", err);
-    return Response.json({ ok: false, error: String(err?.message || err) }, { status: 500 });
-  }
+await dbConnect();
+const userId = await getUserId();
+const { content, tags } = await req.json();
+if (!content) return NextResponse.json({ error: 'content required' }, { status: 400 });
+
+
+const entry = await JournalEntry.create({ userId, content, tags: tags || [] });
+
+
+// Analysis v0.1 (sync)
+const extract = quickExtract(content);
+const { mood, score } = roughSentiment(content);
+const topics = inferTopics(content);
+const primePrompts = makePrimePrompts({ extract, topics });
+const primeSuggestions = makePrimeSuggestions({ extract, topics });
+
+
+await PrimeInsight.create({
+entryId: entry._id,
+userId,
+mood,
+sentimentScore: score,
+topics,
+extract,
+primePrompts,
+primeSuggestions
+});
+
+
+return NextResponse.json({ entryId: entry._id });
 }

@@ -3,12 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prime:verify": "node scripts/prime-health.mjs",
-    "prime:preflight": "pnpm tsc --noEmit && pnpm lint && node scripts/prime-health.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "wip": "git add -A && git commit -m \"chore(wip): snapshot\" || true",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier -w .",
+    "test": "echo \"No tests yet\" && exit 0",
+    "vercel:pull:preview": "vercel pull --yes --environment=preview",
+    "vercel:build:preview": "vercel build",
+    "check": "npm run typecheck && npm run lint && npm run test",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx,js,jsx,css,md,json}": [
+      "prettier -w",
+      "eslint --fix --max-warnings=0"
+    ]
   },
   "dependencies": {
     "@next-auth/mongodb-adapter": "^1.1.3",
@@ -27,6 +39,8 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/mongodb": "^4.0.7",
@@ -38,9 +52,14 @@
     "dotenv": "^17.2.3",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
     "postcss": "^8.5.3",
+    "prettier": "^3.3.3",
     "tailwindcss": "^4.1.7",
-    "tsx": "^4.20.6",
-    "typescript": "^5.9.3"
-  }
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "vercel": "^41.7.2"
+  },
+  "packageManager": "npm@10"
 }

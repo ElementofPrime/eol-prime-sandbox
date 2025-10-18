@@ -1,32 +1,24 @@
-import { MongoClient, Db } from "mongodb";
+// Mongoose connection (single source of truth)
+import mongoose, { Mongoose } from 'mongoose';
 
-// TS: env vars can be undefined; assert + guard so the type is string.
-const MONGODB_URI = process.env.MONGODB_URI as string | undefined;
-if (!MONGODB_URI) {
-  throw new Error("Missing MONGODB_URI in environment");
+const MONGODB_URI = process.env.MONGODB_URI;
+if (!MONGODB_URI) throw new Error('Missing MONGODB_URI in environment');
+
+declare global {
+  // eslint-disable-next-line no-var
+  var mongooseCache:
+    | { conn: Mongoose | null; promise: Promise<Mongoose> | null }
+    | undefined;
 }
-const DB_NAME = (process.env.MONGODB_DB as string | undefined) ?? "eol";
 
-// Cache across hot reloads (Next.js dev)
-let _client: MongoClient | null = null;
-let _promise: Promise<MongoClient> | null = null;
+const cached =
+  global.mongooseCache || (global.mongooseCache = { conn: null, promise: null });
 
-async function getClient(): Promise<MongoClient> {
-  if (!_promise) {
-    // After the guard above, cast to string for the constructor.
-    _client = new MongoClient(MONGODB_URI as string);
-    _promise = _client.connect();
+export async function dbConnect(): Promise<Mongoose> {
+  if (cached.conn) return cached.conn;
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(MONGODB_URI);
   }
-  return _promise;
-}
-
-/** Preferred helper */
-export async function getDb(): Promise<Db> {
-  const client = await getClient();
-  return client.db(DB_NAME);
-}
-
-/** Back-compat alias so existing imports keep working */
-export async function dbConnect(): Promise<Db> {
-  return getDb();
+  cached.conn = await cached.promise;
+  return cached.conn;
 }
