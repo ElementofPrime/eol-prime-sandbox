@@ -25,9 +25,9 @@ export default function Home() {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.9, ease: 'easeOut' }}
       >
-        {/* circular aura */}
+        {/* circular aura (decorative) */}
         <div
-          aria-hidden
+          aria-hidden="true"
           className="pointer-events-none absolute inset-0 -z-10 rounded-full eol-pulse-glow"
           style={{
             background:
@@ -38,16 +38,17 @@ export default function Home() {
         />
         <Image
           src="/logo.png"
-          alt="Element of Life Logo"
+          alt="Element of Life logo"
           width={480}
           height={480}
+          sizes="(max-width: 640px) 9rem, (max-width: 768px) 12rem, 14rem"
           priority
-          className="w-full h-auto rounded-full select-none eol-glow eol-glow-transition"
           draggable={false}
+          className="w-full h-auto rounded-full select-none eol-glow eol-glow-transition"
         />
       </motion.div>
 
-      {/* Mantra + subhead in a centered measure */}
+      {/* Mantra + subhead */}
       <div className="mx-auto max-w-[68ch] px-4">
         <motion.p
           className="text-lg md:text-xl text-zinc-700 dark:text-zinc-300 leading-relaxed text-center"
@@ -56,8 +57,8 @@ export default function Home() {
           transition={{ delay: 0.3, duration: 0.6 }}
         >
           <span className="font-medium text-zinc-800 dark:text-zinc-200">Welcome to Element of Life —</span>{' '}
-          the foundation where <span className="text-cyan-500 dark:text-cyan-400">focus</span> becomes growth,
-          and growth becomes transformation.
+          the foundation where <span className="text-cyan-500 dark:text-cyan-400">focus</span> becomes growth, and
+          growth becomes transformation.
         </motion.p>
 
         <motion.h2
@@ -73,12 +74,12 @@ export default function Home() {
       {/* Grid */}
       <div className="mx-auto max-w-6xl grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-5 md:gap-6 px-3 pb-12 mt-2">
         {elements.map((el) => (
-          <Link key={el.title} href={el.link}>
+          <Link key={el.title} href={el.link} aria-label={el.title}>
             <motion.div
               whileHover={{ scale: 1.06, y: -2 }}
               transition={{ type: 'spring', stiffness: 250, damping: 14 }}
               className="rounded-2xl shadow-lg p-5 text-center ring-1 ring-black/5 dark:ring-white/5
-                       bg-slate-900/45 dark:bg-slate-900/40 backdrop-blur"
+                         bg-slate-900/45 dark:bg-slate-900/40 backdrop-blur"
             >
               <div className="text-2xl sm:text-3xl mb-2">{el.icon}</div>
               <h3 className="text-sm sm:text-base font-semibold text-white">{el.title}</h3>
