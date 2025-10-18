@@ -8,7 +8,7 @@
     "start": "next start",
     "wip": "git add -A && git commit -m \"chore(wip): snapshot\" || true",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
+    "lint": "eslint --cache --ext .ts,.tsx src types scripts",
     "format": "prettier -w .",
     "test": "echo \"No tests yet\" && exit 0",
     "vercel:pull:preview": "vercel pull --yes --environment=preview",
