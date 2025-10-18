@@ -61,5 +61,5 @@
     "typescript": "^5.9.3",
     "vercel": "^41.7.2"
   },
-  "packageManager": "npm@10.8.2"
+  "packageManager": "npm@11.6.2"
 }
