@@ -7,7 +7,7 @@ import { json, error } from '@/lib/http';
 import { NextRequest } from "next/server";
 import { db } from "@/lib/mongo";
 
-export const runtime = "edge"; // optional; switch to node if using mongoose
+export const runtime = "nodejs";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
