@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import PrimePulseTile from '@/components/PrimePulseTile';
 
 const elements = [
   { title: 'Chat', icon: '💬', link: '/chat' },
@@ -70,7 +71,10 @@ export default function Home() {
           Guiding Tools to Discover Your Core Elements
         </motion.h2>
       </div>
-
+      {/* Prime Pulse */}
+      <div className="mx-auto w-full max-w-6xl px-3 pb-6">
+        <PrimePulseTile />
+      </div>
       {/* Grid */}
       <div className="mx-auto max-w-6xl grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-5 md:gap-6 px-3 pb-12 mt-2">
         {elements.map((el) => (
