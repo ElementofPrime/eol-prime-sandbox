@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import useSWR from 'swr';
 import { fetcher } from '@/lib/fetcher';
+import useSWR, { mutate as mutateSWR } from 'swr';
 
 type Entry = { _id: string; content: string; createdAt: string };
 type List = { items: Entry[] };
@@ -32,7 +32,7 @@ export default function JournalPage() {
 
       setContent('');
       // Optimistic refresh of the list
-      await mutate();           // ⟵ revalidate /api/journal
+      await mutate(); await mutateSWR('/prime/pulse');  // ⟵ immediately refresh Prime Pulse
     } catch (err: any) {
       setMsg(err.message || 'Error');
     } finally {
