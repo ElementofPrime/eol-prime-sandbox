@@ -31,7 +31,7 @@ export default function PrimePulseTile() {
     await mutate();
   }
 
-  async function quickTask() {
+  async function QuickToDo() {
     const title = prompt('Add To-Do:');
     if (!title?.trim()) return;
     await fetch('/api/todos', {
@@ -88,9 +88,9 @@ export default function PrimePulseTile() {
           <div className="text-sm opacity-90">{pulse.prompt}</div>
 
           <div className="mt-4 grid grid-cols-2 gap-2">
-            <button onClick={quickTask}
+            <button onClick={QuickToDo}
               className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10">
-              + Create Task
+              + Add To-Do
             </button>
             <button onClick={quickReminder}
               className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10">

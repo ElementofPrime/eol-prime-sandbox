@@ -53,7 +53,7 @@ export default function JournalPage() {
           rows={5}
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="Write something… bullets (- [ ] task), dates, $ amounts, tickers…"
+          placeholder="Write something… bullets (- [ ] to-do), dates, $ amounts, tickers…"
         />
         <button
           disabled={saving || !content.trim()}
