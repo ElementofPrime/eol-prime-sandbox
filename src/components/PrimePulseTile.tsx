@@ -34,7 +34,7 @@ export default function PrimePulseTile() {
   async function quickTask() {
     const title = prompt('New Task:');
     if (!title?.trim()) return;
-    await fetch('/api/tasks', {
+    await fetch('/api/todos', {
       method: 'POST',
       headers: { 'Content-Type':'application/json' },
       body: JSON.stringify({ title })

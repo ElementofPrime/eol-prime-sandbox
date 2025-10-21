@@ -8,7 +8,7 @@ import PrimePulseTile from '@/components/PrimePulseTile';
 const elements = [
   { title: 'Chat', icon: '💬', link: '/chat' },
   { title: 'Journal', icon: '📔', link: '/journal' },
-  { title: 'Tasks', icon: '✅', link: '/tasks' },
+  { title: 'To-Do', icon: '✅', link: '/todo' },
   { title: 'Reminders', icon: '⏰', link: '/reminders' },
   { title: 'Fix-It', icon: '🛠️', link: '/fixit' },
   { title: 'New Beginning', icon: '🧠', link: '/new-beginning' },

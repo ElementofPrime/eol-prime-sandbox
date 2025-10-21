@@ -9,7 +9,7 @@ const nav = [
   { name: 'Home', href: '/' },
   { name: 'Chat', href: '/chat' },
   { name: 'Journal', href: '/journal' },
-  { name: 'Tasks', href: '/tasks' },
+  { name: 'To-Do', href: '/todo' },
   { name: 'Reminders', href: '/reminders' },
   { name: 'Fix-It', href: '/fixit' },
   { name: 'Core', href: '/core' },

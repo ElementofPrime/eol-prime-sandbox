@@ -64,4 +64,8 @@ nav { border: 0 !important; box-shadow: none !important; }
   transform: translateZ(0);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+input, textarea, select { font-size: 16px; }
+html, body { -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; }
+button, a { -webkit-tap-highlight-color: transparent; }
 }
