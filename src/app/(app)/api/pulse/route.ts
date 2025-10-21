@@ -1,71 +1,53 @@
-import { NextResponse } from 'next/server';
-import { MongoClient, ObjectId } from 'mongodb';
+import { NextResponse } from "next/server";
+import { ObjectId } from "mongodb";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOptions";
+import { getMongoDb } from "@/lib/mongo";
 
-export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic';
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
-export const fetchCache = 'force-no-store';
+export const fetchCache = "force-no-store";
 
-let _client: MongoClient | null = null;
-async function db() {
-  if (!_client) {
-    _client = new MongoClient(process.env.MONGODB_URI!, { maxPoolSize: 5 });
-    await _client.connect();
-  }
-  return _client.db(process.env.MONGODB_DB || 'eol');
-}
-
-// super-light heuristic; we’ll replace with ML later
-function analyze(content: string) {
-  const t = (content || '').toLowerCase();
-  const pos = ['great','grateful','good','progress','win','joy','happy','love'];
-  const neg = ['stressed','overwhelmed','anxious','sad','angry','worried','tired','lost'];
-  let score = 0;
-  pos.forEach(w => { if (t.includes(w)) score++; });
-  neg.forEach(w => { if (t.includes(w)) score--; });
-  const mood = score > 0 ? 'positive' : score < 0 ? 'negative' : 'neutral';
-  const prompt =
-    mood === 'negative'
-      ? 'Take one small step you can control. What is it?'
-      : mood === 'positive'
-      ? 'Momentum is up—what tiny action compounds it today?'
-      : 'What would make today 1% better?';
+function analyze(t: string) {
+  const txt = (t || "").toLowerCase();
+  const pos = ["great","grateful","good","progress","win","joy","happy","love"];
+  const neg = ["stressed","overwhelmed","anxious","sad","angry","worried","tired","lost"];
+  let score = 0; pos.forEach(w => txt.includes(w) && score++); neg.forEach(w => txt.includes(w) && score--);
+  const mood = score > 0 ? "positive" : score < 0 ? "negative" : "neutral";
+  const prompt = mood === "negative"
+    ? "Take one small step you can control. What is it?"
+    : mood === "positive"
+    ? "Momentum is up—what tiny action compounds it today?"
+    : "What would make today 1% better?";
   return { mood, sentimentScore: score, prompt };
 }
 
-/**
- * GET: return last 5 journal entries + most recent insight (creates one
- * for the latest entry if missing, so the tile always has something to show).
- */
 export async function GET() {
-  const d = await db();
+  const s = await getServerSession(authOptions);
+  if (!s?.user) return NextResponse.json({ ok:false, error:"Unauthorized" }, { status:401 });
+  const userId = (s.user as any).id;
 
-  // NOTE: your collection names from screenshots: eol.journalentries & eol.primeinsights
-  const entries = await d
-    .collection('journalentries')
-    .find({})
+  const db = await getMongoDb();
+  const entries = await db.collection("journalentries")
+    .find({ userId })
     .sort({ createdAt: -1 })
     .limit(5)
     .toArray();
 
   const latest = entries[0];
 
-  // try to read last insight for latest entry
-  let lastInsight =
-    latest &&
-    (await d
-      .collection('primeinsights')
-      .find({ entryId: latest._id })
-      .sort({ createdAt: -1 })
-      .limit(1)
-      .next());
+  let lastInsight = latest && await db.collection("primeinsights")
+    .find({ userId, entryId: latest._id })
+    .sort({ createdAt: -1 })
+    .limit(1)
+    .next();
 
-  // if none exists yet, create one on the fly (lightweight “upsert” behavior)
   if (latest && !lastInsight) {
-    const a = analyze(latest.content || '');
+    const a = analyze(latest.content || "");
     const ins = {
       entryId: latest._id,
-      userId: 'stub-user',
+      userId,
       mood: a.mood,
       sentimentScore: a.sentimentScore,
       topics: [],
@@ -74,42 +56,37 @@ export async function GET() {
       primeSuggestions: [],
       createdAt: new Date(),
     };
-    const r = await d.collection('primeinsights').insertOne(ins);
+    const r = await db.collection("primeinsights").insertOne(ins);
     lastInsight = { _id: r.insertedId, ...ins } as any;
   }
-
-  const mood = lastInsight?.mood || 'neutral';
-  const prompt =
-    lastInsight?.primePrompts?.[0] || 'What matters most right now?';
 
   return NextResponse.json({
     ok: true,
     entriesCount: entries.length,
     lastInsight: lastInsight || null,
-    mood,
-    prompt,
+    mood: lastInsight?.mood || "neutral",
+    prompt: lastInsight?.primePrompts?.[0] || "What matters most right now?",
   });
 }
 
-/** POST: force-generate a fresh insight for a given entryId (or latest). */
 export async function POST(req: Request) {
-  const d = await db();
-  const body = await req.json().catch(() => ({}));
-  const { entryId } = body;
+  const s = await getServerSession(authOptions);
+  if (!s?.user) return NextResponse.json({ ok:false, error:"Unauthorized" }, { status:401 });
+  const userId = (s.user as any).id;
 
-  const entry =
-    entryId
-      ? await d.collection('journalentries').findOne({ _id: new ObjectId(entryId) })
-      : await d.collection('journalentries').find({}).sort({ createdAt: -1 }).limit(1).next();
+  const db = await getMongoDb();
+  const { entryId } = await req.json().catch(() => ({}));
 
-  if (!entry) {
-    return NextResponse.json({ ok: false, error: 'No journal entry found' }, { status: 404 });
-  }
+  const entry = entryId
+    ? await db.collection("journalentries").findOne({ _id: new ObjectId(entryId), userId })
+    : await db.collection("journalentries").find({ userId }).sort({ createdAt: -1 }).limit(1).next();
 
-  const a = analyze(entry.content || '');
+  if (!entry) return NextResponse.json({ ok:false, error:"No journal entry found" }, { status:404 });
+
+  const a = analyze(entry.content || "");
   const ins = {
     entryId: entry._id,
-    userId: 'stub-user',
+    userId,
     mood: a.mood,
     sentimentScore: a.sentimentScore,
     topics: [],
@@ -118,6 +95,6 @@ export async function POST(req: Request) {
     primeSuggestions: [],
     createdAt: new Date(),
   };
-  const r = await d.collection('primeinsights').insertOne(ins);
-  return NextResponse.json({ ok: true, insight: { _id: r.insertedId, ...ins } }, { status: 201 });
+  const r = await db.collection("primeinsights").insertOne(ins);
+  return NextResponse.json({ ok:true, insight:{ _id:r.insertedId, ...ins } }, { status:201 });
 }

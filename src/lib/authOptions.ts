@@ -1,23 +1,34 @@
+// src/lib/authOptions.ts
 import type { NextAuthOptions } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
+import EmailProvider from "next-auth/providers/email";
+import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import { mongoClientPromise } from "@/lib/mongo"; // from the file we added
 
 export const authOptions: NextAuthOptions = {
+  adapter: MongoDBAdapter(mongoClientPromise as any),
+  session: { strategy: "database" },
   providers: [
-    Credentials({
-      name: "Credentials",
-      credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
+    EmailProvider({
+      server: {
+        host: process.env.EMAIL_SERVER_HOST!,
+        port: Number(process.env.EMAIL_SERVER_PORT!),
+        auth: {
+          user: process.env.EMAIL_SERVER_USER!,
+          pass: process.env.EMAIL_SERVER_PASSWORD!,
+        },
       },
-      async authorize(credentials) {
-        // TEMP: accept any non-empty email/pw so we can boot
-        if (credentials?.email && credentials?.password) {
-          return { id: "1", name: "Prime User", email: credentials.email };
-        }
-        return null;
-      },
+      from: process.env.EMAIL_FROM!,
+      maxAge: 10 * 60,
     }),
   ],
-  session: { strategy: "jwt" },
-  secret: process.env.JWT_SECRET,
+  pages: {
+    signIn: "/signin",
+    verifyRequest: "/signin/verify",
+  },
+  callbacks: {
+    async session({ session, user }) {
+      if (session?.user && user?.id) (session.user as any).id = user.id;
+      return session;
+    },
+  },
 };
