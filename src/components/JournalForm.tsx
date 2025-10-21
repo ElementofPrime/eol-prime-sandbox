@@ -1,52 +1,79 @@
 'use client';
 
+import useSWR from 'swr';
 import { useState } from 'react';
 
-type Props = {
-  onSuccess?: () => void;
-};
+const fetcher = (url: string) => fetch(url, { cache: 'no-store' }).then(r => r.json());
 
-export default function JournalForm({ onSuccess }: Props) {
-  const [entry, setEntry] = useState('');
-  const [status, setStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+export default function JournalForm() {
+  const { data, mutate, isValidating } = useSWR('/api/journal', fetcher, {
+    revalidateOnFocus: true
+  });
+  const [content, setContent] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setStatus('saving');
-    try {
-      // TODO: replace with a real POST to /api/journal
-      await new Promise((r) => setTimeout(r, 800));
-      onSuccess?.();       // safe optional call
-      setEntry('');
-      setStatus('saved');
-    } catch (e) {
-      console.error(e);
-      setStatus('idle');
-    }
-  };
+    const newItem = {
+      _id: 'temp-' + Date.now(),
+      content,
+      mood: null,
+      tags: [],
+      createdAt: new Date().toISOString()
+    };
+
+    // optimistic
+    await mutate(
+      async (curr: any) => {
+        const optimistic = { ok: true, items: [newItem, ...(curr?.items || [])] };
+        // fire POST
+        const res = await fetch('/api/journal', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          cache: 'no-store',
+          body: JSON.stringify({ content })
+        });
+        const json = await res.json();
+        if (!json.ok) throw new Error(json.error || 'Save failed');
+        // replace temp with server item
+        return {
+          ok: true,
+          items: [json.item, ...(curr?.items || [])]
+        };
+      },
+      { revalidate: false }
+    );
+
+    setContent('');
+  }
 
   return (
-    <div className="max-w-xl mx-auto p-6 rounded-2xl bg-neutral-900/60 border border-neutral-700 shadow-lg backdrop-blur-md">
-      <h2 className="text-2xl font-semibold text-center mb-4 text-white">Journal Entry</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+    <div className="space-y-4">
+      <form onSubmit={onSubmit} className="space-y-2">
         <textarea
-          value={entry}
-          onChange={(e) => setEntry(e.target.value)}
-          placeholder="What’s on your mind today?"
-          rows={6}
-          className="p-3 rounded-lg bg-neutral-800 text-white border border-neutral-600 focus:outline-none focus:ring-2 focus:ring-sky-500 resize-none"
-          required
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="Write your thoughts…"
+          className="w-full rounded-xl border p-3"
         />
         <button
           type="submit"
-          disabled={status === 'saving'}
-          className={`py-2 px-4 rounded-lg font-medium transition ${
-            status === 'saving' ? 'bg-gray-500 cursor-not-allowed' : 'bg-sky-600 hover:bg-sky-500'
-          }`}
+          className="rounded-xl bg-black px-4 py-2 text-white disabled:opacity-50"
+          disabled={!content.trim()}
         >
-          {status === 'saving' ? 'Saving...' : status === 'saved' ? 'Saved!' : 'Save Entry'}
+          Save Entry
         </button>
       </form>
+
+      <div className="text-sm text-gray-500">{isValidating ? 'Refreshing…' : null}</div>
+
+      <ul className="space-y-3">
+        {(data?.items || []).map((it: any) => (
+          <li key={it._id} className="rounded-xl border p-3">
+            <div className="text-xs opacity-60">{new Date(it.createdAt).toLocaleString()}</div>
+            <div>{it.content}</div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
