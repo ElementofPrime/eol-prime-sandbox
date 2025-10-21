@@ -32,14 +32,14 @@ export default function PrimePulseTile() {
   }
 
   async function quickTask() {
-    const title = prompt('New Task:');
+    const title = prompt('Add To-Do:');
     if (!title?.trim()) return;
     await fetch('/api/todos', {
       method: 'POST',
       headers: { 'Content-Type':'application/json' },
       body: JSON.stringify({ title })
     });
-    alert('Task created 👍');
+    alert('To-Do created 👍');
   }
 
   async function quickReminder() {
