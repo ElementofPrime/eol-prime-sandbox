@@ -19,7 +19,7 @@ export default function PrimeHeader() {
           background: "linear-gradient(135deg,rgba(56,224,255,0.6), rgba(212,221,229,0.3))", // softer translucent icon
         }}
       />
-      <h1 style={{ color: "#38e0ff", margin: 0 }}>Element of Life — Prime OS</h1>
+      <h1 style={{ color: "#38e0ff", margin: 0 }}>Element of Life — Prime Labs OS</h1>
     </header>
   );
 }

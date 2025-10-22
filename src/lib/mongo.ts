@@ -1,25 +1,32 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, Db } from "mongodb";
 
 const uri = process.env.MONGODB_URI!;
-if (!uri) throw new Error("Missing MONGODB_URI");
+if (!uri) throw new Error("MONGODB_URI is not set");
 
-let client: MongoClient | null = null;
-let promise: Promise<MongoClient> | null = null;
+let _client: MongoClient;
+let _clientPromise: Promise<MongoClient>;
 
-export const mongoClientPromise = (async () => {
-  if (client) return client;
-  if (!promise) {
-    promise = (async () => {
-      const c = new MongoClient(uri, { maxPoolSize: 5 });
-      await c.connect();
-      client = c;
-      return c;
-    })();
+declare global {
+  // eslint-disable-next-line no-var
+  var _eolMongoPromise: Promise<MongoClient> | undefined;
+}
+
+if (process.env.NODE_ENV === "development") {
+  if (!global._eolMongoPromise) {
+    _client = new MongoClient(uri);
+    global._eolMongoPromise = _client.connect();
   }
-  return promise;
-})();
+  _clientPromise = global._eolMongoPromise!;
+} else {
+  _client = new MongoClient(uri);
+  _clientPromise = _client.connect();
+}
 
-export async function getMongoDb() {
-  const c = await mongoClientPromise;
-  return c.db(process.env.MONGODB_DB || "eol");
+/** For NextAuth adapter */
+export const mongoClientPromise: Promise<MongoClient> = _clientPromise;
+
+/** For your app/api routes */
+export async function getDb(dbName = "eol"): Promise<Db> {
+  const c = await _clientPromise;
+  return c.db(dbName);
 }

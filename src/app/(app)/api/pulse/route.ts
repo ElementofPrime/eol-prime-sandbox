@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
-import { getMongoDb } from "@/lib/mongo";
-
+import { getDb } from "@/lib/mongo";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -28,7 +27,7 @@ export async function GET() {
   if (!s?.user) return NextResponse.json({ ok:false, error:"Unauthorized" }, { status:401 });
   const userId = (s.user as any).id;
 
-  const db = await getMongoDb();
+  const db = await getDb();
   const entries = await db.collection("journalentries")
     .find({ userId })
     .sort({ createdAt: -1 })
@@ -74,7 +73,7 @@ export async function POST(req: Request) {
   if (!s?.user) return NextResponse.json({ ok:false, error:"Unauthorized" }, { status:401 });
   const userId = (s.user as any).id;
 
-  const db = await getMongoDb();
+  const db = await getDb();
   const { entryId } = await req.json().catch(() => ({}));
 
   const entry = entryId

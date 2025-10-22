@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from "next-auth";
 import { dbConnect } from '@/lib/db';
 import JournalEntry from '@/models/JournalEntry';
-import { getMongoDb } from "@/lib/mongo";
+import { getDb } from "@/lib/mongo";
 import { authOptions } from "@/lib/authOptions";
 
 export const runtime = "nodejs";
@@ -14,7 +14,7 @@ export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session?.user) return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
 
-  const db = await getMongoDb();
+  const db = await getDb();
   const items = await db
     .collection("journalentries")
     .find({ userId: (session.user as any).id })      // ← per-user
@@ -28,7 +28,7 @@ export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session?.user) return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
 
-  const db = await getMongoDb();
+  const db = await getDb();
   const { content, mood, tags } = await req.json();
 
   if (!content?.trim()) return NextResponse.json({ ok: false, error: "Content required" }, { status: 400 });

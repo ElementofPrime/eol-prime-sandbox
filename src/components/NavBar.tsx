@@ -2,66 +2,82 @@
 
 import Link from 'next/link';
 import { useSession, signIn, signOut } from 'next-auth/react';
-import { usePathname } from 'next/navigation';
+import useSWR from 'swr';
+import { useMemo } from 'react';
 
-const LINKS = [
-  { name: 'Home', href: '/' },
-  { name: 'Chat', href: '/chat' },
-  { name: 'Journal', href: '/journal' },
-  { name: 'To-Do', href: '/todo' },
-  { name: 'Reminders', href: '/reminders' },
-  { name: 'Fix-It', href: '/fix-it' },
-  { name: 'Core', href: '/core' },
-  { name: 'About', href: '/about' },
-];
+const fetcher = (url: string) => fetch(url).then(r => r.json());
+
+function Brand() {
+  return (
+    <Link href="/" className="font-semibold tracking-wide text-cyan-300 hover:text-cyan-200">
+      Element of Life — Prime OS
+    </Link>
+  );
+}
+
+function Pill({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className="rounded-full bg-white/5 px-3 py-1.5 text-sm text-slate-200 hover:bg-white/10 border border-white/10"
+    >
+      {children}
+    </Link>
+  );
+}
 
 export default function NavBar() {
-  const { data: session, status } = useSession();
-  const pathname = usePathname();
+  const { data: session } = useSession();
+  const email = useMemo(() => (session?.user?.email ?? '').toLowerCase(), [session?.user?.email]);
+  const { data } = useSWR(email ? `/api/profile?email=${encodeURIComponent(email)}` : null, fetcher);
+  const displayName = data?.profile?.displayName as string | undefined;
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 backdrop-blur bg-black/20">
-      <nav className="mx-auto max-w-6xl px-3 sm:px-4 py-3 flex items-center justify-between">
-        <Link href="/" className="font-semibold tracking-wide">Element of Life — Prime OS</Link>
+    <nav className="fixed inset-x-0 top-0 z-50 flex items-center justify-between bg-transparent px-4 py-4">
+      <div className="flex items-center gap-6">
+        <Brand />
+        <div className="hidden sm:flex items-center gap-2">
+          <Pill href="/">Home</Pill>
+          <Pill href="/chat">Chat</Pill>
+          <Pill href="/journal">Journal</Pill>
+          <Pill href="/to-do">To-Do</Pill>
+          <Pill href="/reminders">Reminders</Pill>
+          <Pill href="/fix-it">Fix-It</Pill>
+          <Pill href="/core">Core</Pill>
+          <Pill href="/about">About</Pill>
+        </div>
+      </div>
 
-        <ul className="hidden md:flex gap-2">
-          {LINKS.map(l => {
-            const active = pathname === l.href;
-            return (
-              <li key={l.href}>
-                <Link
-                  href={l.href}
-                  className={`rounded-full px-3 py-1 text-sm ${
-                    active ? 'bg-white/15' : 'bg-white/5 hover:bg-white/10'
-                  } border border-white/10`}
-                >
-                  {l.name}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+      <div className="flex items-center gap-3">
+        {displayName && (
+          <Link
+            href="/settings"
+            className="hidden sm:inline rounded-full border border-cyan-400/40 px-3 py-1.5 text-cyan-300 hover:bg-cyan-400/10"
+            title="Edit profile"
+          >
+            Welcome back, {displayName}
+          </Link>
+        )}
 
-        <div className="flex items-center gap-2">
-          {status === 'loading' ? (
-            <span className="text-xs opacity-70">…</span>
-          ) : session?.user ? (
+        {!session ? (
+          <button
+            onClick={() => signIn()}
+            className="rounded-full bg-cyan-600 px-4 py-1.5 text-sm text-white hover:bg-cyan-500"
+          >
+            Sign In
+          </button>
+        ) : (
+          <div className="flex items-center gap-2">
+            <Pill href="/settings">Settings</Pill>
             <button
               onClick={() => signOut()}
-              className="rounded-full px-3 py-1 text-sm bg-white/10 hover:bg-white/15 border border-white/15"
+              className="rounded-full bg-white/10 px-3 py-1.5 text-sm text-slate-200 hover:bg-white/20 border border-white/10"
             >
               Sign Out
             </button>
-          ) : (
-            <button
-              onClick={() => signIn()} // opens email sign-in
-              className="rounded-full px-3 py-1 text-sm bg-cyan-600 hover:bg-cyan-500 text-white"
-            >
-              Sign In
-            </button>
-          )}
-        </div>
-      </nav>
-    </header>
+          </div>
+        )}
+      </div>
+    </nav>
   );
 }

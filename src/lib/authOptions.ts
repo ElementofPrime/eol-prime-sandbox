@@ -2,11 +2,14 @@
 import type { NextAuthOptions } from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import { mongoClientPromise } from "@/lib/mongo"; // from the file we added
+import { mongoClientPromise } from "@/lib/mongo";
 
 export const authOptions: NextAuthOptions = {
-  adapter: MongoDBAdapter(mongoClientPromise as any),
+  adapter: MongoDBAdapter(mongoClientPromise),
+
+  // Use DB sessions (MongoDBAdapter will manage the sessions collection)
   session: { strategy: "database" },
+
   providers: [
     EmailProvider({
       server: {
@@ -18,13 +21,16 @@ export const authOptions: NextAuthOptions = {
         },
       },
       from: process.env.EMAIL_FROM!,
+      // Magic link validity (seconds). Adjust if you want longer links.
       maxAge: 10 * 60,
     }),
   ],
+
   pages: {
-    signIn: "/signin",
+    signIn: "/signin",          // OK if you have this page; otherwise remove
     verifyRequest: "/signin/verify",
   },
+
   callbacks: {
     async session({ session, user }) {
       if (session?.user && user?.id) (session.user as any).id = user.id;

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
-import { getMongoDb } from "@/lib/mongo";
+import { getDb } from "@/lib/mongo";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -13,7 +13,7 @@ export async function GET() {
   const s = await getServerSession(authOptions);
   if (!s?.user) return NextResponse.json({ ok:false, error:"Unauthorized" }, { status:401 });
 
-  const db = await getMongoDb();
+  const db = await getDb();
   const items = await db.collection("todos")
     .find({ userId: (s.user as any).id })
     .sort({ done: 1, createdAt: -1 })
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
   const s = await getServerSession(authOptions);
   if (!s?.user) return NextResponse.json({ ok:false, error:"Unauthorized" }, { status:401 });
 
-  const db = await getMongoDb();
+  const db = await getDb();
   const { title } = await req.json();
   if (!title?.trim()) return NextResponse.json({ ok:false, error:"Title required" }, { status:400 });
 
@@ -39,7 +39,7 @@ export async function PATCH(req: Request) {
   const s = await getServerSession(authOptions);
   if (!s?.user) return NextResponse.json({ ok:false, error:"Unauthorized" }, { status:401 });
 
-  const db = await getMongoDb();
+  const db = await getDb();
   const { id, done } = await req.json();
   if (!id) return NextResponse.json({ ok:false, error:"id required" }, { status:400 });
 
@@ -54,7 +54,7 @@ export async function DELETE(req: Request) {
   const s = await getServerSession(authOptions);
   if (!s?.user) return NextResponse.json({ ok:false, error:"Unauthorized" }, { status:401 });
 
-  const db = await getMongoDb();
+  const db = await getDb();
   const { id } = await req.json();
   if (!id) return NextResponse.json({ ok:false, error:"id required" }, { status:400 });
 
