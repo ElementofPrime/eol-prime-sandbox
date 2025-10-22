@@ -1,7 +1,7 @@
 // src/lib/authOptions.ts
 import type { NextAuthOptions } from "next-auth";
 import EmailProvider from "next-auth/providers/email";
-import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import { mongoClientPromise } from "@/lib/mongo"; // from the file we added
 
 export const authOptions: NextAuthOptions = {
