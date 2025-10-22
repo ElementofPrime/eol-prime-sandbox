@@ -1,30 +1,17 @@
 'use client';
-
+import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
 export default function ThemeToggle() {
-  const [isDark, setIsDark] = useState(false);
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
-  // Initialize from localStorage or prefers-color-scheme
- useEffect(() => {
-   const saved = localStorage.getItem('eol-theme');
-   const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
-   const dark = saved ? saved === 'dark' : prefersDark;
-   setIsDark(dark);
-   document.documentElement.classList.toggle('dark', dark);
- }, []); // <— add this empty array
-
-  const toggle = () => {
-    const next = !isDark;
-    setIsDark(next);
-    document.documentElement.classList.toggle('dark', next);
-    localStorage.setItem('eol-theme', next ? 'dark' : 'light');
-  };
-
+  const isDark = (mounted ? resolvedTheme : theme) === 'dark';
   return (
     <button
-      onClick={toggle}
-      className="border border-cyan-400 text-cyan-400 px-3 py-1 rounded-md hover:bg-cyan-400 hover:text-black transition"
+      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-slate-200 hover:bg-white/10"
       aria-label="Toggle theme"
       title="Toggle theme"
     >
