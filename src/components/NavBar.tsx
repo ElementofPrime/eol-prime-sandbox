@@ -27,26 +27,34 @@ export default function NavBar() {
 
   return (
     <div className="fixed inset-x-0 top-0 z-50 bg-transparent">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-        {/* left */}
-        <div className="flex items-center gap-6">
-          <Link href="/" className="font-semibold tracking-wide text-cyan-300 hover:text-cyan-200">
+      {/* Center the nav group perfectly, independent of left/right widths */}
+      <nav className="mx-auto w-full max-w-6xl px-4 py-4
+                      grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+        {/* LEFT (brand) */}
+        <div className="min-w-0">
+          <Link
+            href="/"
+            className="block truncate font-semibold tracking-wide text-cyan-300 hover:text-cyan-200"
+            title="Element of Life — Prime OS"
+          >
             Element of Life — Prime OS
           </Link>
-          <div className="hidden sm:flex items-center gap-2">
-            <Pill href="/">Home</Pill>
-            <Pill href="/chat">Chat</Pill>
-            <Pill href="/journal">Journal</Pill>
-            <Pill href="/todo">To-Do</Pill>{/* <-- canonical path */}
-            <Pill href="/reminders">Reminders</Pill>
-            <Pill href="/fix-it">Fix-It</Pill>
-            <Pill href="/core">Core</Pill>
-            <Pill href="/about">About</Pill>
-          </div>
         </div>
 
-        {/* right */}
-        <div className="flex items-center gap-3">
+        {/* CENTER (pills) — always centered */}
+        <div className="hidden sm:flex items-center gap-2">
+          <Pill href="/">Home</Pill>
+          <Pill href="/chat">Chat</Pill>
+          <Pill href="/journal">Journal</Pill>
+          <Pill href="/to-do">To-Do</Pill>
+          <Pill href="/reminders">Reminders</Pill>
+          <Pill href="/fix-it">Fix-It</Pill>
+          <Pill href="/core">Core</Pill>
+          <Pill href="/about">About</Pill>
+        </div>
+
+        {/* RIGHT (theme + auth) — right-aligned */}
+        <div className="flex items-center justify-end gap-3">
           <ThemeToggle />
           {displayName && (
             <Link
