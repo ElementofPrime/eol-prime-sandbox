@@ -3,97 +3,163 @@ import { ObjectId } from "mongodb";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { getDb } from "@/lib/mongo";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const fetchCache = "force-no-store";
 
+/** Simple journal sentiment + nudge prompt */
 function analyze(t: string) {
   const txt = (t || "").toLowerCase();
-  const pos = ["great","grateful","good","progress","win","joy","happy","love"];
-  const neg = ["stressed","overwhelmed","anxious","sad","angry","worried","tired","lost"];
-  let score = 0; pos.forEach(w => txt.includes(w) && score++); neg.forEach(w => txt.includes(w) && score--);
+  const pos = ["great", "grateful", "good", "progress", "win", "joy", "happy", "love"];
+  const neg = ["stressed", "overwhelmed", "anxious", "sad", "angry", "worried", "tired", "lost"];
+  let score = 0;
+  for (const w of pos) if (txt.includes(w)) score++;
+  for (const w of neg) if (txt.includes(w)) score--;
+
   const mood = score > 0 ? "positive" : score < 0 ? "negative" : "neutral";
-  const prompt = mood === "negative"
-    ? "Take one small step you can control. What is it?"
-    : mood === "positive"
-    ? "Momentum is up—what tiny action compounds it today?"
-    : "What would make today 1% better?";
+  const prompt =
+    mood === "negative"
+      ? "Take one small step you can control. What is it?"
+      : mood === "positive"
+      ? "Momentum is up—what tiny action compounds it today?"
+      : "What would make today 1% better?";
+
   return { mood, sentimentScore: score, prompt };
 }
 
+/** Lightweight tone heuristic for chat aura */
+function toneFromText(text: string) {
+  const t = (text || "").toLowerCase();
+  let tone: "calm" | "excited" | "reflective" | "stressed" | "neutral" = "neutral";
+
+  if (/[!?]{2,}/.test(t) || /(wow|let's go|on fire)/.test(t)) tone = "excited";
+  else if (/(thank|grateful|breathe|peace)/.test(t)) tone = "calm";
+  else if (/(hmm|thinking|reflect|journal)/.test(t)) tone = "reflective";
+  else if (/(stressed|anxious|worried|help)/.test(t)) tone = "stressed";
+
+  return tone;
+}
+
+/**
+ * GET /api/pulse
+ * Auth required.
+ * Returns the most recent insight (auto-creates one from latest journal entry if missing).
+ */
 export async function GET() {
-  const s = await getServerSession(authOptions);
-  if (!s?.user) return NextResponse.json({ ok:false, error:"Unauthorized" }, { status:401 });
-  const userId = (s.user as any).id;
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+    }
+    const userId = (session.user as any).id;
+    const db = await getDb();
 
-  const db = await getDb();
-  const entries = await db.collection("journalentries")
-    .find({ userId })
-    .sort({ createdAt: -1 })
-    .limit(5)
-    .toArray();
+    const entries = await db
+      .collection("journalentries")
+      .find({ userId })
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .toArray();
 
-  const latest = entries[0];
+    const latest = entries[0];
+    let lastInsight =
+      latest &&
+      (await db
+        .collection("primeinsights")
+        .find({ userId, entryId: latest._id })
+        .sort({ createdAt: -1 })
+        .limit(1)
+        .next());
 
-  let lastInsight = latest && await db.collection("primeinsights")
-    .find({ userId, entryId: latest._id })
-    .sort({ createdAt: -1 })
-    .limit(1)
-    .next();
+    if (latest && !lastInsight) {
+      const a = analyze(latest.content || "");
+      const ins = {
+        entryId: latest._id,
+        userId,
+        mood: a.mood,
+        sentimentScore: a.sentimentScore,
+        topics: [] as string[],
+        extract: {} as Record<string, unknown>,
+        primePrompts: [a.prompt],
+        primeSuggestions: [] as string[],
+        createdAt: new Date(),
+      };
+      const r = await db.collection("primeinsights").insertOne(ins);
+      lastInsight = { _id: r.insertedId, ...ins } as any;
+    }
 
-  if (latest && !lastInsight) {
-    const a = analyze(latest.content || "");
+    return NextResponse.json({
+      ok: true,
+      entriesCount: entries.length,
+      lastInsight: lastInsight || null,
+      mood: lastInsight?.mood || "neutral",
+      prompt: lastInsight?.primePrompts?.[0] || "What matters most right now?",
+    });
+  } catch (err) {
+    return NextResponse.json({ ok: false, error: "Server error" }, { status: 500 });
+  }
+}
+
+/**
+ * POST /api/pulse
+ * Modes:
+ *  - Tone check (no auth): { text }
+ *  - Create insight (auth): { entryId? } -> analyzes specified or latest entry
+ */
+export async function POST(req: Request) {
+  try {
+    const body = await req.json().catch(() => ({} as any));
+    const { text, entryId } = body || {};
+
+    // Tone-only flow (no auth required)
+    if (typeof text === "string" && !entryId) {
+      const tone = toneFromText(text);
+      return NextResponse.json({ tone });
+    }
+
+    // Insight creation flow (auth required)
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+    }
+    const userId = (session.user as any).id;
+    const db = await getDb();
+
+    // Fetch the target entry: explicit by id, else latest
+    const entry =
+      entryId
+        ? await db
+            .collection("journalentries")
+            .findOne({ _id: new ObjectId(entryId), userId })
+        : await db
+            .collection("journalentries")
+            .find({ userId })
+            .sort({ createdAt: -1 })
+            .limit(1)
+            .next();
+
+    if (!entry) {
+      return NextResponse.json({ ok: false, error: "No journal entry found" }, { status: 404 });
+    }
+
+    const a = analyze(entry.content || "");
     const ins = {
-      entryId: latest._id,
+      entryId: entry._id,
       userId,
       mood: a.mood,
       sentimentScore: a.sentimentScore,
-      topics: [],
-      extract: {},
+      topics: [] as string[],
+      extract: {} as Record<string, unknown>,
       primePrompts: [a.prompt],
-      primeSuggestions: [],
+      primeSuggestions: [] as string[],
       createdAt: new Date(),
     };
+
     const r = await db.collection("primeinsights").insertOne(ins);
-    lastInsight = { _id: r.insertedId, ...ins } as any;
+    return NextResponse.json({ ok: true, insight: { _id: r.insertedId, ...ins } }, { status: 201 });
+  } catch (err) {
+    return NextResponse.json({ ok: false, error: "Server error" }, { status: 500 });
   }
-
-  return NextResponse.json({
-    ok: true,
-    entriesCount: entries.length,
-    lastInsight: lastInsight || null,
-    mood: lastInsight?.mood || "neutral",
-    prompt: lastInsight?.primePrompts?.[0] || "What matters most right now?",
-  });
-}
-
-export async function POST(req: Request) {
-  const s = await getServerSession(authOptions);
-  if (!s?.user) return NextResponse.json({ ok:false, error:"Unauthorized" }, { status:401 });
-  const userId = (s.user as any).id;
-
-  const db = await getDb();
-  const { entryId } = await req.json().catch(() => ({}));
-
-  const entry = entryId
-    ? await db.collection("journalentries").findOne({ _id: new ObjectId(entryId), userId })
-    : await db.collection("journalentries").find({ userId }).sort({ createdAt: -1 }).limit(1).next();
-
-  if (!entry) return NextResponse.json({ ok:false, error:"No journal entry found" }, { status:404 });
-
-  const a = analyze(entry.content || "");
-  const ins = {
-    entryId: entry._id,
-    userId,
-    mood: a.mood,
-    sentimentScore: a.sentimentScore,
-    topics: [],
-    extract: {},
-    primePrompts: [a.prompt],
-    primeSuggestions: [],
-    createdAt: new Date(),
-  };
-  const r = await db.collection("primeinsights").insertOne(ins);
-  return NextResponse.json({ ok:true, insight:{ _id:r.insertedId, ...ins } }, { status:201 });
 }

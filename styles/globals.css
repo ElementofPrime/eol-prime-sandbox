@@ -69,3 +69,92 @@ html, body { -webkit-text-size-adjust: 100%; }
 html { scroll-behavior: smooth; }
 button, a { -webkit-tap-highlight-color: transparent; }
 }
+/* ===== Fortress of Prime — visual systems ===== */
+
+/* Starfield (pure CSS) */
+.prime-starfield {
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.8) 50%, transparent 55%),
+    radial-gradient(1.5px 1.5px at 70% 60%, rgba(255,255,255,.6) 50%, transparent 55%),
+    radial-gradient(1.2px 1.2px at 40% 80%, rgba(255,255,255,.55) 50%, transparent 55%),
+    radial-gradient(1.2px 1.2px at 85% 20%, rgba(255,255,255,.6) 50%, transparent 55%),
+    radial-gradient(1px 1px at 10% 75%, rgba(255,255,255,.5) 50%, transparent 55%);
+  background-repeat: repeat;
+  background-size: 700px 700px;
+  animation: primeStarDrift 80s linear infinite;
+}
+@keyframes primeStarDrift {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-400px); }
+}
+
+/* Fog layer */
+.prime-fog:before,
+.prime-fog:after {
+  content: "";
+  position: absolute;
+  inset: -10%;
+  background: radial-gradient(60% 40% at 50% 100%, rgba(180,200,230,.08), transparent 70%),
+              radial-gradient(60% 40% at 10% 30%, rgba(120,170,220,.06), transparent 70%),
+              radial-gradient(60% 40% at 90% 40%, rgba(120,170,220,.05), transparent 70%);
+  filter: blur(18px);
+  animation: fogFloat 24s ease-in-out infinite alternate;
+}
+.prime-fog:after { animation-duration: 36s; opacity: .6; }
+@keyframes fogFloat {
+  0% { transform: translateY(0px) translateX(0px); }
+  100% { transform: translateY(-18px) translateX(6px); }
+}
+
+/* Light beams */
+.prime-beams {
+  background: conic-gradient(from 180deg at 50% -10%,
+    rgba(56,189,248,.12),
+    transparent 30%,
+    rgba(147,197,253,.10),
+    transparent 70%,
+    rgba(56,189,248,.12));
+  mask-image: radial-gradient(120% 60% at 50% 0%, black 20%, transparent 70%);
+  animation: beamsGlow 10s ease-in-out infinite alternate;
+}
+@keyframes beamsGlow {
+  0% { opacity: .25; }
+  100% { opacity: .45; }
+}
+
+/* Beacon glow atop the fortress */
+.prime-beacon {
+  pointer-events: none;
+  background: radial-gradient(200px 120px at 50% 20%, rgba(180,220,255,.35), transparent 60%);
+  mix-blend-mode: screen;
+  animation: beaconPulse 6s ease-in-out infinite;
+}
+@keyframes beaconPulse {
+  0%, 100% { opacity: .35; filter: blur(10px) saturate(110%); }
+  50% { opacity: .55; filter: blur(14px) saturate(130%); }
+}
+
+/* Parallax: subtle float on fortress */
+.fortress-parallax {
+  animation: parallaxFloat 14s ease-in-out infinite;
+}
+@keyframes parallaxFloat {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-6px) scale(1.01); }
+}
+
+/* Prime aura halo (used by PrimeAura) */
+.prime-aura {
+  filter: blur(22px);
+  animation: auraPulse 3.6s ease-in-out infinite;
+}
+@keyframes auraPulse {
+  0% { opacity: .25; transform: scale(.98); }
+  50% { opacity: .45; transform: scale(1.02); }
+  100% { opacity: .25; transform: scale(.98); }
+}
+
+/* Smooth thin scrollbar on chat log (webkit fallback) */
+.scrollbar-thin::-webkit-scrollbar { height: 8px; width: 8px; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 8px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
