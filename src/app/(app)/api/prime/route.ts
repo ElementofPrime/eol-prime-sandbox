@@ -13,23 +13,23 @@ const MODEL = process.env.PRIME_MODEL || "gpt-4o-mini";
 
 type GuestCookie = { date: string; count: number };
 
-function readGuestCookie(): GuestCookie {
-  const raw = cookies().get("eol_guest_chat")?.value ?? "";
+function buildGuestCookieHeader(value: GuestCookie): string {
+  const encoded = encodeURIComponent(JSON.stringify(value));
+  // lax + 1 day, path=/ so all routes see it
+  return `eol_guest_chat=${encoded}; Path=/; Max-Age=86400; SameSite=Lax`;
+}
+
+/** Read the guest cookie (await cookies() in Next 15 route handlers) */
+async function readGuestCookie(): Promise<GuestCookie> {
+  const jar = await cookies();
+  const raw = jar.get("eol_guest_chat")?.value ?? "";
   try {
-    const obj = JSON.parse(raw);
-    if (typeof obj?.date === "string" && typeof obj?.count === "number") {
-      return obj as GuestCookie;
+    const decoded = raw ? JSON.parse(decodeURIComponent(raw)) : null;
+    if (decoded && typeof decoded.date === "string" && typeof decoded.count === "number") {
+      return decoded as GuestCookie;
     }
   } catch {}
   return { date: "", count: 0 };
-}
-
-function writeGuestCookie(value: GuestCookie) {
-  cookies().set("eol_guest_chat", JSON.stringify(value), {
-    path: "/",
-    maxAge: 60 * 60 * 24, // 1 day
-    sameSite: "lax",
-  });
 }
 
 // --- route -----------------------------------------------------------------
@@ -38,27 +38,37 @@ export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
 
-    // ------------------ GUEST LIMITER (5/day) ------------------
+    // ---------- Guest limiter (5/day, UTC) ----------
+    let setCookieHeader: string | null = null;
+
     if (!session?.user) {
-      const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD (UTC)
-      const store = readGuestCookie();
+      const today = new Date().toISOString().slice(0, 10);
+      const store = await readGuestCookie();
       const count = store.date === today ? store.count : 0;
 
       if (count >= 5) {
-        return NextResponse.json(
-          {
+        // Re-send the existing cookie value so the browser keeps it for the day
+        const header = buildGuestCookieHeader({ date: today, count });
+        return new NextResponse(
+          JSON.stringify({
             ok: false,
-            error:
-              "Guest chat limit reached. Create a free account for full access.",
-          },
-          { status: 429 }
+            error: "Guest chat limit reached. Create a free account for full access.",
+          }),
+          {
+            status: 429,
+            headers: {
+              "content-type": "application/json; charset=utf-8",
+              "cache-control": "no-store",
+              "set-cookie": header,
+            },
+          }
         );
       }
 
-      // increment usage immediately (before model call)
-      writeGuestCookie({ date: today, count: count + 1 });
+      // Increment immediately and attach Set-Cookie to the response we’ll return
+      setCookieHeader = buildGuestCookieHeader({ date: today, count: count + 1 });
     }
-    // -----------------------------------------------------------
+    // ------------------------------------------------
 
     const { messages = [] } = await req.json().catch(() => ({}));
     if (!Array.isArray(messages) || messages.length === 0) {
@@ -89,21 +99,20 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return new NextResponse(readable, {
-      status: 200,
-      headers: {
-        "Content-Type": "text/plain; charset=utf-8",
-        "Cache-Control": "no-store",
-      },
-    });
+    // Build streaming response, optionally with Set-Cookie for guest tracking
+    const headers: Record<string, string> = {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-store",
+    };
+    if (setCookieHeader) headers["Set-Cookie"] = setCookieHeader;
+
+    return new NextResponse(readable, { status: 200, headers });
   } catch (err: any) {
     console.error("prime route error:", err?.status, err?.message || err);
     return NextResponse.json(
       {
         ok: false,
-        error: `Prime API error: ${err?.status ?? "unknown"} – ${err?.message ?? String(
-          err
-        )}`,
+        error: `Prime API error: ${err?.status ?? "unknown"} – ${err?.message ?? String(err)}`,
       },
       { status: 500 }
     );
