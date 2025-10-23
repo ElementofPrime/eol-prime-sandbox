@@ -1,8 +1,7 @@
-// /src/components/SceneFortress.tsx
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import NextImage from "next/image";
 
 /**
  * SceneFortress
@@ -14,11 +13,18 @@ export default function SceneFortress() {
   const [hasImg, setHasImg] = useState(true);
 
   useEffect(() => {
-    // Preload main fortress image; if missing, we gracefully degrade to gradient.
-    const img = new Image();
+    // Only run in the browser
+    if (typeof window === "undefined") return;
+
+    const img = new window.Image();
     img.src = "/assets/fortress-bg.png";
     img.onload = () => setHasImg(true);
     img.onerror = () => setHasImg(false);
+
+    // optional cleanup (not needed for Image, but keeps pattern tidy)
+    return () => {
+      // no-op
+    };
   }, []);
 
   return (
@@ -36,9 +42,9 @@ export default function SceneFortress() {
       {hasImg ? (
         <div className="absolute inset-0 flex items-end justify-center md:items-center">
           {/* Slight parallax on scroll */}
-          <div className="fortress-parallax relative w-[1400px] max-w-[92vw] aspect-[16/9]">
+          <div className="fortress-parallax relative w-[1400px] max-w-[92vw] aspect-video">
             {/* fortress image */}
-            <Image
+            <NextImage
               src="/assets/fortress-bg.png"
               alt=""
               fill
