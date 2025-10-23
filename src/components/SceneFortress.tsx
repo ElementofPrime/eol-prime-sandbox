@@ -1,65 +1,70 @@
+// /src/components/SceneFortress.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import NextImage from "next/image";
 
-/**
- * SceneFortress
- * - Parallax fortress backdrop with soft fog + starfield + crest glow.
- * - Safe if assets are missing (falls back to gradient).
- * - Z-index is behind page content; place it near the root of the chat page.
- */
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia(`(max-width:${breakpoint}px)`);
+    const handler = () => setIsMobile(mq.matches);
+    handler();
+    mq.addEventListener?.("change", handler);
+    return () => mq.removeEventListener?.("change", handler);
+  }, [breakpoint]);
+  return isMobile;
+}
+
 export default function SceneFortress() {
+  const isMobile = useIsMobile(768);
+
+  // choose art-directed source
+  const src = isMobile
+    ? "/assets/fortress-bg-portrait.webp" // 1080x1920
+    : "/assets/fortress-bg-desktop.webp"; // 2560x1440
+
   const [hasImg, setHasImg] = useState(true);
 
   useEffect(() => {
-    // Only run in the browser
     if (typeof window === "undefined") return;
-
-    const img = new window.Image();
-    img.src = "/assets/fortress-bg.png";
-    img.onload = () => setHasImg(true);
-    img.onerror = () => setHasImg(false);
-
-    // optional cleanup (not needed for Image, but keeps pattern tidy)
-    return () => {
-      // no-op
-    };
-  }, []);
+    const test = new window.Image();
+    test.src = src;
+    test.onload = () => setHasImg(true);
+    test.onerror = () => setHasImg(false);
+  }, [src]);
 
   return (
-    <div
-      aria-hidden
-      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
-    >
-      {/* Base gradient fallback */}
-      <div className="absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_20%,#87a7c780_0%,#0b122080_60%,transparent_100%)]" />
-
-      {/* Optional starfield */}
+    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      {/* gradient fallback while loading/missing */}
+      <div className="absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_20%,#87a7c766_0%,#0b122099_60%,transparent_100%)]" />
       <div className="absolute inset-0 prime-starfield opacity-30" />
 
-      {/* Fortress image / video layer */}
-      {hasImg ? (
-        <div className="absolute inset-0 flex items-end justify-center md:items-center">
-          {/* Slight parallax on scroll */}
-          <div className="fortress-parallax relative w-[1400px] max-w-[92vw] aspect-video">
-            {/* fortress image */}
+      {hasImg && (
+        <div className="absolute inset-0">
+          <div className="relative h-full w-full">
             <NextImage
-              src="/assets/fortress-bg.png"
+              src={src}
               alt=""
               fill
               priority
-              className="object-contain opacity-80 mix-blend-screen select-none"
+              // cover: fills viewport without letterboxing
+              className="object-cover opacity-[0.9] select-none"
+              // tell Next what size we expect at common breakpoints
+              sizes="(max-width: 480px) 100vw,
+                     (max-width: 768px) 100vw,
+                     (max-width: 1280px) 100vw,
+                     100vw"
+              placeholder="empty"
             />
-            {/* subtle beacon glow */}
-            <div className="absolute inset-0 prime-beacon" />
           </div>
+          {/* soft beacon + beams */}
+          <div className="absolute inset-0 prime-beacon" />
+          <div className="absolute inset-0 prime-fog" />
+          <div className="absolute inset-0 prime-beams" />
         </div>
-      ) : null}
-
-      {/* Foreground fog + subtle moving light beams */}
-      <div className="absolute inset-0 prime-fog pointer-events-none" />
-      <div className="absolute inset-0 prime-beams pointer-events-none" />
+      )}
     </div>
   );
 }
