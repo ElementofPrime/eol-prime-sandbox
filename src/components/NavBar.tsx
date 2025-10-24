@@ -35,9 +35,9 @@ export default function NavBar() {
           <Link
             href="/"
             className="block truncate font-semibold tracking-wide text-cyan-300 hover:text-cyan-200"
-            title="Element of Life — Prime OS"
+            title="Element of Life — Prime Labs OS"
           >
-            Element of Life — Prime OS
+            Element of Life — Prim Labs OS
           </Link>
         </div>
 

@@ -1,6 +1,6 @@
 export default function manifest() {
   return {
-    name: "Element of Life — Prime OS",
+    name: "Element of Life — Prime Labs OS",
     short_name: "EOL",
     description:
       "Element of Life is your intelligent sanctuary — guiding clarity, purpose, and light through Prime.",
