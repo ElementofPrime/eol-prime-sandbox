@@ -25,7 +25,7 @@ export default function PrimeAura({ tone = "neutral" as Tone }) {
     <div className="relative">
       {/* pulsing aura behind messages or the input dock */}
       <div
-        className={`prime-aura pointer-events-none absolute -inset-6 rounded-3xl bg-gradient-to-br ${toneClass}`}
+        className={`prime-aura pointer-events-none absolute -inset-6 rounded-3xl bg-linear-to-br ${toneClass}`}
       />
     </div>
   );

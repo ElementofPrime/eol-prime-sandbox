@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
         return new NextResponse(
           JSON.stringify({
             ok: false,
-            error: "Guest chat limit reached. Create a free account for full access.",
+            error: "Guest chat limit has been reached. Create a free account for full access.",
           }),
           {
             status: 429,

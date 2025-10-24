@@ -40,7 +40,7 @@ export default function SettingsPage() {
       <section className="mx-auto max-w-3xl rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_0_80px_rgba(0,220,255,0.06)]">
         <h1 className="text-3xl md:text-4xl font-semibold">Profile & Settings</h1>
         <p className="mt-2 text-slate-300">
-          Tell Prime what to call you. Your greeting updates across the app.
+          Tell Prime what to call you by. Your greeting updates across the app.
         </p>
 
         {!session?.user?.email && (

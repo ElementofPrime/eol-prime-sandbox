@@ -29,7 +29,7 @@ export default function ChatClient() {
     if (!message.trim()) return;
 
     if (isGuest && chatUsed >= 5) {
-      alert('Guest chat limit reached. Sign up to continue your journey with Prime.');
+      alert('Guest chat limit has been reached. Please create an account or sign in to continue your journey with Prime.');
       return;
     }
 

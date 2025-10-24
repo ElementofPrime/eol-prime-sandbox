@@ -21,9 +21,9 @@ function analyze(t: string) {
   const mood = score > 0 ? "positive" : score < 0 ? "negative" : "neutral";
   const prompt =
     mood === "negative"
-      ? "Take one small step you can control. What is it?"
+      ? "Take one small step you can control. What is it? Sometimes doing even one simple thing we don't want to do, but do it anyways can bring fulfilment and change ones mood instantly"
       : mood === "positive"
-      ? "Momentum is up—what tiny action compounds it today?"
+      ? "Momentum is up—what tiny action compounds it today? Should we keep building upon this and take on the next task or To-Do?"
       : "What would make today 1% better?";
 
   return { mood, sentimentScore: score, prompt };
@@ -95,7 +95,7 @@ export async function GET() {
       entriesCount: entries.length,
       lastInsight: lastInsight || null,
       mood: lastInsight?.mood || "neutral",
-      prompt: lastInsight?.primePrompts?.[0] || "What matters most right now?",
+      prompt: lastInsight?.primePrompts?.[0] || "What matters to you most right now?",
     });
   } catch (err) {
     return NextResponse.json({ ok: false, error: "Server error" }, { status: 500 });

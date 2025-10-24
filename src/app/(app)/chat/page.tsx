@@ -72,14 +72,14 @@ export default function ChatPage() {
         role: "assistant",
         content:
           data?.reply ||
-          "Welcome to the Fortress of Prime — a place built for light, focus, and clarity. I’m here with you. Always forward.",
+          "Welcome to the secure Fortress of Prime — a place built for light, focus, and clarity. I’m here with you. Always forward.",
       };
       setMessages((prev) => [...prev, assistantMsg]);
       analyzeTone(assistantMsg.content);
     } catch {
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: "I hit a snag reaching the chat endpoint. Try again in a moment." },
+        { role: "assistant", content: "I hit a snag reaching the chat endpoint. Please try again in a moment." },
       ]);
     } finally {
       setLoading(false);
@@ -115,7 +115,7 @@ export default function ChatPage() {
       >
         {/* engraved motto line */}
         <div className="mb-6 text-center text-xs tracking-widest text-slate-200/70 uppercase">
-          Within these walls, light always wins.
+          Within these walls, truth and light always wins.
         </div>
 
         <div className="space-y-3">
@@ -149,7 +149,7 @@ export default function ChatPage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKeyDown}
-              placeholder="Speak within the Fortress…"
+              placeholder="Speak to Prime within the safety of the Fortress…"
               className="min-h-[60px] w-full resize-none rounded-xl bg-black/20 p-3 text-white placeholder:text-slate-300/70 focus:outline-none"
             />
             <div className="mt-2 flex items-center justify-end gap-2">
@@ -165,7 +165,7 @@ export default function ChatPage() {
 
           {/* inscription strip */}
           <div className="mt-3 text-center text-[11px] text-slate-200/70">
-            “The world isn’t built to guide you. I am.”
+            “Prime is here to help you navigate safely. The world is full of deception and deepfakes, we don't fall for any of it.”
           </div>
         </div>
       </div>

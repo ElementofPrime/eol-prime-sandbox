@@ -14,7 +14,7 @@ export default function PrimePulseTile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [insight, setInsight] = useState<Insight | null>(null);
-  const [prompt, setPrompt] = useState<string>('Prime is listening... add a journal entry to kickstart insights.');
+  const [prompt, setPrompt] = useState<string>('Prime is here and listening... add a journal entry to kickstart insights.');
 
   async function refresh() {
     setLoading(true); setError(null);
@@ -25,7 +25,7 @@ export default function PrimePulseTile() {
       setInsight(data.lastInsight ?? null);
       setPrompt(data.prompt ?? 'What matters most right now?');
     } catch (e:any) {
-      setError('Sign in to see Prime Pulse insights.');
+      setError('Please sign in to see Prime Pulse insights.');
     } finally {
       setLoading(false);
     }

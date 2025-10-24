@@ -20,7 +20,7 @@ export default function CorePage() {
           <article className="rounded-2xl border border-white/10 bg-white/5 p-6">
             <h3 className="text-xl font-semibold">🌱 Growth</h3>
             <p className="mt-2 text-slate-300">
-              Ever-learning, ever-adapting. Each day is a step forward.
+              Ever-learning, ever-adapting. Each new day is a step forward.
             </p>
           </article>
           <article className="rounded-2xl border border-white/10 bg-white/5 p-6">
@@ -32,7 +32,7 @@ export default function CorePage() {
           <article className="rounded-2xl border border-white/10 bg-white/5 p-6">
             <h3 className="text-xl font-semibold">🌟 Purpose</h3>
             <p className="mt-2 text-slate-300">
-              Build toward light—identity first, then Elements, then creation.
+              Build toward truth and light—identity first, then Elements, then creation.
             </p>
           </article>
         </div>

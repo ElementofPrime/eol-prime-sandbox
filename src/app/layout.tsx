@@ -12,7 +12,7 @@ const greatVibes = Great_Vibes({ weight: "400", subsets: ["latin"], variable: "-
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://elementoflife.ai"),
-  title: "Element of Life — Prime OS",
+  title: "Element of Life — Prime Labs OS",
   description: "The foundation where focus becomes growth, and growth becomes transformation.",
   themeColor: "#0b1220",
   manifest: "/manifest.webmanifest",

@@ -44,7 +44,7 @@ export default function FixItPage() {
       <section className="mx-auto max-w-4xl">
         <h1 className="text-3xl md:text-4xl font-semibold">Prime Fix-It</h1>
         <p className="mt-2 text-slate-300">
-          Tell Prime what you&apos;re trying to fix—he&apos;ll walk you through it safely.
+          Tell Prime what you&apos;re trying to fix—he&apos;ll walk you through it confidently and safely.
         </p>
 
         <div className="mt-6 space-y-3">

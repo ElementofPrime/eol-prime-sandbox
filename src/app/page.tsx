@@ -68,7 +68,7 @@ export default function Home() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.5 }}
         >
-          Guiding Tools to Discover Your Core Elements
+          Guiding Tools that help Discover Your Core Elements
         </motion.h2>
       </div>
       {/* Prime Pulse */}
