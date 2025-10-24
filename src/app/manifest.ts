@@ -1,0 +1,20 @@
+export default function manifest() {
+  return {
+    name: "Element of Life — Prime OS",
+    short_name: "EOL",
+    description:
+      "Element of Life is your intelligent sanctuary — guiding clarity, purpose, and light through Prime.",
+    start_url: "/",
+    display: "standalone",
+    orientation: "portrait",
+    background_color: "#0B1220",
+    theme_color: "#0B1220",
+    icons: [
+      { src: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { src: "/icon-512.png", sizes: "512x512", type: "image/png" },
+      // favicon + apple-specific
+      { src: "/favicon.ico", sizes: "any", type: "image/x-icon" },
+      { src: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  };
+}

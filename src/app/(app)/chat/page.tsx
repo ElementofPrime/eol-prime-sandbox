@@ -14,21 +14,15 @@ export default function ChatPage() {
   const [unauthLimit, setUnauthLimit] = useState(false); // wire to session later
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Simulate unauth state for limit banner (replace with useSession())
-  useEffect(() => {
-    // TODO: swap when next-auth session wired: setUnauthLimit(!session)
-    setUnauthLimit(true);
-  }, []);
-
   useEffect(() => {
     containerRef.current?.scrollTo({ top: containerRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, loading]);
 
   const analyzeTone = async (text: string) => {
     try {
-      const res = await fetch("/api/pulse", { method: "POST", body: JSON.stringify({ text }) });
-      const data = await res.json();
-      if (data?.tone) setTone(data.tone);
+      const r = await fetch("/api/pulse", { method: "POST", body: JSON.stringify({ text }) });
+      const j = await r.json();
+      if (j?.tone) setTone(j.tone);
     } catch {
       setTone("neutral");
     }
@@ -55,49 +49,61 @@ export default function ChatPage() {
     }
 
     const userMsg: Msg = { role: "user", content: trimmed };
-    setMessages((prev) => [...prev, userMsg]);
+    setMessages((prev) => [...prev, userMsg, { role: "assistant", content: "" }]); // seed streaming bubble
     setInput("");
     setLoading(true);
     analyzeTone(trimmed);
 
     // Replace with your existing /api/chat call
     try {
-      const res = await fetch("/api/chat", {
+      // IMPORTANT: use /api/prime (streaming)
+      const res = await fetch("/api/prime", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: [...messages, userMsg] }),
       });
-      const data = await res.json();
-      const assistantMsg: Msg = {
-        role: "assistant",
-        content:
-          data?.reply ||
-          "Welcome to the secure Fortress of Prime — a place built for light, focus, and clarity. I’m here with you. Always forward.",
-      };
-      setMessages((prev) => [...prev, assistantMsg]);
-      analyzeTone(assistantMsg.content);
-    } catch {
+      if (!res.ok || !res.body) {
+        throw new Error(`prime endpoint ${res.status}`);
+      }
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let acc = "";
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        acc += decoder.decode(value, { stream: true });
+
+        // stream into last assistant bubble
+        setMessages((prev) => {
+          const next = [...prev];
+          const lastIdx = next.length - 1;
+          if (lastIdx >= 0 && next[lastIdx].role === "assistant") {
+            next[lastIdx] = { ...next[lastIdx], content: acc };
+          }
+          return next;
+        });
+      }
+         // "Welcome to the secure Fortress of Prime — a place built for light, focus, and clarity. I’m here with you. Always forward.",
+      analyzeTone(acc);
+    } catch (e) {
       setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: "I hit a snag reaching the chat endpoint. Please try again in a moment." },
+        ...prev.slice(0, -1), // drop empty assistant bubble
+        { role: "assistant", content: "I hit a snag reaching the Prime endpoint. Try again in a moment." },
       ]);
     } finally {
       setLoading(false);
     }
   };
-
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
   };
-
   return (
     <main className="relative min-h-svh] pt-24 md:pt-28">
       <SceneFortress />
-
-      {/* Top banner for unauthenticated users */}
       {unauthLimit && (
         <div className="mx-auto w-full max-w-3xl px-4">
           <div className="mb-3 rounded-2xl border border-white/10 bg-white/5 p-3 text-sm text-white/90 backdrop-blur">
@@ -107,17 +113,13 @@ export default function ChatPage() {
           </div>
         </div>
       )}
-
-      {/* Chat container */}
       <div
         ref={containerRef}
-        className="mx-auto w-full max-w-3xl px-4 pb-40 md:pb-48 h-[calc(100svh-220px)] overflow-y-auto scrollbar-thin"
+        className="mx-auto h-[calc(100svh-220px)] w-full max-w-3xl overflow-y-auto px-4 pb-40 md:pb-48 scrollbar-thin"
       >
-        {/* engraved motto line */}
         <div className="mb-6 text-center text-xs tracking-widest text-slate-200/70 uppercase">
-          Within these walls, truth and light always wins.
+          Within these walls- truth light always wins.
         </div>
-
         <div className="space-y-3">
           {messages.map((m, i) => (
             <div
@@ -129,7 +131,7 @@ export default function ChatPage() {
               }`}
             >
               <PrimeAura tone={tone} />
-              <div className="relative">{m.content}</div>
+              <div className="relative whitespace-pre-wrap">{m.content}</div>
             </div>
           ))}
           {loading && (
@@ -139,8 +141,6 @@ export default function ChatPage() {
           )}
         </div>
       </div>
-
-      {/* Input dock */}
       <div className="fixed inset-x-0 bottom-0 z-10">
         <div className="mx-auto w-full max-w-3xl px-4 pb-5">
           <div className="relative rounded-2xl border border-white/15 bg-white/10 p-3 backdrop-blur-xl">
@@ -149,7 +149,7 @@ export default function ChatPage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKeyDown}
-              placeholder="Speak to Prime within the safety of the Fortress…"
+              placeholder="Speak to Prime within the safety of the Web3 blockchain Fortress…"
               className="min-h-[60px] w-full resize-none rounded-xl bg-black/20 p-3 text-white placeholder:text-slate-300/70 focus:outline-none"
             />
             <div className="mt-2 flex items-center justify-end gap-2">
@@ -162,8 +162,6 @@ export default function ChatPage() {
               </button>
             </div>
           </div>
-
-          {/* inscription strip */}
           <div className="mt-3 text-center text-[11px] text-slate-200/70">
             “Prime is here to help you navigate safely. The world is full of deception and deepfakes, we don't fall for any of it.”
           </div>
