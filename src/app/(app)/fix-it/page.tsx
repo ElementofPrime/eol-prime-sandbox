@@ -38,7 +38,6 @@ export default function FixItPage() {
       setLoading(false);
     }
   }
-
   return (
     <main className="min-h-[calc(100vh-6rem)] px-4 pb-24 pt-28 text-slate-100">
       <section className="mx-auto max-w-4xl">

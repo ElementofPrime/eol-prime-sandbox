@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useSession } from "next-auth/react";
 
 type Insight = {
   _id?: string;
@@ -11,6 +12,8 @@ type Insight = {
 };
 
 export default function PrimePulseTile() {
+  const { status } = useSession(); // "authenticated" | "unauthenticated" | "loading"
+  const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [insight, setInsight] = useState<Insight | null>(null);
@@ -44,7 +47,21 @@ export default function PrimePulseTile() {
       setLoading(false);
     }
   }
-
+  useEffect(() => {
+    if (status !== "authenticated") return; // avoid 401 fetch
+    (async () => {
+      const r = await fetch("/api/pulse", { cache: "no-store" });
+      if (!r.ok) return; // silently ignore errors
+      setData(await r.json());
+    })();
+  }, [status]);
+    if (status !== "authenticated") {
+    return (
+      <div className="rounded-2xl border border-white/10 bg-yellow-500/10 p-4 text-yellow-100">
+        Please sign in to see Prime Pulse insights. <a className="underline" href="/signin">Sign in</a>
+      </div>
+    );
+  }
   useEffect(() => { refresh(); }, []);
 
   // simple gauge 0..100 based on |sentiment|
