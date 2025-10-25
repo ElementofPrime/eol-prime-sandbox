@@ -45,8 +45,7 @@ export default function JournalPage() {
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-8 space-y-6">
-      <h1 className="text-2xl font-semibold">Journal</h1>
-
+      <h1 className="eol-heading text-5xl font-bold">Journal</h1>
       <form onSubmit={onSubmit} className="space-y-3">
         <textarea
           className="w-full rounded-xl border border-slate-700/30 bg-slate-900/40 p-3"

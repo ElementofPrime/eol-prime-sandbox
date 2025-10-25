@@ -7,7 +7,7 @@ export default function AuthButton() {
   const loading = status === 'loading';
 
   if (loading) {
-    return <button className="px-3 py-1 rounded-xl bg-zinc-200 dark:bg-zinc-700 opacity-60">…</button>;
+    return <button className="eol-btn">Send</button>;
   }
 
   if (!session) {

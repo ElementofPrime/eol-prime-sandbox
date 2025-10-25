@@ -42,7 +42,7 @@ export default function Chat() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-4 p-4">
-      <div className="rounded-2xl border p-4 shadow-sm bg-white/70 dark:bg-black/30 backdrop-blur">
+      <div className="eol-panel p-4">
         <div ref={outRef} className="h-[60vh] overflow-auto space-y-3">
           {messages.map((m, i) => (
             <div key={i} className={m.role === "user" ? "text-right" : "text-left"}>

@@ -41,8 +41,8 @@ export default function FixItPage() {
   return (
     <main className="min-h-[calc(100vh-6rem)] px-4 pb-24 pt-28 text-slate-300">
       <section className="mx-auto max-w-4xl">
-        <h1 className="text-3xl md:text-4xl font-semibold">Prime Fix-It</h1>
-        <p className="mt-2 text-slate-300">
+        <h1 className="eol-heading text-5xl font-bold">Prime Fix-It</h1>
+        <p className="eol-muted">
           Tell Prime what you&apos;re trying to fix—he&apos;ll walk you through it confidently and safely.
         </p>
 

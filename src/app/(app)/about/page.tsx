@@ -5,10 +5,10 @@ export default function AboutPage(){
     <main className="mx-auto max-w-5xl px-6 pb-20">
       <section className="relative mt-6 mb-10 rounded-2xl border bg-white/60 dark:bg-black/30 p-8 shadow-sm overflow-hidden">
         <Image src="/assets/tree-emblem.png" alt="EOL Emblem" width={72} height={72} className="mb-4"/>
-        <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">
+        <h1 className="eol-heading text-5xl font-bold">
           Element of Life — The Beginning of All Things Possible- where discovering individual elements defines our life's purpose
         </h1>
-        <p className="mt-3 text-slate-600 dark:text-slate-300 max-w-3xl">
+        <p className="eol-muted">
           One safe place to gather, a singular place of clarity and purpose- Guided by Prime, the ever-present, ever-knowing companion who keeps things simple, organized and safe. Ever-learning, ever-adapting, always moving toward light, purpose and goals
         </p>
       </section>

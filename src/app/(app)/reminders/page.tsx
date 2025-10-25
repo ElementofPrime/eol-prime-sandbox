@@ -41,10 +41,10 @@ export default function RemindersPage() {
   return (
     <main className="min-h-[calc(100vh-6rem)] px-4 pb-24 pt-28 text-slate-500">
       <section className="mx-auto max-w-4xl">
-        <h1 className="text-3xl md:text-4xl font-semibold">Reminders</h1>
-        <p className="mt-2 text-slate-300">Lightweight, simple, and ready for notifications in the next step.</p>
+        <h1 className="eol-heading text-5xl font-bold">Reminders</h1>
+        <p className="eol-muted">Lightweight, simple, and ready for notifications in the next step.</p>
 
-        <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4">
+        <div className="eol-panel p-4">
           <div className="grid gap-3 md:grid-cols-[1fr_auto_auto]">
             <input
               value={text}

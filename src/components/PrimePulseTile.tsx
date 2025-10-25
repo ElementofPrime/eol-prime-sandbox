@@ -57,7 +57,7 @@ export default function PrimePulseTile() {
   }, [status]);
     if (status !== "authenticated") {
     return (
-      <div className="rounded-2xl border border-white/10 bg-yellow-500/10 p-4 text-yellow-100">
+      <div className="eol-panel p-4">
         Please sign in to see Prime Pulse insights. <a className="underline" href="/signin">Sign in</a>
       </div>
     );
@@ -76,11 +76,11 @@ export default function PrimePulseTile() {
       </div>
 
       {loading ? (
-        <div className="animate-pulse rounded-2xl border border-white/10 bg-white/5 p-5 text-slate-400">
+        <div className="eol-panel p-4">
           Analyzing your latest reflections…
         </div>
       ) : error ? (
-        <div className="rounded-2xl border border-yellow-400/30 bg-yellow-500/10 p-5 text-yellow-200">
+        <div className="eol-panel p-4">
           {error} <Link href="/signin" className="ml-2 underline">Sign in</Link>
         </div>
       ) : (
@@ -91,7 +91,7 @@ export default function PrimePulseTile() {
               <span>Reflection Level</span>
               <span className="capitalize">{moodLabel}</span>
             </div>
-            <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/10">
+            <div className="eol-panel p-4">
               <div
                 className="h-full rounded-full bg-cyan-500/70 transition-[width]"
                 style={{ width: `${level}%` }}

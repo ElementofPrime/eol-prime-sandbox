@@ -50,7 +50,7 @@ export default function TodoPage() {
 
   return (
     <main className="min-h-screen pt-24 px-4 pb-24">
-      <h1 className="text-2xl sm:text-3xl font-semibold mb-4">To-Do</h1>
+      <h1 className="eol-heading text-5xl font-bold">To-Do</h1>
 
       <form onSubmit={addTodo} className="mb-4 flex gap-2">
         <input

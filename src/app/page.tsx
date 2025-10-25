@@ -82,8 +82,7 @@ export default function Home() {
             <motion.div
               whileHover={{ scale: 1.06, y: -2 }}
               transition={{ type: 'spring', stiffness: 250, damping: 14 }}
-              className="rounded-2xl shadow-lg p-5 text-center ring-1 ring-black/5 dark:ring-white/5
-                         bg-slate-900/45 dark:bg-slate-900/40 backdrop-blur"
+              className="eol-panel p-4"
             >
               <div className="text-2xl sm:text-3xl mb-2">{el.icon}</div>
               <h3 className="text-sm sm:text-base font-semibold text-slate-700">{el.title}</h3>

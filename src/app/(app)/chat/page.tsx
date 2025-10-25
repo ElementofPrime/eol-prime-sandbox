@@ -106,7 +106,7 @@ export default function ChatPage() {
       <SceneFortress />
       {unauthLimit && (
         <div className="mx-auto w-full max-w-3xl px-4">
-          <div className="mb-3 rounded-2xl border border-white/10 bg-white/5 p-3 text-sm text-slate-500 backdrop-blur">
+          <div className="eol-panel p-4">
             <span className="mr-2">⚠️</span>
             Limited to <strong>5 chats</strong>.{" "}
             <span className="opacity-90">Create an account or sign in to access full features.</span>
