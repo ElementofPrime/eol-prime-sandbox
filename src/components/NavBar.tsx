@@ -48,7 +48,7 @@ export default function NavBar() {
           <Pill href="/journal">Journal</Pill>
           <Pill href="/todo">To-Do</Pill>
           <Pill href="/reminders">Reminders</Pill>
-          <Pill href="/fix-it">Fix-It</Pill>
+          <Pill href="/fixit">Fix-It</Pill>
           <Pill href="/core">Core</Pill>
           <Pill href="/about">About</Pill>
         </div>
