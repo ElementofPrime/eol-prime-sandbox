@@ -7,8 +7,12 @@
   html, body { height: 100%; }
   body { min-height: 100svh; }
 
-  html { @apply bg-white text-slate-900; }
-  html.dark { @apply bg-slate-950 text-slate-100; }
+  html {
+    @apply bg-white text-slate-900;
+  }
+  html.dark {
+    @apply bg-[#0b1220] text-slate-100;
+  }
 
   h1, h2, h3, h4, h5, h6 { @apply text-slate-900 dark:text-slate-100; }
   a { @apply text-sky-600 dark:text-sky-400; }
