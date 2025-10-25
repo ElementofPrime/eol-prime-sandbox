@@ -84,7 +84,7 @@ export default function ChatClient() {
       <button
         onClick={handleSend}
         disabled={loading}
-        className={`w-full px-4 py-2 rounded text-white font-semibold transition ${
+        className={`w-full px-4 py-2 rounded text-slate-300 font-semibold transition ${
           loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-accent'
         }`}
       >

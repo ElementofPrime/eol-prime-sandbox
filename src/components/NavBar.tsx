@@ -12,7 +12,7 @@ function Pill({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <Link
       href={href}
-      className="rounded-full bg-white/5 px-3 py-1.5 text-sm text-slate-200 hover:bg-white/10 border border-white/10"
+      className="rounded-full bg-white/5 px-3 py-1.5 text-sm text-slate-300 hover:bg-white/10 border border-white/10"
     >
       {children}
     </Link>
@@ -35,9 +35,9 @@ export default function NavBar() {
           <Link
             href="/"
             className="block truncate font-semibold tracking-wide text-cyan-300 hover:text-cyan-200"
-            title="Element of Life — Prime Labs OS"
+            title="EOL—Prime Labs OS"
           >
-            Element of Life — Prim Labs OS
+            EOL-Prim Labs OS
           </Link>
         </div>
 
@@ -48,7 +48,7 @@ export default function NavBar() {
           <Pill href="/journal">Journal</Pill>
           <Pill href="/todo">To-Do</Pill>
           <Pill href="/reminders">Reminders</Pill>
-          <Pill href="/fixit">Fix-It</Pill>
+          <Pill href="/fix-it">Fix-It</Pill>
           <Pill href="/core">Core</Pill>
           <Pill href="/about">About</Pill>
         </div>
@@ -68,7 +68,7 @@ export default function NavBar() {
           {!session ? (
             <button
               onClick={() => signIn()}
-              className="rounded-full bg-cyan-600 px-4 py-1.5 text-sm text-white hover:bg-cyan-500"
+              className="rounded-full bg-cyan-600 px-4 py-1.5 text-sm text-slate-300 hover:bg-cyan-500"
             >
               Sign In
             </button>

@@ -39,7 +39,7 @@ export default function RemindersPage() {
   }, []);
 
   return (
-    <main className="min-h-[calc(100vh-6rem)] px-4 pb-24 pt-28 text-slate-100">
+    <main className="min-h-[calc(100vh-6rem)] px-4 pb-24 pt-28 text-slate-500">
       <section className="mx-auto max-w-4xl">
         <h1 className="text-3xl md:text-4xl font-semibold">Reminders</h1>
         <p className="mt-2 text-slate-300">Lightweight, simple, and ready for notifications in the next step.</p>

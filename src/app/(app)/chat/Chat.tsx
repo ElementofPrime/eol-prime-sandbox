@@ -67,7 +67,7 @@ export default function Chat() {
             placeholder="Ask Prime…"
             className="flex-1 rounded-full border px-4 py-2 bg-white/80 dark:bg-black/40"
           />
-          <button onClick={send} className="rounded-full px-5 py-2 bg-sky-500 text-white hover:opacity-90">
+          <button onClick={send} className="rounded-full px-5 py-2 bg-sky-500 text-slate-300 hover:opacity-90">
             Send
           </button>
         </div>

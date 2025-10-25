@@ -14,7 +14,7 @@ export default function AuthButton() {
     return (
       <button
         onClick={() => signIn()} // generic -> NextAuth provider screen
-        className="px-3 py-1 rounded-xl bg-cyan-600 text-white hover:bg-cyan-500 transition"
+        className="px-3 py-1 rounded-xl bg-cyan-600 text-slate-300 hover:bg-cyan-500 transition"
       >
         Sign In
       </button>

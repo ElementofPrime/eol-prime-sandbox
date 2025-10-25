@@ -10,7 +10,7 @@ const elements = [
   { title: 'Journal', icon: '📔', link: '/journal' },
   { title: 'To-Do', icon: '✅', link: '/todo' },
   { title: 'Reminders', icon: '⏰', link: '/reminders' },
-  { title: 'Fix-It', icon: '🛠️', link: '/fixit' },
+  { title: 'Fix-It', icon: '🛠️', link: '/fix-it' },
   { title: 'New Beginning', icon: '🧠', link: '/new-beginning' },
   { title: 'Core', icon: '🌿', link: '/core' },
   { title: 'About', icon: '✨', link: '/about' },
@@ -86,7 +86,7 @@ export default function Home() {
                          bg-slate-900/45 dark:bg-slate-900/40 backdrop-blur"
             >
               <div className="text-2xl sm:text-3xl mb-2">{el.icon}</div>
-              <h3 className="text-sm sm:text-base font-semibold text-white">{el.title}</h3>
+              <h3 className="text-sm sm:text-base font-semibold text-slate-700">{el.title}</h3>
             </motion.div>
           </Link>
         ))}

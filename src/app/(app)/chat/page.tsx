@@ -106,7 +106,7 @@ export default function ChatPage() {
       <SceneFortress />
       {unauthLimit && (
         <div className="mx-auto w-full max-w-3xl px-4">
-          <div className="mb-3 rounded-2xl border border-white/10 bg-white/5 p-3 text-sm text-white/90 backdrop-blur">
+          <div className="mb-3 rounded-2xl border border-white/10 bg-white/5 p-3 text-sm text-slate-500 backdrop-blur">
             <span className="mr-2">⚠️</span>
             Limited to <strong>5 chats</strong>.{" "}
             <span className="opacity-90">Create an account or sign in to access full features.</span>
@@ -135,7 +135,7 @@ export default function ChatPage() {
             </div>
           ))}
           {loading && (
-            <div className="mr-auto max-w-[85%] rounded-2xl bg-white/10 px-4 py-3 text-white/80 backdrop-blur">
+            <div className="mr-auto max-w-[85%] rounded-2xl bg-white/10 px-4 py-3 text-slate-500 backdrop-blur">
               Prime is focusing…
             </div>
           )}
@@ -150,7 +150,7 @@ export default function ChatPage() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKeyDown}
               placeholder="Speak to Prime within the safety of the Web3 blockchain Fortress…"
-              className="min-h-[60px] w-full resize-none rounded-xl bg-black/20 p-3 text-white placeholder:text-slate-300/70 focus:outline-none"
+              className="min-h-[60px] w-full resize-none rounded-xl bg-black/20 p-3 text-slate-700 placeholder:text-slate-300/70 focus:outline-none"
             />
             <div className="mt-2 flex items-center justify-end gap-2">
               <button

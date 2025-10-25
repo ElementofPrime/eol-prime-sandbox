@@ -57,7 +57,7 @@ export default function JournalPage() {
         />
         <button
           disabled={saving || !content.trim()}
-          className="rounded-xl px-4 py-2 bg-cyan-600 text-white disabled:opacity-50"
+          className="rounded-xl px-4 py-2 bg-cyan-600 text-slate-500 disabled:opacity-50"
         >
           {saving ? 'Saving…' : 'Save'}
         </button>

@@ -39,7 +39,7 @@ export default function FixItPage() {
     }
   }
   return (
-    <main className="min-h-[calc(100vh-6rem)] px-4 pb-24 pt-28 text-slate-100">
+    <main className="min-h-[calc(100vh-6rem)] px-4 pb-24 pt-28 text-slate-300">
       <section className="mx-auto max-w-4xl">
         <h1 className="text-3xl md:text-4xl font-semibold">Prime Fix-It</h1>
         <p className="mt-2 text-slate-300">
@@ -72,7 +72,7 @@ export default function FixItPage() {
             <button
               onClick={send}
               disabled={loading}
-              className="rounded-xl bg-cyan-600 px-5 py-3 font-medium text-white hover:bg-cyan-500 disabled:opacity-60"
+              className="rounded-xl bg-cyan-600 px-5 py-3 font-medium text-slate-500 hover:bg-cyan-500 disabled:opacity-60"
             >
               Send
             </button>

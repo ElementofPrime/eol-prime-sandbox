@@ -105,7 +105,7 @@ export default function PrimePulseTile() {
           <div className="mt-4 flex flex-wrap gap-2">
             <button
               onClick={analyzeLatest}
-              className="rounded-xl bg-cyan-600 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-500"
+              className="rounded-xl bg-cyan-600 px-4 py-2 text-sm font-medium text-slate-300 hover:bg-cyan-500"
             >
               Analyze Latest
             </button>

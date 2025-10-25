@@ -36,7 +36,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <main className="min-h-[calc(100vh-6rem)] px-4 pb-24 pt-28 text-slate-100">
+    <main className="min-h-[calc(100vh-6rem)] px-4 pb-24 pt-28 text-slate-400">
       <section className="mx-auto max-w-3xl rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_0_80px_rgba(0,220,255,0.06)]">
         <h1 className="text-3xl md:text-4xl font-semibold">Profile & Settings</h1>
         <p className="mt-2 text-slate-300">
