@@ -1,4 +1,3 @@
-// /src/components/PrimeAura.tsx
 "use client";
 
 import { useMemo } from "react";

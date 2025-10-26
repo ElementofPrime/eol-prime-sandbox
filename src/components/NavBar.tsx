@@ -12,7 +12,7 @@ function Pill({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <Link
       href={href}
-      className="rounded-full bg-white/5 px-3 py-1.5 text-sm text-slate-300 hover:bg-white/10 border border-white/10"
+      className="rounded-full bg-white/5 px-3 py-1.5 text-sm text-slate-500 hover:bg-white/10 border border-white/10"
     >
       {children}
     </Link>
