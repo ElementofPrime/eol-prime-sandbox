@@ -162,78 +162,21 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .scrollbar-thin::-webkit-scrollbar { height: 8px; width: 8px; }
 .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 8px; }
 .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
-/* ===== Element of Life — Light/Dark balance ===== */
+
+/* ===== Element of Life — unified light/dark surfaces ===== */
 @layer base {
-  /* Background + base text */
   html {
-    /* soft paper gradient instead of pure white */
     @apply bg-[linear-gradient(to_bottom,#f9fafb,#f1f5f9)] text-slate-900;
   }
   html.dark {
     @apply bg-[#0b1220] text-slate-100;
   }
 
-  /* Placeholders / subtle text */
-  ::placeholder {
-    @apply text-slate-500 dark:text-slate-400;
-  }
-}
-
-/* Re-usable surfaces that self-balance by theme */
-@layer components {
-  /* Panels / cards */
-  .eol-panel {
-    @apply rounded-2xl border backdrop-blur;
-    @apply bg-white/80 text-slate-900 border-slate-200/70;
-    @apply dark:bg-white/10 dark:text-white dark:border-white/10;
+  body {
+    @apply transition-colors duration-500 ease-in-out;
   }
 
-  /* Muted text that’s still readable in light theme */
-  .eol-muted {
-    @apply text-slate-700 dark:text-slate-300;
-  }
-
-  .eol-heading {
-    @apply text-slate-900 dark:text-white;
-  }
-
-  /* Inputs */
-  .eol-input {
-    @apply w-full rounded-xl px-3 py-2 outline-none;
-    @apply bg-slate-100 text-slate-900 border border-slate-300;
-    @apply dark:bg-black/20 dark:text-white dark:border-white/15;
-  }
-
-  /* Primary button */
-  .eol-btn {
-    @apply rounded-xl px-5 py-2 font-medium transition;
-    @apply bg-slate-900 text-white hover:bg-black;
-    @apply dark:bg-white/90 dark:text-slate-900 dark:hover:bg-white;
-  }
-
-  /* Ghost/soft button */
-  .eol-btn-ghost {
-    @apply rounded-xl px-4 py-2 transition;
-    @apply bg-white/70 text-slate-900 hover:bg-white;
-    @apply dark:bg-white/10 dark:text-white dark:hover:bg-white/15;
-  }
-
-  /* Chat bubbles */
-  .eol-bubble-user {
-    @apply ml-auto max-w-[85%] rounded-2xl px-4 py-3 shadow-md backdrop-blur;
-    @apply bg-white/85 text-slate-900;
-    @apply dark:bg-white/10 dark:text-white;
-  }
-  .eol-bubble-assistant {
-    @apply mr-auto max-w-[85%] rounded-2xl px-4 py-3 shadow-md backdrop-blur;
-    @apply bg-slate-100/90 text-slate-900;
-    @apply dark:bg-white/10 dark:text-white;
-  }
-
-  /* Notices / banners */
-  .eol-banner {
-    @apply rounded-2xl border p-3 text-sm backdrop-blur;
-    @apply bg-amber-50 text-amber-900 border-amber-200;
-    @apply dark:bg-white/5 dark:text-white dark:border-white/10;
+  ::selection {
+    @apply bg-cyan-400/40 dark:bg-cyan-300/30;
   }
 }

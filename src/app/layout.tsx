@@ -31,9 +31,9 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${greatVibes.variable}`}>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body className="min-h-screen antialiased">
         <BackgroundDecor />
         <Providers>
