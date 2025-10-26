@@ -60,7 +60,7 @@ export default function JournalPage() {
         >
           {saving ? 'Saving…' : 'Save'}
         </button>
-        {msg && <div className="text-sm opacity-80">{msg}</div>}
+        {msg && <div className="text-sm opacity-90">{msg}</div>}
       </form>
 
       <section className="space-y-3">

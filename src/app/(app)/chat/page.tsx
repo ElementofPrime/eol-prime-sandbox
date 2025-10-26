@@ -181,7 +181,7 @@ export { default } from "./Chat"; function ChatPage() {
             </span>
             <button
               onClick={() => signIn()}
-              className="ml-3 rounded-lg bg-cyan-700 px-3 py-1 text-white hover:bg-cyan-600 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
+              className="ml-3 rounded-lg bg-cyan-700 px-3 py-1 text-white hover:bg-cyan-600 focus:outline-none focus-visible:outline focus-visible:outline-cyan-500 focus-visible:outline-offset-2"
             >
               Sign in
             </button>
@@ -247,12 +247,12 @@ export { default } from "./Chat"; function ChatPage() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKeyDown}
               placeholder="Speak to Prime within the safety of the Fortress…"
-              className="min-h-[60px] w-full resize-none rounded-xl bg-white/70 dark:bg-white/10 p-3 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
+              className="min-h-[60px] w-full resize-none rounded-xl bg-white/70 dark:bg-white/10 p-3 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:outline-none focus-visible:outline-2  focus-visible:outline-cyan-500 focus-visible:outline-offset-2"
             />
             <div className="mt-2 flex items-center justify-end gap-2">
               <button
                 onClick={sendMessage}
-                className="rounded-xl bg-cyan-700 px-5 py-2 text-sm font-medium text-white hover:bg-cyan-600 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
+                className="rounded-xl bg-white/90 px-5 py-2 text-sm font-medium text-slate-900 transition hover:bg-white focus-visible:outline-2 focus-visible:outline-cyan-400 focus-visible:outline-offset-2"
                 disabled={loading || (!isAuthed && unauthReachedLimit)}
               >
                 {loading ? "Sending…" : "Send to Prime"}

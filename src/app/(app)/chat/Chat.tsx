@@ -178,7 +178,7 @@ export default function ChatPage() {
             <span className="opacity-90">Create an account or sign in to access full features.</span>
             <button
               onClick={() => signIn()}
-              className="ml-3 rounded-lg bg-cyan-700 px-3 py-1 text-white hover:bg-cyan-600 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
+              className="ml-3 rounded-lg bg-cyan-700 px-3 py-1 text-white hover:bg-cyan-600 focus:outline-none focus-visible:outline  focus-visible:outline-cyan-500 focus-visible:outline-offset-2"
             >
               Sign in
             </button>
@@ -243,20 +243,20 @@ export default function ChatPage() {
       {/* Input dock */}
       <div className="fixed inset-x-0 bottom-0 z-10">
         <div className="mx-auto w-full max-w-3xl px-4 pb-5">
-          <div className="relative eol-panel rounded-2xl border border-black/10 dark:border-white/10 bg-white/60 dark:bg:white/10 p-3 backdrop-blur-xl">
+          <div className="relative eol-panel p-3">
             <PrimeAura tone={tone} />
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKeyDown}
               placeholder="Speak to Prime within the safety of the Fortress…"
-              className="eol-input min-h-[60px] w-full resize-none rounded-xl bg-white/70 dark:bg-white/10 p-3 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
+              className="eol-input min-h-[60px]"
             />
             <div className="mt-2 flex items-center justify-end gap-2">
               <button
                 onClick={sendMessage}
-                className="eol-btn rounded-xl bg-cyan-700 px-5 py-2 text-sm font-medium text-white hover:bg-cyan-600 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
                 disabled={loading || unauthReachedLimit}
+                className="rounded-xl bg-white/90 px-5 py-2 text-sm font-medium text-slate-900 transition hover:bg-white focus-visible:outline-2 focus-visible:outline-cyan-400 focus-visible:outline-offset-2 dark:bg-white/80 dark:text-slate-900"
               >
                 {loading ? "Sending…" : "Send to Prime"}
               </button>
