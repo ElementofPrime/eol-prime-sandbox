@@ -1,6 +1,5 @@
 // src/app/layout.tsx
 import "../../styles/globals.css";
-import type { ReactNode } from "react";
 import type { Metadata, Viewport } from "next";
 import NavBar from "@/components/NavBar";
 import Providers from "./providers";
@@ -33,11 +32,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen antialiased">
-        <BackgroundDecor />
         <Providers>
-          <NavBar />
+          <BackgroundDecor />
           <main
             className="relative z-10 bg-transparent"
             style={{
@@ -47,6 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               paddingRight: "max(1rem, env(safe-area-inset-right))",
             }}
           >
+            <NavBar />
             {children}
           </main>
         </Providers>

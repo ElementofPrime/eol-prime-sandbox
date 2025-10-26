@@ -7,13 +7,7 @@
   html, body { height: 100%; }
   body { min-height: 100svh; }
 
-  html {
-    @apply bg-white text-slate-900;
-  }
-  html.dark {
-    @apply bg-[#0b1220] text-slate-100;
-  }
-
+  /* Do NOT set a fixed white bg here. Theme comes later. */
   h1, h2, h3, h4, h5, h6 { @apply text-slate-900 dark:text-slate-100; }
   a { @apply text-sky-600 dark:text-sky-400; }
 }
@@ -163,7 +157,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 8px; }
 .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
 
-/* ===== Element of Life — unified light/dark surfaces ===== */
+/* ===== Element of Life — unified light/dark surfaces (single source of truth) ===== */
 @layer base {
   html {
     @apply bg-[linear-gradient(to_bottom,#f9fafb,#f1f5f9)] text-slate-900;
@@ -171,11 +165,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
   html.dark {
     @apply bg-[#0b1220] text-slate-100;
   }
-
   body {
-    @apply transition-colors duration-500 ease-in-out;
+    @apply bg-transparent transition-colors duration-500 ease-in-out;
   }
-
   ::selection {
     @apply bg-cyan-400/40 dark:bg-cyan-300/30;
   }
