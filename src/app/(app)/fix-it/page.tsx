@@ -57,7 +57,7 @@ export default function FixItPage() {
               <p className="whitespace-pre-wrap">{m.content}</p>
             </div>
           ))}
-          {loading && <div className="text-slate-400">Prime is thinking…</div>}
+          {loading && <div className="text-slate-500">Prime is thinking…</div>}
         </div>
 
         <div className="sticky bottom-6 mt-6 rounded-2xl border border-white/10 bg-white/5 p-3 backdrop-blur">

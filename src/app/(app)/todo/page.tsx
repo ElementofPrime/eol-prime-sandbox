@@ -59,7 +59,7 @@ export default function TodoPage() {
           className="flex-1 rounded-xl border border-white/10 bg-white/5 px-3 py-2 outline-none"
           placeholder="Add a to-do…"
         />
-        <button className="rounded-xl bg-cyan-600 hover:bg-cyan-500 px-4 py-2 text-slate-400 disabled:opacity-50" disabled={!title.trim()}>
+        <button className="rounded-xl bg-cyan-600 hover:bg-cyan-500 px-4 py-2 text-slate-500 disabled:opacity-50" disabled={!title.trim()}>
           Add
         </button>
       </form>

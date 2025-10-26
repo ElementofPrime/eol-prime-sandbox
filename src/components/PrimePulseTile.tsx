@@ -71,7 +71,7 @@ export default function PrimePulseTile() {
             offline
           </span>
         </div>
-        <p className="text-sm text-slate-700 dark:text-slate-300">
+        <p className="text-sm text-slate-700 dark:text-slate-400">
           Please sign in to see Prime Pulse insights.
         </p>
         <button
@@ -146,7 +146,7 @@ export default function PrimePulseTile() {
           {/* Signal / mood */}
           <div className="mb-3">
             <div className="mb-2 flex items-center justify-between text-sm">
-              <span className="text-slate-700 dark:text-slate-300">Signal strength</span>
+              <span className="text-slate-700 dark:text-slate-400">Signal strength</span>
               <span
                 className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs ${colors.chip}`}
               >
@@ -170,7 +170,7 @@ export default function PrimePulseTile() {
           </div>
 
           {/* Prompt */}
-          <p className="mt-4 text-slate-700 dark:text-slate-300">
+          <p className="mt-4 text-slate-700 dark:text-slate-400">
             {insight?.primePrompts?.[0] ?? prompt}
           </p>
 

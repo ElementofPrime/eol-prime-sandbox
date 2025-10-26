@@ -53,12 +53,12 @@ export default function Home() {
       {/* Mantra + subhead */}
       <div className="mx-auto max-w-[68ch] px-4">
         <motion.p
-          className="text-lg md:text-xl text-zinc-700 dark:text-zinc-300 leading-relaxed text-center"
+          className="text-lg md:text-xl text-zinc-700 dark:text-zinc-500 leading-relaxed text-center"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
         >
-          <span className="font-medium text-zinc-800 dark:text-zinc-200">Welcome to Element of Life —</span>{" "}
+          <span className="font-medium text-zinc-800 dark:text-zinc-500">Welcome to Element of Life —</span>{" "}
           the foundation where <span className="text-cyan-600 dark:text-cyan-300">focus</span> becomes growth,
           and growth becomes transformation.
         </motion.p>
@@ -90,7 +90,7 @@ export default function Home() {
               <div className="text-2xl sm:text-3xl mb-2" aria-hidden="true">
                 {el.icon}
               </div>
-              <h3 className="text-sm sm:text-base font-semibold text-slate-700 dark:text-slate-200">
+              <h3 className="text-sm sm:text-base font-semibold text-slate-700 dark:text-slate-500">
                 {el.title}
               </h3>
             </motion.div>

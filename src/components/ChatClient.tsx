@@ -84,7 +84,7 @@ export default function ChatClient() {
       <button
         onClick={handleSend}
         disabled={loading}
-        className={`w-full px-4 py-2 rounded text-slate-300 font-semibold transition ${
+        className={`w-full px-4 py-2 rounded text-slate-500 font-semibold transition ${
           loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-accent'
         }`}
       >
@@ -92,7 +92,7 @@ export default function ChatClient() {
       </button>
 
       {reply && (
-        <div className="mt-4 p-4 bg-gray-100 rounded-xl dark:bg-zinc-800">
+        <div className="mt-4 p-4 bg-gray-400 rounded-xl dark:bg-zinc-800">
           <p className="text-sm font-semibold mb-1 text-brand-accent">Prime says:</p>
           <p className="text-gray-800 dark:text-white whitespace-pre-wrap">{reply}</p>
         </div>
