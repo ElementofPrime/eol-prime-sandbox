@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
-import { openai } from "@/lib/openai";
+import { grok } from "@/lib/grok";
 
 const MODEL = process.env.PRIME_MODEL || "gpt-4o-mini";
 
@@ -28,7 +28,7 @@ async function readGuestCookie(): Promise<GuestCookie> {
     if (decoded && typeof decoded.date === "string" && typeof decoded.count === "number") {
       return decoded as GuestCookie;
     }
-  } catch {}
+  } catch { }
   return { date: "", count: 0 };
 }
 
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     }
 
     // ---- OpenAI streaming ----
-    const stream = await openai.chat.completions.create({
+    const stream = await grok.chat.completions.create({
       model: MODEL,
       messages,
       stream: true,
