@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from "next-auth";
 import { grok } from '@/lib/grok';
-import { primeSystemPrompt } from '@/lib/prime/primePrompt';
+import { primesystemPrompt } from '@/lib/prime/primePrompt';
 import { authOptions } from "@/lib/authOptions";
 
 export async function POST(req: Request) {
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     const completion = await grok.chat.completions.create({
         model: 'grok-3-mini',
         messages: [
-            { role: 'system', content: primeSystemPrompt },
+            { role: 'system', content: primesystemPrompt },
             { role: 'user', content: message }
         ],
         temperature: 0.7,

@@ -76,7 +76,7 @@ export default function PrimePulseTile() {
         </p>
         <button
           onClick={() => signIn()}
-          className="mt-4 rounded-xl px-4 py-2 text-sm font-medium bg-cyan-700 text-white hover:bg-cyan-600 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
+          className="mt-4 rounded-xl px-4 py-2 text-sm font-medium bg-cyan-700 text-white hover:bg-cyan-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
         >
           Sign in
         </button>
@@ -163,7 +163,7 @@ export default function PrimePulseTile() {
               aria-valuetext={`${mood} • ${levelPct}%`}
             >
               <div
-                className={`h-full w-0 bg-gradient-to-r ${colors.bar} transition-[width] duration-500`}
+                className={`h-full w-0 bg-linear-to-r ${colors.bar} transition-[width] duration-500`}
                 style={{ width: `${levelPct}%` }}
               />
             </div>
@@ -179,13 +179,13 @@ export default function PrimePulseTile() {
             <button
               onClick={analyzeLatest}
               disabled={posting}
-              className="rounded-xl px[16] px-4 py-2 text-sm font-medium bg-cyan-700 text-white hover:bg-cyan-600 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
+              className="rounded-xl px[16] px-4 py-2 text-sm font-medium bg-cyan-700 text-white hover:bg-cyan-600 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
             >
               {posting ? 'Analyzing…' : 'Analyze Latest'}
             </button>
             <Link
               href="/journal"
-              className="rounded-xl border border-cyan-500/30 px-4 py-2 text-sm text-cyan-700 dark:text-cyan-300 hover:bg-cyan-600/15 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
+              className="rounded-xl border border-cyan-500/30 px-4 py-2 text-sm text-cyan-700 dark:text-cyan-300 hover:bg-cyan-600/15 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
             >
               Reflect now
             </Link>

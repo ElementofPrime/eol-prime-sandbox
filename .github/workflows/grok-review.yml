@@ -18,13 +18,13 @@ jobs:
           sudo apt update && sudo apt install -y gh
           echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
       - name: Grok Code Review
+        env:
+          GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
         run: |
           PR_DIFF=$(git diff --name-only HEAD~1 | head -5)
           PROMPT="Review this EOL PR diff for ethical code, bugs, and monetization wins: $PR_DIFF. Suggest fixes in markdown."
           SUMMARY=$(curl -s -X POST https://api.x.ai/v1/chat/completions \
-            -H "Authorization: Bearer ${{ secrets.GROK_API_KEY }}" \
+            -H "Authorization: Bearer $GROK_API_KEY" \
             -H "Content-Type: application/json" \
             -d "{\"model\":\"grok-3\",\"messages\":[{\"role\":\"user\",\"content\":\"$PROMPT\"}],\"max_tokens\":200}" | jq -r '.choices[0].message.content')
           gh pr comment ${{ github.event.pull_request.number }} --body "$SUMMARY"
-        env:
-          GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
