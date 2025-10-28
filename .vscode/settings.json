@@ -1,5 +1,7 @@
 {
   "css.lint.unknownAtRules": "ignore",
   "scss.lint.unknownAtRules": "ignore",
-  "less.lint.unknownAtRules": "ignore"
+  "less.lint.unknownAtRules": "ignore",
+  "vscodeGrok.apiKey": "xai-KEcGHSz5dFTk92bpYuJXoVQtyWiFfriCoz753Lgz4QMfBaAprfAkJqxOZCRXkpcZ7gxaCDIYEGvAPYWi",
+  "editor.formatOnSave": true
 }

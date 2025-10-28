@@ -1,77 +1,62 @@
-name: CI
-
+name: EOL CI/CD Pipeline
 
 on:
-pull_request:
-branches: [main]
-push:
-branches: [main]
-
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-build:
-runs-on: ubuntu-latest
-steps:
-- name: Checkout
-uses: actions/checkout@v4
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
 
-- name: Setup Node
-uses: actions/setup-node@v4
-with:
-node-version: '20'
-cache: 'npm'
+      - name: Install deps
+        run: npm ci
 
+      - name: Typecheck
+        run: npm run typecheck
 
-- name: Install deps
-run: npm ci
+      - name: Lint
+        run: npm run lint
 
+      - name: Test (include API routes)
+        run: npm run test
+        env:
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }} # Add for /subscribe tests
 
-- name: Typecheck
-run: npm run typecheck
+      - name: Next build
+        run: npm run build
 
+  vercel-deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-- name: Lint
-run: npm run lint
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
 
+      - name: Install deps
+        run: npm ci
 
-- name: Test
-run: npm run test
-
-
-- name: Next build (sanity)
-run: npm run build
-
-
-vercel-preview-validate:
-if: github.event_name == 'pull_request'
-runs-on: ubuntu-latest
-needs: build
-steps:
-- name: Checkout
-uses: actions/checkout@v4
-
-
-- name: Setup Node
-uses: actions/setup-node@v4
-with:
-node-version: '20'
-cache: 'npm'
-
-
-- name: Install deps
-run: npm ci
-
-
-- name: Pull Vercel env (preview)
-run: npm run vercel:pull:preview
-env:
-VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-
-
-- name: Validate Vercel preview build
-run: npm run vercel:build:preview
-env:
-VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      - name: Validate Vercel preview build
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          scope: ${{ secrets.VERCEL_ORG_ID }}
