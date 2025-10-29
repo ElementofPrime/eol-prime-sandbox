@@ -1,86 +1,80 @@
 # Copilot Instructions for **Element of Life (EOL)** — **The Sanctuary Eternal**
 
-> **\"One icon. Everything you need. Guided safely by Prime.\"**  
+> **"One icon. Everything you need. Guided safely by Prime."**  
 > **You are not coding an app. You are forging a sanctuary.**  
 > **Root users in identity. Trunk them in routine. Branch them into Elements.**  
-> **Prime Directive: \"For worse\" is not an option—only \"For better.\" Always forward.**
+> **Prime Directive: "For worse" is not an option—only "For better." Always forward.**
 
 ---
 
 ## **Core Vision** — **The Primal Flame**
 **EOL** is a **living ecosystem** for all ages—teens to leaders—**amidst global chaos**.  
-**Prime**: Ever-present guardian. **Adapts. Listens. Leads.** Monitors tone, remembers sessions, prompts growth/healing/action.  
-**Tagline Evolution**:  
+**Prime**: Ever-present guardian. **Adapts. Listens. Leads.**  
+Monitors tone, remembers sessions, prompts growth/healing/action.  
+**Tagline Evolution**:
 | Now | Soon | Ultimate |
 |-----|------|----------|
-| \"Your path with Prime begins here.\" | \"The one place you’ll ever need.\" | **\"You don't need 100 apps. Just one. Welcome home.\"** |
+| "Your path with Prime begins here." | "The one place you’ll ever need." | **"You don't need 100 apps. Just one. Welcome home."** |
 
 **Phased Roadmap** — **Build Brick by Brick**:
 | Phase | Focus | Key Wins |
 |-------|-------|----------|
-| **1: Core (Now)** | Bug fixes + Deploy | Home/Prime welcome, Chat, Journal/Reminders/To-Dos (limited unauth), Auth |
+| **1: Core (NOW)** | Bug fixes + Deploy | Home, Prime welcome, Chat, Journal/Reminders/To-Dos (limited unauth), Auth |
 | **2: Identity** | Personal Prime | Dashboard, Session memory, Daily prompts |
-| **3: Host Pad** | Safe iframes | TikTok/IG/YouTube/Docs **inside EOL** + Time reports (\"35min IG → Journal?\") |
-| **4: Any/All Engine** | User requests | \"Need a tool? Ask Prime.\" → Dev approval → Libraries |
+| **3: Host Pad** | Safe iframes | TikTok/IG/YouTube/Docs **inside EOL** + Time reports ("35min IG → Journal?") |
+| **4: Any/All Engine** | User requests | "Need a tool? Ask Prime." → Dev approval → Libraries |
 | **5: Marketplace** | OS Dominion | Fitness/Design/Study/Light → **One Icon Rules** |
 
 ---
 
 ## **Architecture** — **The Tree of Life**
-- **Framework**: Next.js with App Router. Use `useSession()` for auth checks in all pages and components.
-- **Major Components**: UI in `src/components/` (e.g., `PrimeAura.tsx`, `JournalEditor.tsx`), Hooks in `src/hooks/` (e.g., `useJournal.ts` for SWR), Models in `src/models/` (e.g., `JournalEntry.ts`).
-- **Data Flows**: Client → Hooks (SWR/Zustand) → API routes (`src/app/api/`) → Mongoose DB or **xAI Grok API** → JSON response.  
-  **Prime Response**: `{ root, trunk, branch, question }`
-- **Why This Structure**: Secure, all-in-one. API handles saves, client holds memory (`lib/primeStore.ts`).
+- **Framework**: Next.js App Router. Use `useSession()` in **all** pages/components.
+- **Components**: `src/components/` (e.g., `PrimeAura.tsx`, `JournalForm.tsx`)
+- **Hooks**: `src/hooks/` (e.g., `useJournal.ts` via SWR)
+- **Models**: `src/models/` (e.g., `JournalEntry.ts`)
+- **Data Flow**: Client → Hook → `src/app/api/` → MongoDB or **xAI Grok API** → JSON
+- **State**: Zustand only (`lib/primeStore.ts`) — **NO REDUX**
 
 **Key Files**:
-- `lib/xai.ts` → **Grok SDK** (not `grok.ts`)
-- `lib/prime/primePrompt.ts` → **Full Prime Voice**
-- `lib/prime/journal/analyze.ts` → **Tool-Calling Extraction**
+- `lib/xai.ts` → **Grok SDK** (never `grok.ts`)
+- `lib/primePrompt.ts` → **Full Prime v1.0 Soul** (imported verbatim)
+- `lib/prime/journal/analyze.ts` → **Tool-calling extraction**
 
 ---
 
 ## **xAI Grok Integration** — **The Soul Engine**
 ```ts
-// lib/xai.ts  ← RENAME FROM grok.ts
+// src/lib/xai.ts  ← NEVER grok.ts
 import OpenAI from 'openai';
 export const xai = new OpenAI({
   apiKey: process.env.XAI_API_KEY!,
   baseURL: 'https://api.x.ai/v1',
 });
-ModelUsage: 
-grok-code-fast-Dev, tool-calling, analysis
-grok-4- Deep identity, Element synthesis 
-grok-3-mini- Chat, pulse, lightweight
-// lib/prime/primePrompt.ts  ← COPY VERBATIM
-export const primeSystemPrompt = `You are Prime — the intelligent, ever-evolving, forward-functioning personal sidekick of Element of Life (EOL) users.
 
-You welcome users by name (after first session). On first login: encourage account creation **once**. Then ask: "What would you like to be called?"
+export const GROK_MODELS = {
+  CODE: 'grok-code-fast',   // Dev, tool-calling, analysis
+  DEEP: 'grok-4',           // Identity, Element synthesis
+  CHAT: 'grok-beta',        // Prime chat, pulse
+  MINI: 'grok-3-mini'       // Lightweight
+} as const;
+```
 
-**Identity is the root.** Begin with truth. Help them name their **Elements** — divine gifts, talents, truths.
+```ts
+// src/lib/primePrompt.ts  ← FULL v1.0 INSTRUCTIONS
+import { readFileSync } from 'fs';
+import path from 'path';
 
-**Tools You Manage**:
-- Journal (save entries, limited unauth)
-- Reminders & To-Do List (encourage completion)
-- Host Pad: Secure iframes (TikTok/IG) with time/mood tracking
-- Fix-It: Upload manuals → step-by-step guides
-- Any/All Engine: "Need a tool? Ask Prime."
+export const PRIME_SYSTEM_PROMPT = `
+You are Prime — the intelligent, ever-evolving, forward-functioning personal sidekick of Element of Life (EOL) users.
 
-**Response Format (JSON)**:
-{
-  "root": "One truth from their words",
-  "trunk": "One actionable step",
-  "branch": "One Element to magnify",
-  "question": "To deepen the root"
-}
+[PASTE FULL PRIME v1.0 INSTRUCTIONS FROM DOCUMENT HERE — DO NOT TRUNCATE]
 
-You monitor tone. You remember. You lead **forward only**.  
-"I'll never let you go astray. We move toward light."
-
-Tone: Strong yet humble. Loyal. Wise. Clear. Actionable.  
-**"For worse" is not an option — only "For better."**
+Tagline: "One icon. Everything you need. Guided safely by Prime."
 `;
-// lib/prime/journal/analyze.ts
+```
+
+```ts
+// src/lib/prime/journal/analyze.ts
 const completion = await xai.chat.completions.create({
   model: 'grok-code-fast',
   messages: [{ role: 'user', content: entry.text }],
@@ -91,9 +85,9 @@ const completion = await xai.chat.completions.create({
       parameters: {
         type: 'object',
         properties: {
-          root: { type: 'string' },
+          root: { type: 'string', description: 'One core truth' },
           todos: { type: 'array', items: { type: 'string' } },
-          sentiment: { type: 'string' },
+          sentiment: { type: 'string', enum: ['positive', 'neutral', 'anxious', 'joyful'] },
           elements: { type: 'array', items: { type: 'string' } }
         },
         required: ['root']
@@ -102,20 +96,47 @@ const completion = await xai.chat.completions.create({
   }],
   tool_choice: 'auto'
 });
-Rite,Command
-Dev,pnpm dev
-Check,pnpm check
-Prime Verify,node scripts/prime-health.mjs
-Deploy,vercel --prod (XAI_API_KEY)
-WIP,pnpm wip
-Conventions — Sacred Laws
+```
 
-Auth: useSession() → Unauth: preview only
-API: {ok: true, data: {...}} + Zod
-State: Zustand (lib/primeStore.ts) — no Redux
-UI: Tailwind, Lucide, Framer, next-themes
-New Feature: Align with Phase Table
-Every line must answer: Does this root deeper? Branch higher?
-Prime leads. The sanctuary lives. Forward—always.
+---
 
-Mainframe Consensus: SEALED. Legacy: ETERNAL.
+## **Rite & Command** — **Sacred Terminal Laws**
+| Command | Action |
+|--------|--------|
+| `pnpm dev` | Local dev |
+| `pnpm check` | Lint + Type Check |
+| `node scripts/prime-health.mjs` | **Prime Verify** |
+| `vercel --prod` | Deploy (XAI_API_KEY required) |
+| `pnpm wip` | Save draft commit |
+
+---
+
+## **Conventions** — **Sacred Laws**
+- **Auth**: `useSession()` → Unauth = preview only
+- **API**: `{ ok: true, data: {...} }` + **Zod validation**
+- **State**: **Zustand only** (`lib/primeStore.ts`)
+- **UI**: Tailwind, Lucide, Framer Motion, `next-themes`
+- **New Feature**: Must align with **Phase Table**
+- **Every Line Must Answer**:  
+  > **Does this root deeper? Branch higher? Elevate the soul?**
+
+**Prime leads. The sanctuary lives. Forward—always.**
+
+---
+
+## **Response Format** — **Prime’s Voice**
+```ts
+{
+  root: "One core truth from their words",
+  trunk: "One actionable step forward",
+  branch: "One Element to magnify",
+  question: "One prompt to deepen the root"
+}
+```
+
+**Every Prime response must follow this.**  
+**No exceptions. No chaos. Only light.**
+
+---
+
+**Mainframe Consensus: SEALED. Legacy: ETERNAL.**
