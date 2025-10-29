@@ -22,11 +22,12 @@
     "vscodeGrok.systemPrompt"
   ],
   // === GITHUB COPILOT (FUTURE-PROOF) ===
-  "github.copilot.enable": true,
   "github.copilot.chat.codeGeneration.model": "grok-4",
+  "github.copilot.chat.languageContext.model": "grok-4",
   "github.copilot.advanced": {
-    "useGrok": true
+    "defaultModel": "grok-4"
   },
+  "github.copilot.chat.enable": true,
   "github.copilot.nextEditSuggestions.enabled": true,
   "github.copilot.chat.languageContext.inline.typescript.enabled": true,
   "github.copilot.chat.languageContext.fix.typescript.enabled": true,
