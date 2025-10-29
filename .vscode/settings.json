@@ -48,5 +48,7 @@
   // === AUTO-DEPLOY (Optional Nuclear) ===
   // "git.autocommit": true,
   // "git.autocommitDelay": 2000,
-  "editor.codeActionsOnSave": {}
+  "editor.codeActionsOnSave": {},
+  "workbench.editor.showTabs": "single",
+  "zenMode.showTabs": "single"
 }
