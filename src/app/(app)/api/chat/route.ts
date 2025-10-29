@@ -1,7 +1,7 @@
 // src/app/(app)/api/chat/route.ts
 import { NextResponse } from 'next/server';
 import { getServerSession } from "next-auth";
-import { grok } from '@/lib/grok';
+import { grok } from '@/lib/xai';
 import { primesystemPrompt } from '@/lib/prime/primePrompt';
 import { authOptions } from "@/lib/authOptions";
 

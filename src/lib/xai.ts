@@ -1,4 +1,3 @@
-// src/lib/grok.ts - xAI Grok Client (Replaces OpenAI)
 import OpenAI from "openai";
 
 export const grok = new OpenAI({

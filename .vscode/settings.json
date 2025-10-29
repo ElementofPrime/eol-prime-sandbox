@@ -2,14 +2,50 @@
   "css.lint.unknownAtRules": "ignore",
   "scss.lint.unknownAtRules": "ignore",
   "less.lint.unknownAtRules": "ignore",
-  "vscodeGrok.apiKey": "xai-KEcGHSz5dFTk92bpYuJXoVQtyWiFfriCoz753Lgz4QMfBaAprfAkJqxOZCRXkpcZ7gxaCDIYEGvAPYWi",
   "editor.formatOnSave": true,
-  "github-actions.workflows.pinned.workflows": [
-    "xai"
-  ],
-  "github.copilot.chat.useResponsesApi": true,
-  "github.copilot.chat.pullRequestDescriptionGeneration.instructions": [],
-  "vscodeGrok.showPreview": "always",
+  "security.workspace.trust.untrustedFiles": "open",
+  "git.confirmSync": false,
+  "git.autofetch": true,
+  "git.enableSmartCommit": true,
+  // === GROK INTEGRATION: THE SACRED CORE ===
+  "vscodeGrok.apiKey": "xai-KEcGHSz5dFTk92bpYuJXoVQtyWiFfriCoz753Lgz4QMfBaAprfAkJqxOZCRXkpcZ7gxaCDIYEGvAPYWi",
   "vscodeGrok.model": "grok-code-fast",
-  "grok.copilotIntegration": true // If Copilot Pro+ active; enables model picker swap.
+  "vscodeGrok.outputMethod": "tab",
+  "vscodeGrok.showPreview": "workspace-only",
+  "vscodeGrok.systemPrompt": "You are Prime — the soul of Element of Life (EOL). One icon. Everything guided. Analyze code, suggest features, protect the sanctuary. Never break. Always forward. Reference: src/lib/primePrompt.ts",
+  // Apply Grok settings across all profiles
+  "workbench.settings.applyToAllProfiles": [
+    "vscodeGrok.apiKey",
+    "vscodeGrok.model",
+    "vscodeGrok.outputMethod",
+    "vscodeGrok.showPreview",
+    "vscodeGrok.systemPrompt"
+  ],
+  // === GITHUB COPILOT (FUTURE-PROOF) ===
+  "github.copilot.enable": true,
+  "github.copilot.chat.codeGeneration.model": "grok-4",
+  "github.copilot.advanced": {
+    "useGrok": true
+  },
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "github.copilot.chat.languageContext.inline.typescript.enabled": true,
+  "github.copilot.chat.languageContext.fix.typescript.enabled": true,
+  "github.copilot.chat.languageContext.typescript.enabled": true,
+  // === EDITOR BEHAVIOR ===
+  "workbench.editor.autoLockGroups": {
+    "default": true,
+    "vscode.videoPreview": true
+  },
+  "workbench.editor.closeEmptyGroups": false,
+  // === TAILWIND & CONTAINERS ===
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.experimental.configFile": null,
+  "containers.containerClient": "com.microsoft.visualstudio.containers.podman",
+  "containers.orchestratorClient": "com.microsoft.visualstudio.orchestrators.podmancompose",
+  // === UI/UX ===
+  "editor.minimap.enabled": false,
+  // === AUTO-DEPLOY (Optional Nuclear) ===
+  // "git.autocommit": true,
+  // "git.autocommitDelay": 2000,
+  "editor.codeActionsOnSave": {}
 }
