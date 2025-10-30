@@ -34,7 +34,7 @@ function NavPill({
           ? 'bg-cyan-600/15 text-cyan-700 dark:text-cyan-300 border-cyan-500/30 hover:bg-cyan-600/25'
           : 'bg-white/40 dark:bg-white/10 text-slate-700 dark:text-slate-300 border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/15',
         // focus ring for a11y
-        'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500'
+        'focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500'
       )}
     >
       {children}
@@ -69,7 +69,7 @@ export default function NavBar() {
               'block truncate font-semibold tracking-wide',
               'text-slate-900 dark:text-slate-100',
               'hover:text-cyan-600 dark:hover:text-cyan-300',
-              'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500'
+              'focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500'
             )}
             title="EOL—Prime Labs OS"
           >
@@ -99,7 +99,7 @@ export default function NavBar() {
                 'hidden sm:inline rounded-full px-3 py-1.5 text-sm font-medium',
                 'border border-cyan-500/30 text-cyan-700 dark:text-cyan-300',
                 'hover:bg-cyan-600/15',
-                'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500'
+                'focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500'
               )}
               title="Edit profile"
             >
@@ -114,7 +114,7 @@ export default function NavBar() {
                 'rounded-full px-4 py-1.5 text-sm font-semibold',
                 'bg-cyan-700 text-white hover:bg-cyan-600 active:bg-cyan-700',
                 'dark:bg-cyan-600 dark:hover:bg-cyan-500 dark:active:bg-cyan-600',
-                'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500'
+                'focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500'
               )}
             >
               Sign In
@@ -129,7 +129,7 @@ export default function NavBar() {
                   'border border-black/10 dark:border-white/10',
                   'bg-white/40 dark:bg-white/10 text-slate-700 dark:text-slate-300',
                   'hover:bg-black/5 dark:hover:bg-white/15',
-                  'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500'
+                  'focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500'
                 )}
               >
                 Sign Out

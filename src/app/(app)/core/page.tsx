@@ -46,13 +46,13 @@ export default function CorePage() {
         <div className="mt-10 flex flex-wrap gap-3">
           <Link
             href="/journal"
-            className="rounded-full border border-cyan-500/30 px-5 py-2 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-600/15 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
+            className="rounded-full border border-cyan-500/30 px-5 py-2 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-600/15 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
           >
             Start a journal entry
           </Link>
           <Link
             href="/todo"
-            className="rounded-full border border-cyan-500/30 px-5 py-2 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-600/15 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
+            className="rounded-full border border-cyan-500/30 px-5 py-2 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-600/15 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
           >
             Add a to-do
           </Link>

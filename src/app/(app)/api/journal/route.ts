@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from "next-auth";
 import { getDb } from "@/lib/mongo";
 import { authOptions } from "@/lib/authOptions";
-import { primeSystemPrompt } from '@/lib/primePrompt';
+import { PRIME_SYSTEM_PROMPT } from '@/lib/primePrompt';
 
 // --- GROK IMPORT ---
 const GROK_API_KEY = process.env.GROK_API_KEY;
@@ -64,7 +64,7 @@ export async function POST(req: Request) {
           messages: [
             {
               role: 'system',
-              content: primeSystemPrompt
+              content: PRIME_SYSTEM_PROMPT
             },
             {
               role: 'user',
