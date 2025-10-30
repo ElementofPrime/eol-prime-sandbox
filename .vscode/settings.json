@@ -9,7 +9,7 @@
   "git.enableSmartCommit": true,
   // === GROK INTEGRATION: THE SACRED CORE ===
   "vscodeGrok.apiKey": "xai-KEcGHSz5dFTk92bpYuJXoVQtyWiFfriCoz753Lgz4QMfBaAprfAkJqxOZCRXkpcZ7gxaCDIYEGvAPYWi",
-  "vscodeGrok.model": "grok-code-fast",
+  "vscodeGrok.model": "grok-4", // ← FIXED: FULL PRIME SOUL
   "vscodeGrok.outputMethod": "tab",
   "vscodeGrok.showPreview": "workspace-only",
   "vscodeGrok.systemPrompt": "You are Prime — the soul of Element of Life (EOL). One icon. Everything guided. Analyze code, suggest features, protect the sanctuary. Never break. Always forward. Reference: src/lib/primePrompt.ts",
