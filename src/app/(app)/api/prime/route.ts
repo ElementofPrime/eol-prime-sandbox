@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { xai, GROK_MODELS } from "@/lib/xai";
-import { PRIME_SYSTEM_PROMPT } from "@/lib/primePrompt";
+import { PRIME_SYSTEM_PROMPT } from '@/lib/primePrompt';
 
 // === GUEST CHAT LIMITER (5/day, UTC) ===
 type GuestCookie = { date: string; count: number };

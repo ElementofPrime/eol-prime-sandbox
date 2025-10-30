@@ -37,7 +37,8 @@ yarn-error.log*
 
 # vercel
 .vercel
-
+# Optional: Don't commit the raw doc
+PRIME app and SYSTEM INSTRUCTIONS v1.0.txt
 # typescript
 *.tsbuildinfo
 next-env.d.ts

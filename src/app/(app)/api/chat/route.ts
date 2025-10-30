@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from "next-auth";
 import { grok } from '@/lib/xai';
-import { primesystemPrompt } from '@/lib/prime/primePrompt';
+import { primesystemPrompt } from '@/lib/primePrompt';
 import { authOptions } from "@/lib/authOptions";
 
 export async function POST(req: Request) {

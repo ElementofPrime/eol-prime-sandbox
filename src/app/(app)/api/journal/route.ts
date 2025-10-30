@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from "next-auth";
 import { getDb } from "@/lib/mongo";
 import { authOptions } from "@/lib/authOptions";
-import { primeSystemPrompt } from '@/lib/prime/primePrompt';
+import { primeSystemPrompt } from '@/lib/primePrompt';
 
 // --- GROK IMPORT ---
 const GROK_API_KEY = process.env.GROK_API_KEY;
