@@ -7,7 +7,12 @@ import { cookies } from "next/headers";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { xai, GROK_MODELS } from "@/lib/xai";
-import type { ChatCompletionMessageParam } from 'openai/resources/chat/completions'; // Assuming xai follows OpenAI-like types; adjust if needed.
+
+// Define the message type locally to ensure compatibility with xAI
+type ChatCompletionMessageParam = {
+  role: 'system' | 'user' | 'assistant';
+  content: string;
+};
 
 // Define the system prompt constant
 const PRIME_SYSTEM_PROMPT = "You are a helpful AI assistant. Provide accurate, concise, and relevant responses.";
@@ -98,7 +103,7 @@ export async function POST(req: NextRequest) {
     const selectedModel = MODEL_MAP[modelKey] ?? MODEL_MAP.chat;
 
     // === STREAMING RESPONSE (Grok-powered) ===
-    const stream = await xai.chat.completions.create({
+    const stream = await (xai.chat.completions.create as (options: any) => Promise<any>)({
       model: selectedModel,
       messages: [
         { role: "system", content: PRIME_SYSTEM_PROMPT },
@@ -113,7 +118,7 @@ export async function POST(req: NextRequest) {
     const readable = new ReadableStream({
       async start(controller) {
         try {
-          for await (const chunk of stream) {
+          for await (const chunk of stream as AsyncIterable<any>) {
             const delta = chunk.choices[0]?.delta?.content ?? "";
             if (delta) controller.enqueue(encoder.encode(delta));
           }

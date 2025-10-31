@@ -67,7 +67,7 @@ export default function RemindersPage() {
         <ul className="mt-6 space-y-3">
           {items.length === 0 && <li className="text-slate-500">No reminders yet.</li>}
           {items.map((it) => (
-            <li key={it._id ?? it.text} className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-4">
+            <li key={it._id ?? it.text} className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 dark:bg-black/5 p-4">
               <div>
                 <p className="font-medium">{it.text}</p>
                 {it.dueAt && <p className="text-sm text-slate-500">Due {new Date(it.dueAt).toLocaleString()}</p>}

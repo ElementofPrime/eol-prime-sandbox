@@ -26,7 +26,7 @@ export default function SignInPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
-            className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 outline-none"
+            className="w-full rounded-xl border border-white/10 bg-white/5 dark:bg-black/5 px-3 py-2 outline-none"
           />
           <button className="w-full rounded-xl bg-cyan-600 hover:bg-cyan-500 px-4 py-2 text-slate-500">
             Send magic link

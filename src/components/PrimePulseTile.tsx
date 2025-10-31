@@ -63,7 +63,7 @@ export default function PrimePulseTile() {
 
   if (status !== 'authenticated') {
     return (
-      <div className="mx-auto mt-6 max-w-4xl rounded-3xl border border-black/10 dark:border-white/10 bg-white/40 dark:bg-white/10 backdrop-blur p-5 shadow-[0_0_80px_rgba(56,189,248,0.12)]">
+      <div className="mx-auto mt-6 max-w-4xl rounded-3xl border border-black/10 dark:border-white/10 bg-white/40 dark:bg-black/40 backdrop-blur p-5 shadow-[0_0_80px_rgba(56,189,248,0.12)]">
         <div className="mb-3 flex items-center justify-between">
           <span className="text-xs tracking-widest text-slate-500 dark:text-slate-400">PRIME PULSE</span>
           <span className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
@@ -111,7 +111,7 @@ export default function PrimePulseTile() {
   }
 
   return (
-    <div className="mx-auto mt-6 max-w-4xl rounded-3xl border border-black/10 dark:border-white/10 bg-white/40 dark:bg-white/10 backdrop-blur p-5 shadow-[0_0_80px_rgba(56,189,248,0.12)]">
+    <div className="mx-auto mt-6 max-w-4xl rounded-3xl border border-black/10 dark:border-white/10 bg-white/40 dark:bg-black/40 backdrop-blur p-5 shadow-[0_0_80px_rgba(56,189,248,0.12)]">
       <div className="mb-3 flex items-center justify-between">
         <span className="text-xs tracking-widest text-slate-500 dark:text-slate-400">PRIME PULSE</span>
         <span className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
@@ -125,13 +125,13 @@ export default function PrimePulseTile() {
 
       {(isLoading || posting) && (
         <div
-          className="rounded-xl border border-black/10 dark:border-white/10 bg-white/60 dark:bg-white/5 p-4 animate-pulse"
+          className="rounded-xl border border-black/10 dark:border-white/10 bg-white/60 dark:bg-black/60 p-4 animate-pulse"
           role="status"
           aria-live="polite"
         >
-          <div className="h-3 w-24 bg-black/10 dark:bg-white/10 rounded mb-3" />
-          <div className="h-2 w-full bg-black/10 dark:bg-white/10 rounded" />
-          <div className="mt-4 h-3 w-2/3 bg-black/10 dark:bg-white/10 rounded" />
+          <div className="h-3 w-24 bg-white/10 dark:bg-black/10 rounded mb-3" />
+          <div className="h-2 w-full bg-white/10 dark:bg-black/10 rounded" />
+          <div className="mt-4 h-3 w-2/3 bg-white/10 dark:bg-black/10 rounded" />
         </div>
       )}
 
@@ -155,7 +155,7 @@ export default function PrimePulseTile() {
               </span>
             </div>
             <div
-              className="h-2 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10"
+              className="h-2 w-full overflow-hidden rounded-full  bg-white/10 dark:bg-black/10"
               role="meter"
               aria-valuemin={0}
               aria-valuemax={100}

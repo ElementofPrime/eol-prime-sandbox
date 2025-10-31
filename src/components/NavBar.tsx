@@ -32,7 +32,7 @@ function NavPill({
         // base surfaces (light/dark)
         active
           ? 'bg-cyan-600/15 text-cyan-700 dark:text-cyan-300 border-cyan-500/30 hover:bg-cyan-600/25'
-          : 'bg-white/40 dark:bg-white/10 text-slate-700 dark:text-slate-300 border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/15',
+          : 'bg-white/40 dark:bg-black/40 text-slate-700 dark:text-slate-300 border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/15',
         // focus ring for a11y
         'focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500'
       )}
@@ -127,7 +127,7 @@ export default function NavBar() {
                 className={cx(
                   'rounded-full px-3 py-1.5 text-sm font-medium',
                   'border border-black/10 dark:border-white/10',
-                  'bg-white/40 dark:bg-white/10 text-slate-700 dark:text-slate-300',
+                  'bg-white/40 dark:bg-black/40 text-slate-700 dark:text-slate-300',
                   'hover:bg-black/5 dark:hover:bg-white/15',
                   'focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500'
                 )}

@@ -6,12 +6,6 @@ import SceneFortress from "@/components/SceneFortress";
 import PrimeAura from "@/components/PrimeAura";
 
 type Msg = { role: "user" | "assistant"; content: string };
-const body = await req.json();
-const { content, mood, tags } = body;
-if (!content?.trim()) return NextResponse.json({ ok: false, error: "Content required" }, { status: 400 });
-
-const { content, mood, tags } = body;
-if (!content?.trim()) return NextResponse.json({ ok: false, error: "Content required" }, { status: 400 });
 
 export default function ChatPage() {
   const { status } = useSession();
@@ -210,8 +204,8 @@ export default function ChatPage() {
               key={i}
               className={`relative max-w-[85%] rounded-2xl px-4 py-3 shadow-md backdrop-blur
                 ${m.role === "user"
-                  ? "ml-auto bg-white/70 text-slate-900 dark:bg-white/10 dark:text-white"
-                  : "mr-auto bg-sky-50/90 text-slate-900 dark:bg-white/10 dark:text-white"
+                  ? "ml-auto bg-white/70 dark:bg-black/70 text-slate-900"
+                  : "mr-auto bg-sky-50/90 text-slate-900"
                 }`}
               aria-live={i === messages.length - 1 && m.role === "assistant" ? "polite" : undefined}
             >
@@ -223,6 +217,12 @@ export default function ChatPage() {
           {loading && (
             <div className="mr-auto max-w-[85%] rounded-2xl border border-black/10 dark:border-white/10 bg-white/60 dark:bg-white/5 px-4 py-3 text-slate-600 dark:text-slate-400 backdrop-blur animate-pulse">
               Prime is focusing…
+            </div>
+          )}
+
+          {error && (
+            <div className="mx-auto max-w-[85%] rounded-2xl bg-red-50/90 p-4 text-red-900">
+              {error}
             </div>
           )}
 

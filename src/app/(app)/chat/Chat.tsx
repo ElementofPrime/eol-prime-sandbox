@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { useSession, signIn } from "next-auth/react";
 import SceneFortress from "@/components/SceneFortress";
 import PrimeAura from "@/components/PrimeAura";
@@ -172,7 +171,7 @@ export default function ChatPage() {
       {/* Guest banner */}
       {status !== "authenticated" && (
         <div className="mx-auto w-full max-w-3xl px-4">
-          <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-white/50 dark:bg-white/10 backdrop-blur p-4 text-sm text-slate-700 dark:text-slate-300">
+          <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-white/50 dark:bg-black/50 backdrop-blur p-4 text-sm text-slate-700 dark:text-slate-300">
             <span className="mr-2">⚠️</span>
             Limited to <strong>5 chats</strong>.{" "}
             <span className="opacity-90">Create an account or sign in to access full features.</span>
@@ -204,9 +203,9 @@ export default function ChatPage() {
                 className={
                   isAssistant
                     ? // Assistant bubble (glass, dark-safe)
-                      "eol-bubble-assistant relative max-w-[85%] mr-auto rounded-2xl px-4 py-3 shadow-md backdrop-blur bg-sky-50/90 text-slate-900 dark:bg-white/10 dark:text-white border border-black/10 dark:border-white/10"
+                      "eol-bubble-assistant relative max-w-[85%] mr-auto rounded-2xl px-4 py-3 shadow-md backdrop-blur text-slate-900 bg-white/10 dark:bg-black/10 dark:text-white border border-black/10 dark:border-white/10"
                     : // User bubble
-                      "eol-bubble-user relative max-w-[85%] ml-auto rounded-2xl px-4 py-3 shadow-md backdrop-blur bg-white/70 text-slate-900 dark:bg-white/10 dark:text-white border border-black/10 dark:border-white/10"
+                      "eol-bubble-user relative max-w-[85%] ml-auto rounded-2xl px-4 py-3 shadow-md backdrop-blur bg-white/70 dark:bg-black/70 text-slate-900 dark:text-white border border-black/10 dark:border-white/10"
                 }
                 aria-live={i === messages.length - 1 && isAssistant ? "polite" : undefined}
               >
@@ -218,7 +217,7 @@ export default function ChatPage() {
 
           {loading && (
             <div
-              className="mr-auto max-w-[85%] rounded-2xl border border-black/10 dark:border-white/10 bg-white/60 dark:bg-white/5 px-4 py-3 text-slate-600 dark:text-slate-400 backdrop-blur animate-pulse"
+              className="mr-auto max-w-[85%] rounded-2xl border border-black/10 dark:border-white/10 bg-white/60 dark:bg-black/60 px-4 py-3 text-slate-600 dark:text-slate-400 backdrop-blur animate-pulse"
               role="status"
               aria-live="polite"
             >
@@ -256,7 +255,7 @@ export default function ChatPage() {
               <button
                 onClick={sendMessage}
                 disabled={loading || unauthReachedLimit}
-                className="rounded-xl bg-white/90 px-5 py-2 text-sm font-medium text-slate-900 transition hover:bg-white focus-visible:outline-2 focus-visible:outline-cyan-400 focus-visible:outline-offset-2 dark:bg-white/80 dark:text-slate-900"
+                className="rounded-xl bg-white/90 dark:bg-black/90 px-5 py-2 text-sm font-medium text-slate-900 transition hover:bg-white focus-visible:outline-2 focus-visible:outline-cyan-400 focus-visible:outline-offset-2 dark:text-slate-900"
               >
                 {loading ? "Sending…" : "Send to Prime"}
               </button>

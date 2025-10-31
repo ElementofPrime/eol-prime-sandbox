@@ -56,7 +56,7 @@ export default function TodoPage() {
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="flex-1 rounded-xl border border-white/10 bg-white/5 px-3 py-2 outline-none"
+          className="flex-1 rounded-xl border border-white/10 bg-white/5 dark:bg-black/5 px-3 py-2 outline-none"
           placeholder="Add a to-do…"
         />
         <button className="rounded-xl bg-cyan-600 hover:bg-cyan-500 px-4 py-2 text-slate-500 disabled:opacity-50" disabled={!title.trim()}>
@@ -68,7 +68,7 @@ export default function TodoPage() {
 
       <ul className="space-y-2">
         {(data?.items || []).map((it: any) => (
-          <li key={it._id} className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-3 py-2">
+          <li key={it._id} className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 dark:bg-black/5 px-3 py-2">
             <input type="checkbox" checked={!!it.done} onChange={(e) => toggle(it._id, e.target.checked)} />
             <div className={`flex-1 ${it.done ? 'line-through opacity-60' : ''}`}>{it.title}</div>
             <button onClick={() => remove(it._id)} className="text-xs opacity-70 hover:opacity-100">Delete</button>

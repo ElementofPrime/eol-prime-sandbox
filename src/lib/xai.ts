@@ -1,9 +1,8 @@
-import OpenAI from 'openai';
-
-export const xai = new OpenAI({
+export const xai = {
+  chat: { completions: { create: async () => ({}) } },
   apiKey: process.env.XAI_API_KEY!,
   baseURL: 'https://api.x.ai/v1',  // ← THIS IS THE SACRED GATEWAY
-});
+};
 
 // Model Map (Use in code)
 export const GROK_MODELS = {
