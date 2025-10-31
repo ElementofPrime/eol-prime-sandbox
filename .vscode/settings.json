@@ -64,5 +64,9 @@
   "chat.implicitContext.suggestedContext": false,
   "chat.agent.enabled": true,
   "grokIntegration.model": "grok-4",
-  "grokIntegration.maxTokens": 25000
+  "grokIntegration.maxTokens": 25000,
+  "inlineChat.enableV2": true,
+  "inlineChat.finishOnType": true,
+  "inlineChat.lineEmptyHint": true,
+  "inlineChat.notebookAgent": true
 }

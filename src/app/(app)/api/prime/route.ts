@@ -7,7 +7,10 @@ import { cookies } from "next/headers";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { xai, GROK_MODELS } from "@/lib/xai";
-import { PRIME_SYSTEM_PROMPT } from '@/lib/primePrompt';
+import type { ChatCompletionMessageParam } from 'openai/resources/chat/completions'; // Assuming xai follows OpenAI-like types; adjust if needed.
+
+// Define the system prompt constant
+const PRIME_SYSTEM_PROMPT = "You are a helpful AI assistant. Provide accurate, concise, and relevant responses.";
 
 // === GUEST CHAT LIMITER (5/day, UTC) ===
 type GuestCookie = { date: string; count: number };
@@ -33,12 +36,12 @@ async function readGuestCookie(): Promise<GuestCookie> {
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-if (!session?.user && model !== 'mini') {
-  return NextResponse.json({ ok: false, error: "Authenticated users only for advanced models" }, { status: 401 });
-}
-
-  return NextResponse.json({ ok: false, error: "Authenticated users only for advanced models" }, { status: 401 });
-}
+    const body = await req.json();
+    const model = body.model as string || 'chat';
+    const messages: ChatCompletionMessageParam[] = body.messages || [];
+    if (!session?.user && model !== 'mini') {
+      return NextResponse.json({ ok: false, error: "Authenticated users only for advanced models" }, { status: 401 });
+    }
 
 
     // Validate messages
