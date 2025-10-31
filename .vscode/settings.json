@@ -22,15 +22,15 @@
     "vscodeGrok.systemPrompt"
   ],
   // === GITHUB COPILOT (FUTURE-PROOF) ===
-  "github.copilot.chat.codeGeneration.model": "grok-4",
-  "github.copilot.chat.languageContext.model": "grok-4",
-  "github.copilot.advanced": {
-    "defaultModel": "grok-4"
-  },
-  "github.copilot.chat.enable": true,
-  "github.copilot.nextEditSuggestions.enabled": true,
-  "github.copilot.chat.languageContext.inline.typescript.enabled": true,
-  "github.copilot.chat.languageContext.fix.typescript.enabled": true,
+  //"github.copilot.chat.codeGeneration.model": "grok-4",
+  //"github.copilot.chat.languageContext.model": "grok-4",
+  //"github.copilot.advanced": {
+  //  "defaultModel": "grok-4"
+  //},
+  //"github.copilot.chat.enable": true,
+  //"github.copilot.nextEditSuggestions.enabled": true,
+  //"github.copilot.chat.languageContext.inline.typescript.enabled": true,
+  //"github.copilot.chat.languageContext.fix.typescript.enabled": true,
   "github.copilot.chat.languageContext.typescript.enabled": true,
   // === EDITOR BEHAVIOR ===
   "workbench.editor.autoLockGroups": {
@@ -50,5 +50,9 @@
   // "git.autocommitDelay": 2000,
   "editor.codeActionsOnSave": {},
   "workbench.editor.showTabs": "single",
-  "zenMode.showTabs": "single"
+  "zenMode.showTabs": "single",
+  "firefox.executable": "C:\\Program Files\\Mozilla Firefox\\firefox.exe",
+  "firefox.keepProfileChanges": true,
+  "firefox.profileDir": "C:\\Program Files\\Mozilla Firefox",
+  "firefox.profile": "EOL Jeremy Firefox on 15XAlbatross-1"
 }
