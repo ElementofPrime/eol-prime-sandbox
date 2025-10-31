@@ -55,11 +55,11 @@
   "firefox.keepProfileChanges": true,
   "firefox.profileDir": "C:\\Program Files\\Mozilla Firefox",
   "firefox.profile": "EOL Jeremy Firefox on 15XAlbatross-1",
-  "inlineChat.lineNaturalLanguageHint": false,
-  "chat.todoListTool.descriptionField": false,
-  "chat.showAgentSessionsViewDescription": false,
-  "chat.promptFiles": false,
+  "inlineChat.lineNaturalLanguageHint": true,
+  "chat.todoListTool.descriptionField": true,
+  "chat.showAgentSessionsViewDescription": true,
+  "chat.promptFiles": true,
   "chat.implicitContext.suggestedContext": false,
-  "chat.agent.enabled": false,
+  "chat.agent.enabled": true,
   "grokIntegration.model": "grok-4"
 }
