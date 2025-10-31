@@ -60,5 +60,6 @@
   "chat.showAgentSessionsViewDescription": false,
   "chat.promptFiles": false,
   "chat.implicitContext.suggestedContext": false,
-  "chat.agent.enabled": false
+  "chat.agent.enabled": false,
+  "grokIntegration.model": "grok-4"
 }
