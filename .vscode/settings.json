@@ -54,5 +54,11 @@
   "firefox.executable": "C:\\Program Files\\Mozilla Firefox\\firefox.exe",
   "firefox.keepProfileChanges": true,
   "firefox.profileDir": "C:\\Program Files\\Mozilla Firefox",
-  "firefox.profile": "EOL Jeremy Firefox on 15XAlbatross-1"
+  "firefox.profile": "EOL Jeremy Firefox on 15XAlbatross-1",
+  "inlineChat.lineNaturalLanguageHint": false,
+  "chat.todoListTool.descriptionField": false,
+  "chat.showAgentSessionsViewDescription": false,
+  "chat.promptFiles": false,
+  "chat.implicitContext.suggestedContext": false,
+  "chat.agent.enabled": false
 }
