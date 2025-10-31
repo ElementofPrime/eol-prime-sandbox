@@ -33,7 +33,13 @@ async function readGuestCookie(): Promise<GuestCookie> {
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    const { messages = [], model = "chat" } = await req.json();
+if (!session?.user && model !== 'mini') {
+  return NextResponse.json({ ok: false, error: "Authenticated users only for advanced models" }, { status: 401 });
+}
+
+  return NextResponse.json({ ok: false, error: "Authenticated users only for advanced models" }, { status: 401 });
+}
+
 
     // Validate messages
     if (!Array.isArray(messages) || messages.length === 0) {

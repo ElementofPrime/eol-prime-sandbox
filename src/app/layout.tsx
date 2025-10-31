@@ -25,7 +25,9 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   width: "device-width",
-  initialScale: 1,
+<body className={`min-h-screen antialiased ${inter.variable} ${greatVibes.variable}`}>
+
+
   viewportFit: "cover",
   userScalable: false,
 };

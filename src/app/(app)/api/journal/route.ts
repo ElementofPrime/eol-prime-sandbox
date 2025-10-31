@@ -12,9 +12,53 @@ const GROK_MODEL = 'grok-3-mini'; // Cheap, fast, ethical
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
-export const fetchCache = "force-no-store";
-
 export async function GET() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+
+  const db = await getDb();
+const page = parseInt(new URL(req.url).searchParams.get('page') || '1', 10);
+const limit = 20;
+const skip = (page - 1) * limit;
+
+const items = await db
+  .collection("journalentries")
+  .find({ userId: (session.user as any).id })
+  .sort({ createdAt: -1 })
+  .skip(skip)
+  .limit(limit)
+  .toArray();
+
+const total = await db.collection("journalentries").countDocuments({ userId: (session.user as any).id });
+
+return NextResponse.json({ ok: true, items, page, totalPages: Math.ceil(total / limit) });
+
+
+  return NextResponse.json({ ok: true, items });
+}
+
+
+  const db = await getDb();
+const page = parseInt(new URL(req.url).searchParams.get('page') || '1', 10);
+const limit = 20;
+const skip = (page - 1) * limit;
+
+const items = await db
+  .collection("journalentries")
+  .find({ userId: (session.user as any).id })
+  .sort({ createdAt: -1 })
+  .skip(skip)
+  .limit(limit)
+  .toArray();
+
+const total = await db.collection("journalentries").countDocuments({ userId: (session.user as any).id });
+
+return NextResponse.json({ ok: true, items, page, totalPages: Math.ceil(total / limit) });
+
+
+  return NextResponse.json({ ok: true, items });
+}
+
   const session = await getServerSession(authOptions);
   if (!session?.user) return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
 

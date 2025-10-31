@@ -6,6 +6,12 @@ import SceneFortress from "@/components/SceneFortress";
 import PrimeAura from "@/components/PrimeAura";
 
 type Msg = { role: "user" | "assistant"; content: string };
+const body = await req.json();
+const { content, mood, tags } = body;
+if (!content?.trim()) return NextResponse.json({ ok: false, error: "Content required" }, { status: 400 });
+
+const { content, mood, tags } = body;
+if (!content?.trim()) return NextResponse.json({ ok: false, error: "Content required" }, { status: 400 });
 
 export default function ChatPage() {
   const { status } = useSession();
