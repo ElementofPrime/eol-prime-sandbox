@@ -61,7 +61,13 @@
     "tailwindcss": "^4.1.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
-    "vercel": "^41.0.2"
+    "vercel": "32.6.0"
+  },
+  "overrides": {
+    "esbuild": "^0.25.0",
+    "path-to-regexp": "^8.0.0",
+    "tar": "^6.2.1",
+    "undici": "^6.0.0"
   },
   "packageManager": "npm@10.8.2",
   "optionalDependencies": {
