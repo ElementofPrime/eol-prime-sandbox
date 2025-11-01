@@ -4,7 +4,7 @@
   "vscodeGrok.model": "grok-4",
   "vscodeGrok.systemPrompt": "You are Prime — the soul of Element of Life (EOL). One icon. Everything guided. Analyze code, suggest features, protect the sanctuary. Never break. Always forward. Reference: src/lib/primePrompt.ts",
   "vscodeGrok.showPreview": true,
-  "vscodeGrok.outputMethod": "panel",  // Opens in side panel (clean)
+  "vscodeGrok.outputMethod": "panel", // Opens in side panel (clean)
 
   "workbench.settings.applyToAllProfiles": [
     "vscodeGrok.apiKey",
@@ -18,12 +18,8 @@
   "workbench.editor.limit.enabled": true,
   "workbench.editor.limit.value": 2,
   "workbench.editor.openPositioning": "right",
-  "workbench.editor.enablePreview": true,
   "workbench.editor.enablePreviewFromQuickOpen": true,
   "workbench.editor.wrapTabs": true,
-
-  // === EDITOR BEHAVIOR (KEPT + ENHANCED) ===
-  "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
@@ -33,16 +29,12 @@
   },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[javascript]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[json]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "workbench.editor.autoLockGroups": {
-    "default": true,
-    "vscode.videoPreview": true
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 
   // === TAILWIND & CSS (KEPT + OPTIMIZED) ===
@@ -65,11 +57,25 @@
   "terminal.integrated.defaultProfile.windows": "Git Bash",
   "terminal.integrated.fontSize": 14,
   "terminal.integrated.cursorBlinking": true,
-  "terminal.integrated.gpuAcceleration": "on",
+  "terminal.integrated.gpuAcceleration": "auto",
 
   // === UI/UX (KEPT + CLEANED) ===
   "editor.minimap.enabled": false,
   "security.workspace.trust.untrustedFiles": "open",
+  "workbench.editor.doubleClickTabToToggleEditorGroupSizes": "expand",
+  "workbench.editor.limit.perEditorGroup": true,
+  "workbench.editor.splitSizing": "split",
+  "explorer.fileNesting.enabled": true,
+  "notebook.defaultFormatter": "esbenp.prettier-vscode",
+  "workbench.colorTheme": "Default Dark Modern",
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": true,
+  "workbench.preferredHighContrastLightColorTheme": "Default Dark Modern",
+  "workbench.preferredLightColorTheme": "Default Dark Modern",
+  "workbench.editor.closeOnFileDelete": true,
+  "search.actionsPosition": "auto",
+  "extensions.closeExtensionDetailsOnViewChange": true,
+  "terminal.integrated.environmentChangesRelaunch": false
 
   // === EXTENSIONS SETTINGS (KEPT + ORGANIZED) ===
   // === CLEANUP: REMOVED REDUNDANT / UNUSED ===
