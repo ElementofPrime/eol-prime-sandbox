@@ -1,6 +1,6 @@
-// /src/components/SceneFortress.tsx
 "use client";
 
+import { viewport } from '@radix-ui/react-viewport';
 import { useEffect, useState } from "react";
 import NextImage from "next/image";
 

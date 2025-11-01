@@ -1,16 +1,32 @@
-'use client';
+import ClientViewportWrapper from '@/components/ClientViewportWrapper';
 
 import { useSession } from 'next-auth/react';
 import useSWR from 'swr';
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+const FALLBACK_PROMPT = 'What is one small step forward today?';
 
 export default function CorePage() {
+  const fetcher = (url: string) => fetch(url).then((r) => r.json());
   const { status } = useSession();
-  if (status !== 'authenticated') return <div>Sign in required for Daily Prompt.</div>;
+  const { data, error, isLoading } = useSWR('/api/pulse', fetcher);
 
-  const { data } = useSWR('/api/pulse', fetcher);
-  const prompt = data?.prompt ?? 'What is one small step forward today?';
+  if (status === 'loading') {
+    return <div>Checking authentication...</div>;
+  }
+
+  if (status !== 'authenticated') {
+    return <div>Sign in required for Daily Prompt.</div>;
+  }
+
+  if (!data) {
+    return <div>Loading prompt...</div>;
+  }
+
+  if (error) {
+    return <div>Failed to load prompt.</div>;
+  }
+
+  const prompt = data?.prompt ?? FALLBACK_PROMPT;
 
   return (
     <main className="min-h-svh px-4 pb-24 pt-28 text-slate-700 dark:text-slate-300">

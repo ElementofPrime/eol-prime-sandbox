@@ -1,12 +1,11 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
 import "../../styles/globals.css";
 import type { Viewport } from "next";
-import NavBar from "@/components/NavBar";
 import Providers from "./providers";
 import { Inter, Great_Vibes } from "next/font/google";
 import BackgroundDecor from "@/components/BackgroundDecor";
+import NavBar from "@/components/NavBar";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const greatVibes = Great_Vibes({ weight: "400", subsets: ["latin"], variable: "--font-greatvibes", display: "swap" });
@@ -16,8 +15,8 @@ export const viewport = {
   viewportFit: "cover",
   userScalable: false,
   title: "Element of Life — Prime Labs OS",
-  description: "The foundation where focus becomes growth, and growth becomes transformation.",
-  themeColor: "#0b1220",
+  // The 'title' field sets the default title for the web app's viewport metadata.
+    description: "The foundation where focus becomes growth, and growth becomes transformation.",
   manifest: "/manifest.webmanifest",
   openGraph: {
     url: "https://elementoflife.ai",
@@ -29,8 +28,12 @@ export const viewport = {
     "mobile-web-app-capable": "yes",
   },
 };
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+/**
+/**
+ * RootLayout component provides the main HTML structure and global providers for the application.
+ * @param props - The props for RootLayout.
+ * @param props.children - The child components to render within the layout.
+ */
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${greatVibes.variable} min-h-screen antialiased`}>
@@ -52,4 +55,3 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </body>
     </html>
   );
-}

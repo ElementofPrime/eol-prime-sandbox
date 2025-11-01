@@ -1,18 +1,11 @@
 {
-  "css.lint.unknownAtRules": "ignore",
-  "scss.lint.unknownAtRules": "ignore",
-  "less.lint.unknownAtRules": "ignore",
-  "editor.formatOnSave": true,
-  "security.workspace.trust.untrustedFiles": "open",
-  "git.confirmSync": false,
-  "git.autofetch": true,
-  "git.enableSmartCommit": true,
-  // === GROK INTEGRATION: THE SACRED CORE ===
-  "vscodeGrok.apiKey": "${env:GROK_API_KEY}",  // Use env var instead of hardcoding
-  "vscodeGrok.model": "grok-4", // ← FIXED: FULL PRIME SOUL
-
+  // === GROK INTEGRATION: THE SACRED CORE (KEPT + UPGRADED) ===
+  "vscodeGrok.apiKey": "${env:GROK_API_KEY}",
+  "vscodeGrok.model": "grok-4",
   "vscodeGrok.systemPrompt": "You are Prime — the soul of Element of Life (EOL). One icon. Everything guided. Analyze code, suggest features, protect the sanctuary. Never break. Always forward. Reference: src/lib/primePrompt.ts",
-  // Apply Grok settings across all profiles
+  "vscodeGrok.showPreview": true,
+  "vscodeGrok.outputMethod": "panel",  // Opens in side panel (clean)
+
   "workbench.settings.applyToAllProfiles": [
     "vscodeGrok.apiKey",
     "vscodeGrok.model",
@@ -20,46 +13,54 @@
     "vscodeGrok.showPreview",
     "vscodeGrok.systemPrompt"
   ],
-  // === GITHUB COPILOT (FUTURE-PROOF) ===
-  //"github.copilot.chat.codeGeneration.model": "grok-4",
-  //"github.copilot.chat.languageContext.model": "grok-4",
-  //"github.copilot.advanced": {
-  //  "defaultModel": "grok-4"
-  //},
-  //"github.copilot.chat.enable": true,
-  //"github.copilot.nextEditSuggestions.enabled": true,
-  //"github.copilot.chat.languageContext.inline.typescript.enabled": true,
-  //"github.copilot.chat.languageContext.fix.typescript.enabled": true,
-  "github.copilot.chat.languageContext.typescript.enabled": true,
-  // === EDITOR BEHAVIOR ===
+
+  // === TAB FORTRESS: MAX 2, SIDE-BY-SIDE, NO CLUTTER (ADDED) ===
+  "workbench.editor.limit.enabled": true,
+  "workbench.editor.limit.value": 2,
+  "workbench.editor.openPositioning": "right",
+  "workbench.editor.enablePreview": true,
+  "workbench.editor.enablePreviewFromQuickOpen": true,
+  "workbench.editor.wrapTabs": true,
+
+  // === EDITOR BEHAVIOR (KEPT + ENHANCED) ===
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
   "workbench.editor.autoLockGroups": {
     "default": true,
     "vscode.videoPreview": true
   },
-  // === TAILWIND & CONTAINERS ===
+
+  // === TAILWIND & CSS (KEPT + OPTIMIZED) ===
   "tailwindCSS.emmetCompletions": true,
   "tailwindCSS.experimental.configFile": null,
-  "containers.containerClient": "com.microsoft.visualstudio.containers.podman",
-  "containers.orchestratorClient": "com.microsoft.visualstudio.orchestrators.podmancompose",
-  // === UI/UX ===
+  "tailwindCSS.experimental.classRegex": [
+    "cn\\(([^)]*)\\)",
+    "cva\\(([^)]*)\\)"
+  ],
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "less.lint.unknownAtRules": "ignore",
+
+  // === GIT FLOW (KEPT) ===
+  "git.confirmSync": false,
+  "git.autofetch": true,
+  "git.enableSmartCommit": true,
+
+  // === TERMINAL: BASH = BOSS (KEPT + POLISHED) ===
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.cursorBlinking": true,
+  "terminal.integrated.gpuAcceleration": "on",
+
+  // === UI/UX (KEPT + CLEANED) ===
   "editor.minimap.enabled": false,
-  // === AUTO-DEPLOY (Optional Nuclear) ===
-  // "git.autocommit": true,
-  // "git.autocommitDelay": 2000,
-  "editor.codeActionsOnSave": {},
-  "firefox.keepProfileChanges": true,
-  "firefox.profileDir": "C:\\Program Files\\Mozilla Firefox",
-  "firefox.profile": "EOL Jeremy Firefox on 15XAlbatross-1",
-  "inlineChat.lineNaturalLanguageHint": true,
-  "chat.todoListTool.descriptionField": true,
-  "chat.showAgentSessionsViewDescription": true,
-  "chat.promptFiles": true,
-  "chat.implicitContext.suggestedContext": false,
-  "chat.agent.enabled": true,
-  "grokIntegration.model": "grok-4",
-  "grokIntegration.maxTokens": 30000,
-  "inlineChat.enableV2": true,
-  "inlineChat.finishOnType": true,
-  "inlineChat.lineEmptyHint": true,
-  "inlineChat.notebookAgent": true
+  "security.workspace.trust.untrustedFiles": "open",
+
+  // === EXTENSIONS SETTINGS (KEPT + ORGANIZED) ===
+  // === CLEANUP: REMOVED REDUNDANT / UNUSED ===
+  // Removed: inlineChat, chat.*, firefox, containers, grokIntegration duplicates
+  // These were either deprecated, Copilot-only, or conflicting
 }
