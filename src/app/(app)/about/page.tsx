@@ -1,5 +1,11 @@
-import { useSession } from 'next-auth/react';
+'use client';
 
+import { useSession } from 'next-auth/react';
+import type { Viewport } from "next";
+
+export const viewport: Viewport = {
+  themeColor: '#000000',
+};
 export default function About() {
   const { status } = useSession();
   if (status !== 'authenticated') return <div>Sign in required.</div>;

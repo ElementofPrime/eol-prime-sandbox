@@ -1,6 +1,8 @@
-// src/app/layout.tsx
+'use client';
+
+import { useSession } from 'next-auth/react';
 import "../../styles/globals.css";
-import type { Metadata, Viewport } from "next";
+import type { Viewport } from "next";
 import NavBar from "@/components/NavBar";
 import Providers from "./providers";
 import { Inter, Great_Vibes } from "next/font/google";
@@ -9,12 +11,17 @@ import BackgroundDecor from "@/components/BackgroundDecor";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const greatVibes = Great_Vibes({ weight: "400", subsets: ["latin"], variable: "--font-greatvibes", display: "swap" });
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://elementoflife.ai"),
+export const viewport = {
+  width: "device-width",
+  viewportFit: "cover",
+  userScalable: false,
   title: "Element of Life — Prime Labs OS",
   description: "The foundation where focus becomes growth, and growth becomes transformation.",
   themeColor: "#0b1220",
   manifest: "/manifest.webmanifest",
+  openGraph: {
+    url: "https://elementoflife.ai",
+  },
   other: {
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "black-translucent",
@@ -23,16 +30,10 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = {
-  width: "device-width",
-  viewportFit: "cover",
-  userScalable: false,
-};
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="min-h-screen antialiased">
+      <body className={`${inter.variable} ${greatVibes.variable} min-h-screen antialiased`}>
         <Providers>
           <BackgroundDecor />
           <main
