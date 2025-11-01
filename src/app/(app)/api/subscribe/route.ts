@@ -1,5 +1,10 @@
-// src/app/(app)/api/subscribe/route.ts
-//import { NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
+
+export async function POST(request: NextRequest) {
+  // Your logic
+  return Response.json({ success: true });
+}
+
 //import Stripe from 'stripe';
 
 //const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);

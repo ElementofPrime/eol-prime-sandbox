@@ -1,18 +1,27 @@
 module.exports = {
-  root: true,
-  extends: ["next/core-web-vitals", "eslint:recommended"],
-  parserOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module",
-  },
   env: {
     browser: true,
     es2021: true,
     node: true,
   },
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
+    'next/core-web-vitals',
+  ],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+  },
+  plugins: ['react', '@typescript-eslint'],
   rules: {
-    // your overrides here if needed
-    "no-unused-vars": "warn",
-    "react-hooks/exhaustive-deps": "off",
+    // Add custom rules here
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
   },
 };
