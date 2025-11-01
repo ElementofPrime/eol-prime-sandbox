@@ -36,7 +36,6 @@
     "default": true,
     "vscode.videoPreview": true
   },
-  "workbench.editor.closeEmptyGroups": false,
   // === TAILWIND & CONTAINERS ===
   "tailwindCSS.emmetCompletions": true,
   "tailwindCSS.experimental.configFile": null,
@@ -48,9 +47,6 @@
   // "git.autocommit": true,
   // "git.autocommitDelay": 2000,
   "editor.codeActionsOnSave": {},
-  "workbench.editor.showTabs": "single",
-  "zenMode.showTabs": "single",
-  "firefox.executable": "C:\\Program Files\\Mozilla Firefox\\firefox.exe",
   "firefox.keepProfileChanges": true,
   "firefox.profileDir": "C:\\Program Files\\Mozilla Firefox",
   "firefox.profile": "EOL Jeremy Firefox on 15XAlbatross-1",
