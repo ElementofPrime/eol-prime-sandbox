@@ -30,8 +30,10 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en" className={`${inter.variable} ${greatVibes.variable}`}>
-			<body className="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+		<html lang="en" suppressHydrationWarning>
+			<body
+				className={`${inter.variable} ${greatVibes.variable} min-h-screen antialiased`}
+			>
 				<Providers>
 					<BackgroundDecor />
 					<ClientLayout>
