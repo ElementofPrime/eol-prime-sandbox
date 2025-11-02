@@ -1,9 +1,13 @@
-import { useSession } from "next-auth/react";
-import useSWR from "swr"; // ← This is correct!
+"use client";
 
-const FALLBACK_PROMPT = "What is one small step forward today?";
+import { useSession } from "next-auth/react";
+import useSWR from "swr";
+
+const FALLBACK_PROMPT =
+	"What is one small action or step you could take today that is something you usually resist or don't like to do?";
 
 export default function CorePage() {
+	const { data: session } = useSession();
 	const fetcher = (url: string) => fetch(url).then((r) => r.json());
 	const { status } = useSession();
 	const { data, error, isLoading } = useSWR("/api/pulse", fetcher);
@@ -13,7 +17,7 @@ export default function CorePage() {
 	}
 
 	if (status !== "authenticated") {
-		return <div>Sign in required for Daily Prompt.</div>;
+		return <div>Sign in required for Daily Prompt and memory.</div>;
 	}
 
 	if (!data) {
