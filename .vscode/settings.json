@@ -70,11 +70,13 @@
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "explorer.fileNesting.enabled": true,
-  "notebook.defaultFormatter": "esbenp.prettier-vscode",
+  "notebook.defaultFormatter": null,
   "workbench.colorTheme": "Default Dark Modern",
   "editor.formatOnPaste": true,
   "workbench.preferredHighContrastLightColorTheme": "Default Dark Modern",
   "workbench.preferredLightColorTheme": "Default Dark Modern",
   "extensions.closeExtensionDetailsOnViewChange": true,
-  "terminal.integrated.environmentChangesRelaunch": false
+  "terminal.integrated.environmentChangesRelaunch": false,
+  "github.copilot.chat.grokCodeAlternatePrompt": ".prompt.md",
+  "chat.disableAIFeatures": true
 }
