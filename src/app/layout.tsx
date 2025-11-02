@@ -1,4 +1,4 @@
-import "../../styles/globals.css";
+import "@styles/globals.css";
 import Providers from "./providers";
 import { Inter, Great_Vibes } from "next/font/google";
 import BackgroundDecor from "@/components/BackgroundDecor";
@@ -30,17 +30,14 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en" suppressHydrationWarning>
-			<body
-				className={`${inter.variable} ${greatVibes.variable} min-h-screen antialiased`}
-			>
+		<html lang="en" suppressHydrationWarning className="dark">
+			{" "}
+			{/* ← DARK DEFAULT */}
+			<body className="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
 				<Providers>
 					<BackgroundDecor />
 					<ClientLayout>
-						<main
-							role="main"
-							className="relative z-10 bg-transparent"
-						>
+						<main className="relative z-10">
 							<NavBar />
 							{children}
 						</main>

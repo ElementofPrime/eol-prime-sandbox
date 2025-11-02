@@ -1,19 +1,15 @@
-'use client';
-import { ThemeProvider } from 'next-themes';
-import { SessionProvider } from 'next-auth/react';
-import type { ReactNode } from 'react';
+"use client";
 
-export default function Providers({ children }: { children: ReactNode }) {
-  return (
-    <SessionProvider>
-      <ThemeProvider
-        attribute="class"      // <-- puts 'dark' on <html>
-        defaultTheme="dark"    // <-- open in dark by default
-        enableSystem
-        disableTransitionOnChange
-      >
-        {children}
-      </ThemeProvider>
-    </SessionProvider>
-  );
+import { ThemeProvider } from "next-themes";
+
+export default function Providers({ children }: { children: React.ReactNode }) {
+	return (
+		<ThemeProvider
+			attribute="class"
+			defaultTheme="dark"
+			enableSystem={false}
+		>
+			{children}
+		</ThemeProvider>
+	);
 }
