@@ -1,4 +1,3 @@
-// src/app/(app)/page.tsx
 "use client";
 
 import Link from "next/link";
@@ -7,14 +6,14 @@ import { motion } from "framer-motion";
 import PrimePulseTile from "@/components/PrimePulseTile";
 
 const elements = [
-  { title: "Chat",           icon: "💬", link: "/chat" },
-  { title: "Journal",        icon: "📔", link: "/journal" },
-  { title: "To-Do",          icon: "✅", link: "/todo" },          // keep if your folder is /todo
-  { title: "Reminders",      icon: "⏰", link: "/reminders" },
-  { title: "Fix-It",         icon: "🛠️", link: "/fix-it" },         // <-- was /fix-it; corrected to /fixit
-  { title: "New Beginning",  icon: "🧠", link: "/new-beginning" },
-  { title: "Core",           icon: "🌿", link: "/core" },
-  { title: "About",          icon: "✨", link: "/about" },
+  { title: "Chat", icon: "💬", link: "/chat" },
+  { title: "Journal", icon: "📔", link: "/journal" },
+  { title: "To-Do", icon: "✅", link: "/todo" }, // keep if your folder is /todo
+  { title: "Reminders", icon: "⏰", link: "/reminders" },
+  { title: "Fix-It", icon: "🛠️", link: "/fix-it" }, // <-- was /fix-it; corrected to /fixit
+  { title: "New Beginning", icon: "🧠", link: "/new-beginning" },
+  { title: "Core", icon: "🌿", link: "/core" },
+  { title: "About", icon: "✨", link: "/about" },
 ];
 
 export default function Home() {
@@ -58,9 +57,12 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
         >
-          <span className="font-medium text-zinc-800 dark:text-zinc-500">Welcome to Element of Life —</span>{" "}
-          the foundation where <span className="text-cyan-600 dark:text-cyan-300">focus</span> becomes growth,
-          and growth becomes transformation.
+          <span className="font-medium text-zinc-800 dark:text-zinc-500">
+            Welcome to Element of Life —
+          </span>{" "}
+          the foundation where{" "}
+          <span className="text-cyan-600 dark:text-cyan-300">focus</span>{" "}
+          becomes growth, and growth becomes transformation.
         </motion.p>
 
         <motion.h2

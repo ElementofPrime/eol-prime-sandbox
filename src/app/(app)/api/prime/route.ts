@@ -1,4 +1,3 @@
-// src/app/(app)/api/prime/route.ts
 export const runtime = "nodejs";
 
 import type { NextRequest } from "next/server";
@@ -7,15 +6,17 @@ import { cookies } from "next/headers";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { xai, GROK_MODELS } from "@/lib/xai";
+import { z } from "zod";
 
 // Define the message type locally to ensure compatibility with xAI
 type ChatCompletionMessageParam = {
-  role: 'system' | 'user' | 'assistant';
+  role: "system" | "user" | "assistant";
   content: string;
 };
 
 // Define the system prompt constant
-const PRIME_SYSTEM_PROMPT = "You are a helpful AI assistant. Provide accurate, concise, and relevant responses.";
+const PRIME_SYSTEM_PROMPT =
+  "You are a helpful AI assistant. Provide accurate, concise, and relevant responses.";
 
 // === GUEST CHAT LIMITER (5/day, UTC) ===
 type GuestCookie = { date: string; count: number };
@@ -30,10 +31,14 @@ async function readGuestCookie(): Promise<GuestCookie> {
   const raw = jar.get("eol_guest_chat")?.value ?? "";
   try {
     const decoded = raw ? JSON.parse(decodeURIComponent(raw)) : null;
-    if (decoded && typeof decoded.date === "string" && typeof decoded.count === "number") {
+    if (
+      decoded &&
+      typeof decoded.date === "string" &&
+      typeof decoded.count === "number"
+    ) {
       return decoded;
     }
-  } catch { }
+  } catch {}
   return { date: "", count: 0 };
 }
 
@@ -42,18 +47,11 @@ export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     const body = await req.json();
-    const model = body.model as string || 'chat';
-    const messages: ChatCompletionMessageParam[] = body.messages || [];
-    if (!session?.user && model !== 'mini') {
-      return NextResponse.json({ ok: false, error: "Authenticated users only for advanced models" }, { status: 401 });
-    }
-
-
-    // Validate messages
-    if (!Array.isArray(messages) || messages.length === 0) {
+    const model = (body.model as string) || "chat";
+    if (!session?.user && model !== "mini") {
       return NextResponse.json(
-        { ok: false, error: "No messages provided" },
-        { status: 400 }
+        { ok: false, error: "Authenticated users only for advanced models" },
+        { status: 401 }
       );
     }
 
@@ -69,7 +67,8 @@ export async function POST(req: NextRequest) {
         return new NextResponse(
           JSON.stringify({
             ok: false,
-            error: "Guest chat limit reached (5/day). Create a free account for unlimited access.",
+            error:
+              "Guest chat limit reached (5/day). Create a free account for unlimited access.",
           }),
           {
             status: 429,
@@ -98,17 +97,36 @@ export async function POST(req: NextRequest) {
     } as const;
 
     type ModelKey = keyof typeof MODEL_MAP;
-    const modelKey = (model as unknown) as ModelKey;
+    const modelKey = model as unknown as ModelKey;
 
     const selectedModel = MODEL_MAP[modelKey] ?? MODEL_MAP.chat;
+    const schema = z.object({
+      model: z.enum(["code", "deep", "chat", "mini"]).optional(),
+      messages: z
+        .array(
+          z.object({
+            role: z.enum(["system", "user", "assistant"]),
+            content: z.string(),
+          })
+        )
+        .min(1),
+    });
 
+    const parsed = schema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { ok: false, error: "Invalid request" },
+        { status: 400 }
+      );
+    }
+
+    const { model: parsedModel, messages } = parsed.data;
     // === STREAMING RESPONSE (Grok-powered) ===
-    const stream = await (xai.chat.completions.create as (options: any) => Promise<any>)({
+    const stream = await (
+      xai.chat.completions.create as (options: any) => Promise<any>
+    )({
       model: selectedModel,
-      messages: [
-        { role: "system", content: PRIME_SYSTEM_PROMPT },
-        ...messages,
-      ],
+      messages: [{ role: "system", content: PRIME_SYSTEM_PROMPT }, ...messages],
       stream: true,
       temperature: 0.7,
       max_tokens: 2000,

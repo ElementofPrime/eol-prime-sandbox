@@ -1,82 +1,81 @@
 {
-  // === GROK INTEGRATION: THE SACRED CORE (KEPT + UPGRADED) ===
-  "vscodeGrok.apiKey": "${env:GROK_API_KEY}",
-  "vscodeGrok.model": "grok-4",
-  "vscodeGrok.systemPrompt": "You are Prime — the soul of Element of Life (EOL). One icon. Everything guided. Analyze code, suggest features, protect the sanctuary. Never break. Always forward. Reference: src/lib/primePrompt.ts",
-  "vscodeGrok.showPreview": true,
-  "vscodeGrok.outputMethod": "panel", // Opens in side panel (clean)
+    // === GROK INTEGRATION: THE SACRED CORE (KEPT + UPGRADED) ===
+    "vscodeGrok.apiKey": "${env:GROK_API_KEY}",
+    "vscodeGrok.model": "grok-4",
+    "vscodeGrok.systemPrompt": "You are Prime — the soul of Element of Life (EOL). One icon. Everything guided. Analyze code, suggest features, protect the sanctuary. Never break. Always forward. Reference: src/lib/primePrompt.ts",
+    "vscodeGrok.showPreview": true,
+    "vscodeGrok.outputMethod": "panel", // Opens in side panel (clean)
 
-  "workbench.settings.applyToAllProfiles": [
-    "vscodeGrok.apiKey",
-    "vscodeGrok.model",
-    "vscodeGrok.outputMethod",
-    "vscodeGrok.showPreview",
-    "vscodeGrok.systemPrompt"
-  ],
-  // === AUTO-SAVE: OFF (RESTORE SAVE RITUAL) ===
-  "files.autoSave": "off",
-  "files.hotExit": "onExitAndWindowClose",
+    "workbench.settings.applyToAllProfiles": [
+        "vscodeGrok.apiKey",
+        "vscodeGrok.model",
+        "vscodeGrok.outputMethod",
+        "vscodeGrok.showPreview",
+        "vscodeGrok.systemPrompt"
+    ],
+    // === AUTO-SAVE: OFF (RESTORE SAVE RITUAL) ===
+    "files.autoSave": "off",
+    "files.hotExit": "onExitAndWindowClose",
 
-  // === SAVE PROMPT: ALWAYS ASK ON CLOSE ===
-  "files.saveConflictResolution": "askUser",
+    // === SAVE PROMPT: ALWAYS ASK ON CLOSE ===
+    "files.saveConflictResolution": "askUser",
 
-  // === CLOSE BEHAVIOR: NO BLANK SPLITS ===
-  "workbench.editor.closeOnFileDelete": true,
-  "workbench.editor.splitInGroupLayout": "horizontal", // Side-by-side only
+    // === CLOSE BEHAVIOR: NO BLANK SPLITS ===
+    "workbench.editor.closeOnFileDelete": true,
+    "workbench.editor.splitInGroupLayout": "horizontal",
 
-  // === TAB FORTRESS: MAX 2, SIDE-BY-SIDE, NO CLUTTER (ADDED) ===
-  "workbench.editor.limit.enabled": true,
-  "workbench.editor.limit.perEditorGroup": true,
-  "workbench.editor.enablePreview": true,
-  "workbench.editor.enablePreviewFromQuickOpen": true,
-  "workbench.editor.enablePreviewFromCodeNavigation": true,
-  "workbench.editor.showTabs": "multiple",
-  "workbench.editor.limit.value": 2,
-  // Removed duplicate editor.defaultFormatter and editor.codeActionsOnSave settings
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
+    // === TAB FORTRESS: MAX 2, SIDE-BY-SIDE, NO CLUTTER (ADDED) ===
+    "workbench.editor.limit.enabled": true,
+    "workbench.editor.limit.perEditorGroup": true,
+    "workbench.editor.enablePreview": true,
+    "workbench.editor.enablePreviewFromQuickOpen": true,
+    "workbench.editor.enablePreviewFromCodeNavigation": true,
+    "workbench.editor.showTabs": "multiple",
+    "workbench.editor.limit.value": 2,
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
 
-  // === TAILWIND & CSS (KEPT + OPTIMIZED) ===
-  "tailwindCSS.emmetCompletions": true,
-  "tailwindCSS.experimental.configFile": null,
-  "tailwindCSS.experimental.classRegex": [
-    "cn\\(([^)]*)\\)",
-    "cva\\(([^)]*)\\)"
-  ],
-  "css.lint.unknownAtRules": "ignore",
-  "scss.lint.unknownAtRules": "ignore",
-  "less.lint.unknownAtRules": "ignore",
+    // === TAILWIND & CSS (KEPT + OPTIMIZED) ===
+    "tailwindCSS.emmetCompletions": true,
+    "tailwindCSS.experimental.configFile": null,
+    "tailwindCSS.experimental.classRegex": [
+        "cn\\(([^)]*)\\)",
+        "cva\\(([^)]*)\\)"
+    ],
+    "css.lint.unknownAtRules": "ignore",
+    "scss.lint.unknownAtRules": "ignore",
+    "less.lint.unknownAtRules": "ignore",
 
-  // === GIT FLOW (KEPT) ===
-  "git.confirmSync": false,
-  "git.autofetch": true,
-  "git.enableSmartCommit": true,
+    // === GIT FLOW (KEPT) ===
+    "git.confirmSync": false,
+    "git.autofetch": true,
+    "git.enableSmartCommit": true,
 
-  // === TERMINAL: BASH = BOSS (KEPT + POLISHED) ===
-  "terminal.integrated.defaultProfile.windows": "Git Bash",
-  "terminal.integrated.fontSize": 14,
-  "terminal.integrated.cursorBlinking": true,
-  "terminal.integrated.gpuAcceleration": "auto",
+    // === TERMINAL: BASH = BOSS (KEPT + POLISHED) ===
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "terminal.integrated.fontSize": 14,
+    "terminal.integrated.cursorBlinking": true,
+    "terminal.integrated.gpuAcceleration": "auto",
 
-  // === UI/UX (KEPT + CLEANED) ===
-  "editor.minimap.enabled": false,
-  "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
-  },
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "explorer.fileNesting.enabled": true,
-  "notebook.defaultFormatter": null,
-  "workbench.colorTheme": "Default Dark Modern",
-  "editor.formatOnPaste": true,
-  "workbench.preferredHighContrastLightColorTheme": "Default Dark Modern",
-  "workbench.preferredLightColorTheme": "Default Dark Modern",
-  "extensions.closeExtensionDetailsOnViewChange": true,
-  "terminal.integrated.environmentChangesRelaunch": false,
-  "github.copilot.chat.grokCodeAlternatePrompt": ".prompt.md",
-  "chat.disableAIFeatures": true
+    // === UI/UX (KEPT + CLEANED) ===
+    "editor.minimap.enabled": false,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "explorer.fileNesting.enabled": true,
+    "notebook.defaultFormatter": null,
+    "workbench.colorTheme": "Default Dark Modern",
+    "editor.formatOnPaste": true,
+    "workbench.preferredHighContrastLightColorTheme": "Default Dark Modern",
+    "workbench.preferredLightColorTheme": "Default Dark Modern",
+    "extensions.closeExtensionDetailsOnViewChange": true,
+    "terminal.integrated.environmentChangesRelaunch": false,
+    "github.copilot.chat.grokCodeAlternatePrompt": ".prompt.md",
+    "chat.disableAIFeatures": true
 }

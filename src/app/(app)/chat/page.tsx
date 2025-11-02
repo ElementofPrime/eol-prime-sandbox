@@ -6,6 +6,7 @@ import SceneFortress from "@/components/SceneFortress";
 import PrimeAura from "@/components/PrimeAura";
 
 type Msg = { role: "user" | "assistant"; content: string };
+type Tone = "calm" | "excited" | "reflective" | "stressed" | "neutral";
 
 export default function ChatPage() {
   const { status } = useSession();
@@ -14,13 +15,26 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [tone, setTone] = useState<"calm" | "excited" | "reflective" | "stressed" | "neutral">("neutral");
+  const [tone, setTone] = useState<Tone>("neutral");
   const [error, setError] = useState<string | null>(null);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const streamAbortRef = useRef<AbortController | null>(null);
 
-  // Smooth scroll
+  // === WELCOME MESSAGE ON MOUNT ===
+  useEffect(() => {
+    if (messages.length === 0) {
+      setMessages([
+        {
+          role: "assistant",
+          content:
+            "Welcome to the Fortress of Prime — a calm, sovereign space for clarity and growth. When you're ready, share what’s on your mind and I’ll meet you there.",
+        },
+      ]);
+    }
+  }, [messages.length]);
+
+  // === AUTO-SCROLL ON NEW CONTENT ===
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
@@ -30,17 +44,7 @@ export default function ChatPage() {
     return () => cancelAnimationFrame(id);
   }, [messages, loading]);
 
-  // Welcome message
-  useEffect(() => {
-    setMessages([
-      {
-        role: "assistant",
-        content: "Welcome to the Fortress of Prime — a calm, sovereign space for clarity and growth. When you're ready, share what’s on your mind and I’ll meet you there.",
-      },
-    ]);
-  }, []);
-
-  // Tone analysis
+  // === TONE ANALYSIS ===
   async function analyzeTone(text: string) {
     try {
       const r = await fetch("/api/pulse", {
@@ -50,13 +54,13 @@ export default function ChatPage() {
       });
       if (!r.ok) return setTone("neutral");
       const j = await r.json();
-      if (j?.tone) setTone(j.tone);
+      if (j?.tone) setTone(j.tone as Tone);
     } catch {
       setTone("neutral");
     }
   }
 
-  // Send message
+  // === SEND MESSAGE WITH STREAMING ===
   async function sendMessage() {
     const trimmed = input.trim();
     if (!trimmed || loading) return;
@@ -67,18 +71,24 @@ export default function ChatPage() {
         ...prev,
         {
           role: "assistant",
-          content: "Limit reached (5 chats). Create an account or sign in to unlock full access, memory, and the full Fortress experience.",
+          content:
+            "Limit reached (5 chats). Create an account or sign in to unlock full access, memory, and the full Fortress experience.",
         },
       ]);
       return;
     }
 
+    // Abort previous stream
     streamAbortRef.current?.abort();
     const controller = new AbortController();
     streamAbortRef.current = controller;
 
     const userMsg: Msg = { role: "user", content: trimmed };
-    setMessages((prev) => [...prev, userMsg, { role: "assistant", content: "" }]);
+    setMessages((prev) => [
+      ...prev,
+      userMsg,
+      { role: "assistant", content: "" },
+    ]);
     setInput("");
     setError(null);
     setLoading(true);
@@ -109,9 +119,9 @@ export default function ChatPage() {
               raf = requestAnimationFrame(() => {
                 setMessages((prev) => {
                   const next = [...prev];
-                  const i = next.length - 1;
-                  if (i >= 0 && next[i].role === "assistant") {
-                    next[i] = { role: "assistant", content: acc };
+                  const last = next.length - 1;
+                  if (last >= 0 && next[last].role === "assistant") {
+                    next[last] = { role: "assistant", content: acc };
                   }
                   return next;
                 });
@@ -125,14 +135,17 @@ export default function ChatPage() {
       };
 
       await pump();
+
+      // Finalize assistant message
       setMessages((prev) => {
         const next = [...prev];
-        const i = next.length - 1;
-        if (i >= 0 && next[i].role === "assistant") {
-          next[i] = { role: "assistant", content: acc || "…" };
+        const last = next.length - 1;
+        if (last >= 0 && next[last].role === "assistant") {
+          next[last] = { role: "assistant", content: acc || "…" };
         }
         return next;
       });
+
       analyzeTone(acc);
     } catch (e: any) {
       if (e?.name === "AbortError") return;
@@ -140,7 +153,8 @@ export default function ChatPage() {
         ...prev.slice(0, -1),
         {
           role: "assistant",
-          content: "I hit a snag reaching the Prime endpoint. Try again in a moment.",
+          content:
+            "I hit a snag reaching the Prime endpoint. Try again in a moment, or check your connection.",
         },
       ]);
       setError(e?.message ?? "Request failed.");
@@ -157,18 +171,40 @@ export default function ChatPage() {
     }
   };
 
-  const unauthReachedLimit = !isAuthed && messages.filter((m) => m.role === "user").length >= 5;
+  const unauthReachedLimit =
+    !isAuthed && messages.filter((m) => m.role === "user").length >= 5;
 
   return (
     <main className="relative min-h-svh pt-24 md:pt-28">
+      {/* Hero Fortress */}
       <SceneFortress />
 
-      {/* SIGN IN TO SAVE BANNER */}
+      {/* === GUEST BANNER (Limited Access) === */}
+      {status !== "authenticated" && (
+        <div className="mx-auto w-full max-w-3xl px-4">
+          <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-white/50 dark:bg-black/50 backdrop-blur p-4 text-sm text-slate-700 dark:text-slate-300">
+            <span className="mr-2">Warning</span>
+            Limited to <strong>5 chats</strong>.{" "}
+            <span className="opacity-90">
+              Create an account or sign in to access full features.
+            </span>
+            <button
+              onClick={() => signIn()}
+              className="ml-3 rounded-lg bg-cyan-700 px-3 py-1 text-white hover:bg-cyan-600 focus:outline-none focus-visible:outline focus-visible:outline-cyan-500 focus-visible:outline-offset-2"
+            >
+              Sign in
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* === AUTH: SAVE CONVERSATION BANNER === */}
       {!isAuthed && messages.length > 0 && !unauthReachedLimit && (
         <div className="mx-auto max-w-3xl px-4 mb-4">
           <div className="rounded-xl border border-cyan-500/30 bg-cyan-500/10 p-4 text-center">
             <p className="text-cyan-900 dark:text-cyan-200 text-sm">
-              Sign in to <strong>save this conversation</strong> and continue with Prime anytime.
+              Sign in to <strong>save this conversation</strong> and continue
+              with Prime anytime.
             </p>
             <button
               onClick={() => signIn()}
@@ -180,16 +216,18 @@ export default function ChatPage() {
         </div>
       )}
 
-      {/* PRIME REMEMBERS YOU */}
+      {/* === AUTH: PRIME REMEMBERS YOU === */}
       {isAuthed && messages.length > 0 && (
         <div className="mx-auto max-w-3xl px-4 mb-4">
           <div className="flex items-center justify-center gap-2 text-emerald-600 dark:text-emerald-400 text-sm font-medium">
             <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-            Prime remembers you. The light within your Tree is glowing brighter every day.
+            Prime remembers you. The light within your Tree is glowing brighter
+            every day.
           </div>
         </div>
       )}
 
+      {/* === CHAT LOG === */}
       <div
         ref={scrollRef}
         className="mx-auto h-[calc(100svh-220px)] w-full max-w-3xl overflow-y-auto px-4 pb-40 md:pb-48 scrollbar-thin"
@@ -199,34 +237,41 @@ export default function ChatPage() {
         </div>
 
         <div className="space-y-3">
-          {messages.map((m, i) => (
-            <div
-              key={i}
-              className={`relative max-w-[85%] rounded-2xl px-4 py-3 shadow-md backdrop-blur
-                ${m.role === "user"
-                  ? "ml-auto bg-white/70 dark:bg-black/70 text-slate-900"
-                  : "mr-auto bg-sky-50/90 text-slate-900"
-                }`}
-              aria-live={i === messages.length - 1 && m.role === "assistant" ? "polite" : undefined}
-            >
-              <PrimeAura tone={tone} />
-              <div className="relative whitespace-pre-wrap">{m.content}</div>
-            </div>
-          ))}
+          {messages.map((m, i) => {
+            const isAssistant = m.role === "assistant";
+            return (
+              <div
+                key={i}
+                className={
+                  isAssistant
+                    ? "eol-bubble-assistant relative max-w-[85%] mr-auto rounded-2xl px-4 py-3 shadow-md backdrop-blur text-slate-900 bg-white/10 dark:bg-black/10 dark:text-white border border-black/10 dark:border-white/10"
+                    : "eol-bubble-user relative max-w-[85%] ml-auto rounded-2xl px-4 py-3 shadow-md backdrop-blur bg-white/70 dark:bg-black/70 text-slate-900 dark:text-white border border-black/10 dark:border-white/10"
+                }
+                aria-live={
+                  i === messages.length - 1 && isAssistant
+                    ? "polite"
+                    : undefined
+                }
+              >
+                <PrimeAura tone={tone} />
+                <div className="relative whitespace-pre-wrap">{m.content}</div>
+              </div>
+            );
+          })}
 
           {loading && (
-            <div className="mr-auto max-w-[85%] rounded-2xl border border-black/10 dark:border-white/10 bg-white/60 dark:bg-white/5 px-4 py-3 text-slate-600 dark:text-slate-400 backdrop-blur animate-pulse">
+            <div className="mr-auto max-w-[85%] rounded-2xl border border-black/10 dark:border-white/10 bg-white/60 dark:bg-black/60 px-4 py-3 text-slate-600 dark:text-slate-400 backdrop-blur animate-pulse">
               Prime is focusing…
             </div>
           )}
 
-          {error && (
-            <div className="mx-auto max-w-[85%] rounded-2xl bg-red-50/90 p-4 text-red-900">
+          {error && !loading && (
+            <div className="mr-auto max-w-[85%] rounded-2xl border border-rose-400/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-700 dark:text-rose-300">
               {error}
             </div>
           )}
 
-          {/* UPGRADE CTA */}
+          {/* === GUEST LIMIT UPGRADE CTA === */}
           {unauthReachedLimit && (
             <div className="mx-auto max-w-3xl px-4 mb-6">
               <div className="rounded-2xl border border-amber-500/30 bg-linear-to-r from-amber-500/10 to-orange-500/10 p-5 text-center">
@@ -234,7 +279,9 @@ export default function ChatPage() {
                   You've reached the guest limit (5 messages).
                 </p>
                 <p className="text-sm text-amber-800 dark:text-amber-300 mb-4">
-                  Unlock <strong>unlimited chat, memory, and your Tree of Life</strong> with SuperGrok.
+                  Unlock{" "}
+                  <strong>unlimited chat, memory, and your Tree of Life</strong>{" "}
+                  with SuperGrok.
                 </p>
                 <button
                   onClick={() => signIn()}
@@ -248,30 +295,32 @@ export default function ChatPage() {
         </div>
       </div>
 
-      {/* INPUT */}
+      {/* === INPUT DOCK === */}
       <div className="fixed inset-x-0 bottom-0 z-10">
         <div className="mx-auto w-full max-w-3xl px-4 pb-5">
-          <div className="relative rounded-2xl border border-black/10 dark:border-white/10 bg-white/60 dark:bg-white/10 p-3 backdrop-blur-xl">
+          <div className="relative eol-panel p-3">
             <PrimeAura tone={tone} />
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKeyDown}
               placeholder="Speak to Prime within the safety of the Fortress…"
-              className="min-h-[60px] w-full resize-none rounded-xl bg-white/70 dark:bg-white/10 p-3 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:outline-none focus-visible:outline-2 focus-visible:outline-cyan-500 focus-visible:outline-offset-2"
+              className="eol-input min-h-[60px]"
             />
             <div className="mt-2 flex items-center justify-end gap-2">
               <button
                 onClick={sendMessage}
-                className="rounded-xl bg-white/90 px-5 py-2 text-sm font-medium text-slate-900 transition hover:bg-white"
-                disabled={loading || (!isAuthed && unauthReachedLimit)}
+                disabled={loading || unauthReachedLimit}
+                className="rounded-xl bg-white/90 dark:bg-black/90 px-5 py-2 text-sm font-medium text-slate-900 transition hover:bg-white focus-visible:outline-2 focus-visible:outline-cyan-400 focus-visible:outline-offset-2 dark:text-slate-900"
               >
                 {loading ? "Sending…" : "Send to Prime"}
               </button>
             </div>
           </div>
+
           <div className="mt-3 text-center text-[11px] text-slate-700 dark:text-slate-200/70">
-            “Prime is here to help you navigate safely. The world is full of deception and deepfakes — we don’t fall for any of it.”
+            “Prime is here to help you navigate safely. The world is full of
+            deception and deepfakes — we don’t fall for any of it.”
           </div>
         </div>
       </div>

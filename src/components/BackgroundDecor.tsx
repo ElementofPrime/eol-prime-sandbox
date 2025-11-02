@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import Image from "next/image";
 
 export default function BackgroundDecor() {
@@ -9,21 +9,22 @@ export default function BackgroundDecor() {
     >
       {/* VINE — top-left */}
       <div className="absolute top-4 left-4 w-[26vw] max-w-[300px] h-[26vw] max-h-[300px]">
-        <div className="relative w-full h-full">{/* parent for fill */}
+        <div className="relative w-full h-full">
+          {/* parent for fill */}
           <Image
             src="/assets/vines.png"
             alt=""
             fill
             priority
             sizes="(max-width: 640px) 45vw, 26vw"
-            className="object-left-top object-contain"
+            className="object-top-left object-contain"
             style={{
-              opacity: 0.20,
+              opacity: 0.2,
               maskImage:
-                'radial-gradient(65% 65% at 65% 65%, #000 65%, transparent 100%)',
+                "radial-gradient(65% 65% at 65% 65%, #000 65%, transparent 100%)",
               WebkitMaskImage:
-                'radial-gradient(65% 65% at 65% 65%, #000 65%, transparent 100%)',
-              transform: 'translateZ(0)',
+                "radial-gradient(65% 65% at 65% 65%, #000 65%, transparent 100%)",
+              transform: "translateZ(0)",
             }}
           />
         </div>
@@ -31,21 +32,22 @@ export default function BackgroundDecor() {
 
       {/* TREE — bottom-right */}
       <div className="absolute bottom-4 right-4 w-[26vw] max-w-[300px] h-[26vw] max-h-[300px]">
-        <div className="relative w-full h-full">{/* parent for fill */}
+        <div className="relative w-full h-full">
+          {/* parent for fill */}
           <Image
             src="/assets/tree-emblem.png"
             alt=""
             fill
             priority
             sizes="(max-width: 640px) 45vw, 26vw"
-            className="object-right-bottom object-contain"
+            className="object-bottom-right object-contain"
             style={{
-              opacity: 0.20,
+              opacity: 0.2,
               maskImage:
-                'radial-gradient(65% 65% at 65% 65%, #000 65%, transparent 100%)',
+                "radial-gradient(65% 65% at 65% 65%, #000 65%, transparent 100%)",
               WebkitMaskImage:
-                'radial-gradient(65% 65% at 65% 65%, #000 65%, transparent 100%)',
-              transform: 'translateZ(0)',
+                "radial-gradient(65% 65% at 65% 65%, #000 65%, transparent 100%)",
+              transform: "translateZ(0)",
             }}
           />
         </div>
