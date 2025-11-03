@@ -1,5 +1,3 @@
 {
-    "recommendations": [
-        "ndestates.grok-integration"
-    ]
+	"recommendations": ["ndestates.grok-integration", "esbenp.prettier-vscode"]
 }

@@ -1,7 +1,12 @@
 /* styles/globals.css */
-@import "tailwindcss";
 
-/* === PRIME THEME: DARK FIRST === */
+/* === TAILWIND V4 CORE === */
+@import "tailwindcss/preflight";
+@tailwind utilities;
+
+/* ========================================
+   PRIME THEME: DARK FIRST — FORTRESS FOUNDATION
+   ======================================== */
 @layer base {
 	html {
 		@apply bg-slate-50 text-slate-900;
@@ -20,11 +25,11 @@
 	h4,
 	h5,
 	h6 {
-		@apply text-slate-900 dark:text-slate-100;
+		@apply text-slate-900 dark:text-slate-100 font-bold;
 	}
 
 	a {
-		@apply text-sky-600 dark:text-sky-400 hover:underline;
+		@apply text-sky-600 dark:text-sky-400 hover:underline transition-colors;
 	}
 
 	::selection {
@@ -32,9 +37,98 @@
 	}
 }
 
-/* === PRIME GLOW === */
+/* ========================================
+   PRIME GLOW — DIVINE RADIANCE
+   ======================================== */
 @layer utilities {
 	.prime-glow {
-		box-shadow: 0 0 60px rgba(56, 189, 248, 0.15);
+		box-shadow:
+			0 0 28px rgba(34, 211, 238, 0.3),
+			0 0 64px rgba(59, 130, 246, 0.18);
+	}
+}
+
+/* ========================================
+   PRIME POLISH: GLOBAL COMPONENT CLASSES
+   ======================================== */
+@layer components {
+	/* ——— EOL PANEL — THE FORTRESS TILE ——— */
+	.eol-panel {
+		@apply relative 
+      rounded-3xl 
+      border 
+      border-black/10 
+      dark:border-white/10 
+      bg-white/60 
+      dark:bg-black/60 
+      backdrop-blur-md 
+      p-5 
+      shadow-[0_0_80px_rgba(56,189,248,0.12)] 
+      transition-all 
+      duration-300;
+	}
+	.eol-panel:hover {
+		@apply shadow-[0_0_100px_rgba(56,189,248,0.20)] 
+      bg-white/70 
+      dark:bg-black/70;
+	}
+
+	/* ——— BTN PRIMARY — FORWARD MOMENTUM ——— */
+	.btn-primary {
+		@apply inline-flex 
+      items-center 
+      justify-center 
+      rounded-xl 
+      px-4 
+      py-2 
+      text-sm 
+      font-medium 
+      bg-linear-to-r 
+      from-sky-600 
+      to-cyan-700 
+      text-white 
+      shadow-md 
+      hover:shadow-lg 
+      hover:from-sky-500 
+      hover:to-cyan-600 
+      focus:outline-none 
+      focus-visible:outline-2 
+      focus-visible:outline-offset-2 
+      focus-visible:outline-cyan-500 
+      transition-all 
+      duration-200;
+	}
+	.btn-primary:disabled {
+		@apply opacity-60 cursor-not-allowed;
+	}
+	.btn-primary:active {
+		@apply scale-95;
+	}
+
+	/* ——— PULSE DOT — LIVE INDICATOR ——— */
+	.pulse-dot {
+		@apply relative inline-flex h-2.5 w-2.5;
+	}
+	.pulse-dot::before {
+		@apply absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping;
+		content: "";
+	}
+	.pulse-dot::after {
+		@apply relative inline-flex h-2.5 w-2.5 rounded-full;
+		content: "";
+	}
+
+	/* Mood Variants */
+	.pulse-dot.positive::before,
+	.pulse-dot.positive::after {
+		@apply bg-emerald-500;
+	}
+	.pulse-dot.negative::before,
+	.pulse-dot.negative::after {
+		@apply bg-rose-500;
+	}
+	.pulse-dot.neutral::before,
+	.pulse-dot.neutral::after {
+		@apply bg-slate-400 dark:bg-slate-300;
 	}
 }
