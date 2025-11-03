@@ -1,3 +1,4 @@
+// src/app/(app)/api/pulse/route.ts
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import { getServerSession } from "next-auth";
@@ -37,15 +38,70 @@ function analyze(t: string) {
 	for (const w of neg) if (txt.includes(w)) score--;
 
 	const mood = score > 0 ? "positive" : score < 0 ? "negative" : "neutral";
-	const prompt = generateElementPrompt({
-		mood: a.mood,
-		streak,
-		trend,
-		userElements: await getUserElements(userId), // future
-		lastAction: entries[0]?.tags?.[0],
-	});
+	const prompt =
+		mood === "negative"
+			? "Take one small step you can control. What is it?"
+			: mood === "positive"
+				? "Momentum is up—what tiny action compounds it today?"
+				: "What would make today 1% better?";
 
 	return { mood, sentimentScore: score, prompt };
+}
+
+// === MOVE generateElementPrompt OUTSIDE analyze() ===
+async function generateElementPrompt({
+	mood,
+	streak,
+	trend,
+	userId,
+	lastAction,
+}: {
+	mood: string;
+	streak: number;
+	trend: string;
+	userId: string;
+	lastAction?: string;
+}) {
+	// Placeholder — implement getUserElements() later
+	const userElements: string[] = [];
+	// const userElements = await getUserElements(userId);
+
+	return `Your ${mood} energy is growing. With a ${streak}-day streak, let's build on ${userElements[0] || "your light"}.`;
+}
+
+// === HELPER: Normalize score to 0–1 ===
+function norm(score: number): number {
+	return Math.max(0, Math.min(1, (score + 8) / 16)); // assuming -8 to +8 range
+}
+
+// === HELPER: Map mood to aura ===
+function mapMoodToAura(
+	mood: string
+): "calm" | "excited" | "reflective" | "stressed" | "neutral" {
+	const map: Record<string, any> = {
+		positive: "excited",
+		negative: "stressed",
+		neutral: "reflective",
+	};
+	return map[mood] || "neutral";
+}
+
+// === HELPER: Calculate streak (stub) ===
+function calculateStreak(entries: any[]): number {
+	// TODO: implement real streak logic
+	return entries.length >= 3 ? 3 : entries.length;
+}
+
+// === HELPER: Get trend (stub) ===
+function getTrend(moods: string[]): "rising" | "falling" | "steady" {
+	if (moods.length < 2) return "steady";
+	const recent = moods.slice(0, 3);
+	const positiveCount = recent.filter((m) => m === "positive").length;
+	return positiveCount >= 2
+		? "rising"
+		: positiveCount === 0
+			? "falling"
+			: "steady";
 }
 
 /** Lightweight tone heuristic for chat aura */
@@ -88,10 +144,10 @@ export async function GET() {
 			.limit(30)
 			.toArray();
 
-		const streak = calculateStreak(entries); // new helper
+		const streak = calculateStreak(entries);
 		const moodHistory = entries
 			.slice(0, 7)
-			.map((e) => analyze(e.content).mood);
+			.map((e) => analyze(e.content || "").mood);
 		const trend = getTrend(moodHistory);
 
 		const latest = entries[0];
@@ -104,8 +160,14 @@ export async function GET() {
 				.limit(1)
 				.next());
 
+		let a = {
+			mood: "neutral",
+			sentimentScore: 0,
+			prompt: "What matters to you most right now?",
+		};
+
 		if (latest && !lastInsight) {
-			const a = analyze(latest.content || "");
+			a = analyze(latest.content || "");
 			const ins = {
 				entryId: latest._id,
 				userId,
@@ -120,6 +182,15 @@ export async function GET() {
 			const r = await db.collection("primeinsights").insertOne(ins);
 			lastInsight = { _id: r.insertedId, ...ins } as any;
 		}
+
+		// Generate prompt with user context
+		const prompt = await generateElementPrompt({
+			mood: a.mood,
+			streak,
+			trend,
+			userId,
+			lastAction: entries[0]?.tags?.[0],
+		});
 
 		return NextResponse.json({
 			ok: true,

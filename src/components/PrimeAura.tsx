@@ -1,35 +1,34 @@
+// src/components/PrimeAura.tsx
 "use client";
-import { useEffect, useState } from "react";
-import { subscribeToPulse, type Pulse } from "@/lib/prime/pulse";
 
-export default function PrimeAura() {
-	const [pulse, setPulse] = useState<Pulse | null>(null);
+import { useMemo } from "react";
 
-	useEffect(() => {
-		return subscribeToPulse(setPulse);
-	}, []);
+type Tone = "calm" | "excited" | "reflective" | "stressed" | "neutral";
 
-	if (!pulse) return null;
+interface PrimeAuraProps {
+	tone?: Tone; // ← REQUIRED
+}
 
-	const intensity = pulse.glowIntensity;
-	const aura = pulse.aura;
-
-	const auraMap = {
-		calm: `from-cyan-400/${intensity} via-teal-500/${intensity * 0.6} to-transparent`,
-		excited: `from-amber-400/${intensity} via-orange-500/${intensity * 0.6} to-transparent`,
-		reflective: `from-sky-400/${intensity} via-blue-500/${intensity * 0.6} to-transparent`,
-		stressed: `from-violet-500/${intensity} via-fuchsia-600/${intensity * 0.6} to-transparent`,
-	};
+export default function PrimeAura({ tone = "neutral" }: PrimeAuraProps) {
+	const toneClass = useMemo(() => {
+		switch (tone) {
+			case "calm":
+				return "from-cyan-300/25 via-cyan-500/15 to-transparent";
+			case "excited":
+				return "from-amber-300/25 via-amber-500/15 to-transparent";
+			case "reflective":
+				return "from-sky-300/25 via-blue-400/15 to-transparent";
+			case "stressed":
+				return "from-violet-400/25 via-fuchsia-500/10 to-transparent";
+			default:
+				return "from-slate-300/20 via-slate-500/10 to-transparent";
+		}
+	}, [tone]);
 
 	return (
-		<div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+		<div className="relative">
 			<div
-				className={`
-          absolute inset-0 bg-linear-to-br ${auraMap[aura]}
-          animate-pulse transition-all duration-1000
-          blur-3xl opacity-70
-        `}
-				style={{ animationDuration: `${2 + (1 - intensity) * 3}s` }}
+				className={`prime-aura pointer-events-none absolute -inset-6 rounded-3xl bg-linear-to-br ${toneClass}`}
 			/>
 		</div>
 	);

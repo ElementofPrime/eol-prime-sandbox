@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSession, signIn } from "next-auth/react";
 import SceneFortress from "@/components/SceneFortress";
 import PrimeAura from "@/components/PrimeAura";
-import { cn } from "src/lib/utils";
+// Remove: import { cn } from "src/lib/utils"; // ← NOT USED
 
 type Msg = { role: "user" | "assistant"; content: string };
 type Tone = "calm" | "excited" | "reflective" | "stressed" | "neutral";
@@ -66,35 +66,34 @@ export default function ChatPage() {
 	// === SEND MESSAGE WITH STREAMING ===
 	async function sendMessage() {
 		const trimmed = input.trim();
-if (!trimmed || loading) return;
-if (trimmed.length > 2000) {
-  setError("Message is too long (max 2000 characters).");
-  return;
-}
+		if (!trimmed || loading) return;
+		if (trimmed.length > 2000) {
+			setError("Message is too long (max 2000 characters).");
+			return;
+		}
 
-	  
 		const userCount = messages.filter((m) => m.role === "user").length;
 		if (!isAuthed && userCount >= 5) {
-		  setMessages((prev) => [
-			...prev,
-			{
-			  role: "assistant",
-			  content:
-				"Limit reached (5 chats). Create an account or sign in to unlock full access, memory, and the full Fortress experience.",
-			},
-		  ]);
-		  return;
+			setMessages((prev) => [
+				...prev,
+				{
+					role: "assistant",
+					content:
+						"Limit reached (5 chats). Create an account or sign in to unlock full access, memory, and the full Fortress experience.",
+				},
+			]);
+			return;
 		}
-	  
+
 		streamAbortRef.current?.abort();
 		const controller = new AbortController();
 		streamAbortRef.current = controller;
-	  
+
 		const userMsg: Msg = { role: "user", content: trimmed };
 		setMessages((prev) => [
-		  ...prev,
-		  userMsg,
-		  { role: "assistant", content: "" },
+			...prev,
+			userMsg,
+			{ role: "assistant", content: "" },
 		]);
 		setInput("");
 		setError(null);
@@ -249,68 +248,71 @@ if (trimmed.length > 2000) {
 					Within these walls — Truth & Light always win.
 				</div>
 
-            <div className="space-y-3">
-            {messages.map((m, i) => {
-				const isUser = m.role === "user";        // ← CORRECT: uses `m`
-				const isAssistant = m.role === "assistant";
-			  
-				return (
-				  <div
-					key={i}
-					className={clsx(
-					  "max-w-xs rounded-2xl px-4 py-3 border",
-					  isUser
-						? "mr-auto bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border-slate-200 dark:border-slate-700"
-						: "ml-auto bg-cyan-500/20 dark:bg-cyan-600/20 text-cyan-700 dark:text-cyan-300 border-cyan-500/30 dark:border-cyan-600/30"
-					)}
-					aria-live={i === messages.length - 1 && isAssistant ? "polite" : undefined}
-				  >
-					<PrimeAura tone={tone} />
-					<div className="relative whitespace-pre-wrap">
-					  {m.content}
-					</div>
-				  </div>
-                  );
-                 })}
-                   </div>
+				<div className="space-y-3">
+					{messages.map((m, i) => {
+						const isUser = m.role === "user";
+						const isAssistant = m.role === "assistant";
 
-					{loading && (
-						<div className="mr-auto max-w-[85%] rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-black/60 px-5 py-3 text-slate-600 dark:text-slate-400 backdrop-blur animate-pulse">
-							Prime is focusing…
-						</div>
-					)}
-
-					{error && !loading && (
-						<div className="mr-auto max-w-[85%] rounded-2xl border border-rose-400/30 bg-rose-500/10 px-5 py-3 text-sm text-rose-700 dark:text-rose-300">
-							{error}
-						</div>
-					)}
-
-					{/* === GUEST LIMIT CTA === */}
-					{unauthReachedLimit && (
-						<div className="mx-auto max-w-3xl px-4 mb-6">
-							<div className="rounded-2xl border border-amber-500/30 bg-linear-to-r from-amber-500/10 to-orange-500/10 p-5 text-center">
-								<p className="text-amber-900 dark:text-amber-200 font-semibold mb-3">
-									You've reached the guest limit (5 messages).
-								</p>
-								<p className="text-sm text-amber-800 dark:text-amber-300 mb-4">
-									Unlock{" "}
-									<strong>
-										unlimited chat, memory, and your Tree of
-										Life
-									</strong>{" "}
-									with SuperGrok.
-								</p>
-								<button
-									onClick={() => signIn()}
-									className="rounded-xl bg-linear-to-r from-emerald-600 to-cyan-600 px-6 py-3 text-white font-bold hover:from-emerald-700 hover:to-cyan-700 transition-all shadow-lg"
-								>
-									Upgrade Now — $9/mo
-								</button>
+						return (
+							<div
+								key={i}
+								className={clsx(
+									"max-w-xs rounded-2xl px-4 py-3 border",
+									isUser
+										? "mr-auto bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border-slate-200 dark:border-slate-700"
+										: "ml-auto bg-cyan-500/20 dark:bg-cyan-600/20 text-cyan-700 dark:text-cyan-300 border-cyan-500/30 dark:border-cyan-600/30"
+								)}
+								aria-live={
+									i === messages.length - 1 && isAssistant
+										? "polite"
+										: undefined
+								}
+							>
+								<PrimeAura tone={tone} />
+								<div className="relative whitespace-pre-wrap">
+									{m.content}
+								</div>
 							</div>
-						</div>
-					)}
+						);
+					})}
 				</div>
+
+				{/* === LOADING / ERROR / LIMIT === */}
+				{loading && (
+					<div className="mr-auto max-w-[85%] rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-black/60 px-5 py-3 text-slate-600 dark:text-slate-400 backdrop-blur animate-pulse">
+						Prime is focusing…
+					</div>
+				)}
+
+				{error && !loading && (
+					<div className="mr-auto max-w-[85%] rounded-2xl border border-rose-400/30 bg-rose-500/10 px-5 py-3 text-sm text-rose-700 dark:text-rose-300">
+						{error}
+					</div>
+				)}
+
+				{unauthReachedLimit && (
+					<div className="mx-auto max-w-3xl px-4 mb-6">
+						<div className="rounded-2xl border border-amber-500/30 bg-linear-to-r from-amber-500/10 to-orange-500/10 p-5 text-center">
+							<p className="text-amber-900 dark:text-amber-200 font-semibold mb-3">
+								You've reached the guest limit (5 messages).
+							</p>
+							<p className="text-sm text-amber-800 dark:text-amber-300 mb-4">
+								Unlock{" "}
+								<strong>
+									unlimited chat, memory, and your Tree of
+									Life
+								</strong>{" "}
+								with SuperGrok.
+							</p>
+							<button
+								onClick={() => signIn()}
+								className="rounded-xl bg-linear-to-r from-emerald-600 to-cyan-600 px-6 py-3 text-white font-bold hover:from-emerald-700 hover:to-cyan-700 transition-all shadow-lg"
+							>
+								Upgrade Now — $9/mo
+							</button>
+						</div>
+					</div>
+				)}
 			</div>
 
 			{/* === INPUT DOCK === */}
