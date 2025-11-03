@@ -118,7 +118,6 @@
 		content: "";
 	}
 
-	/* Mood Variants */
 	.pulse-dot.positive::before,
 	.pulse-dot.positive::after {
 		@apply bg-emerald-500;
