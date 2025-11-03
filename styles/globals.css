@@ -4,6 +4,9 @@
 @import "tailwindcss/preflight";
 @tailwind utilities;
 
+/* === REFERENCE TAILWIND UTILITIES (REQUIRED IN V4) === */
+@reference "./**/*.{ts,tsx}";
+
 /* ========================================
    PRIME THEME: DARK FIRST — FORTRESS FOUNDATION
    ======================================== */
