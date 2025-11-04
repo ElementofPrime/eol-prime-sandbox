@@ -3,58 +3,59 @@
 /* === TAILWIND V4 CORE === */
 @import "tailwindcss/preflight";
 @tailwind utilities;
+@import "tailwindcss/theme"; /* ← THIS UNLOCKS @apply FOR BUILT-IN CLASSES */
 
 /* ========================================
    PRIME THEME: DARK FIRST — FORTRESS FOUNDATION
    ======================================== */
 @layer base {
-	html {
-		@apply bg-slate-50 text-slate-900;
-	}
-	html.dark {
-		@apply bg-slate-950 text-slate-100;
-	}
+  html {
+    @apply bg-slate-50 text-slate-900;
+  }
+  html.dark {
+    @apply bg-slate-950 text-slate-100;
+  }
 
-	body {
-		@apply min-h-screen antialiased transition-colors duration-300;
-	}
+  body {
+    @apply min-h-screen antialiased transition-colors duration-300;
+  }
 
-	h1,
-	h2,
-	h3,
-	h4,
-	h5,
-	h6 {
-		@apply text-slate-900 dark:text-slate-100 font-bold;
-	}
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-slate-900 dark:text-slate-100 font-bold;
+  }
 
-	a {
-		@apply text-sky-600 dark:text-sky-400 hover:underline transition-colors;
-	}
+  a {
+    @apply text-sky-600 dark:text-sky-400 hover:underline transition-colors;
+  }
 
-	::selection {
-		@apply bg-cyan-400/40 dark:bg-cyan-300/30;
-	}
+  ::selection {
+    @apply bg-cyan-400/40 dark:bg-cyan-300/30;
+  }
 }
 
 /* ========================================
    PRIME GLOW — DIVINE RADIANCE
    ======================================== */
 @layer utilities {
-	.prime-glow {
-		box-shadow:
-			0 0 28px rgba(34, 211, 238, 0.3),
-			0 0 64px rgba(59, 130, 246, 0.18);
-	}
+  .prime-glow {
+    box-shadow:
+      0 0 28px rgba(34, 211, 238, 0.3),
+      0 0 64px rgba(59, 130, 246, 0.18);
+  }
 }
 
 /* ========================================
    PRIME POLISH: GLOBAL COMPONENT CLASSES
    ======================================== */
 @layer components {
-	/* ——— EOL PANEL — THE FORTRESS TILE ——— */
-	.eol-panel {
-		@apply relative 
+  /* ——— EOL PANEL — THE FORTRESS TILE ——— */
+  .eol-panel {
+    @apply relative 
       rounded-3xl 
       border 
       border-black/10 
@@ -66,16 +67,16 @@
       shadow-[0_0_80px_rgba(56,189,248,0.12)] 
       transition-all 
       duration-300;
-	}
-	.eol-panel:hover {
-		@apply shadow-[0_0_100px_rgba(56,189,248,0.20)] 
+  }
+  .eol-panel:hover {
+    @apply shadow-[0_0_100px_rgba(56,189,248,0.20)] 
       bg-white/70 
       dark:bg-black/70;
-	}
+  }
 
-	/* ——— BTN PRIMARY — FORWARD MOMENTUM ——— */
-	.btn-primary {
-		@apply inline-flex 
+  /* ——— BTN PRIMARY — FORWARD MOMENTUM ——— */
+  .btn-primary {
+    @apply inline-flex 
       items-center 
       justify-center 
       rounded-xl 
@@ -97,37 +98,37 @@
       focus-visible:outline-cyan-500 
       transition-all 
       duration-200;
-	}
-	.btn-primary:disabled {
-		@apply opacity-60 cursor-not-allowed;
-	}
-	.btn-primary:active {
-		@apply scale-95;
-	}
+  }
+  .btn-primary:disabled {
+    @apply opacity-60 cursor-not-allowed;
+  }
+  .btn-primary:active {
+    @apply scale-95;
+  }
 
-	/* ——— PULSE DOT — LIVE INDICATOR ——— */
-	.pulse-dot {
-		@apply relative inline-flex h-2.5 w-2.5;
-	}
-	.pulse-dot::before {
-		@apply absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping;
-		content: "";
-	}
-	.pulse-dot::after {
-		@apply relative inline-flex h-2.5 w-2.5 rounded-full;
-		content: "";
-	}
+  /* ——— PULSE DOT — LIVE INDICATOR ——— */
+  .pulse-dot {
+    @apply relative inline-flex h-2.5 w-2.5;
+  }
+  .pulse-dot::before {
+    @apply absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping;
+    content: "";
+  }
+  .pulse-dot::after {
+    @apply relative inline-flex h-2.5 w-2.5 rounded-full;
+    content: "";
+  }
 
-	.pulse-dot.positive::before,
-	.pulse-dot.positive::after {
-		@apply bg-emerald-500;
-	}
-	.pulse-dot.negative::before,
-	.pulse-dot.negative::after {
-		@apply bg-rose-500;
-	}
-	.pulse-dot.neutral::before,
-	.pulse-dot.neutral::after {
-		@apply bg-slate-400 dark:bg-slate-300;
-	}
+  .pulse-dot.positive::before,
+  .pulse-dot.positive::after {
+    @apply bg-emerald-500;
+  }
+  .pulse-dot.negative::before,
+  .pulse-dot.negative::after {
+    @apply bg-rose-500;
+  }
+  .pulse-dot.neutral::before,
+  .pulse-dot.neutral::after {
+    @apply bg-slate-400 dark:bg-slate-300;
+  }
 }
