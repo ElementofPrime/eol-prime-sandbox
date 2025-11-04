@@ -1,75 +1,191 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { fetcher } from '@/lib/fetcher';
-import useSWR, { mutate as mutateSWR } from 'swr';
+import { useState } from "react";
+import { fetcher } from "@/lib/fetcher";
+import useSWR, { mutate as globalMutate } from "swr";
+import { format } from "date-fns";
+import { Loader2, CheckCircle2 } from "lucide-react";
 
-type Entry = { _id: string; content: string; createdAt: string };
-type List = { items: Entry[] };
+type Entry = {
+  _id: string;
+  content: string;
+  createdAt: string;
+  mood?: "positive" | "negative" | "neutral";
+  tags?: string[];
+};
+
+type ListResponse = { items: Entry[] };
 
 export default function JournalPage() {
-  const { data, isLoading, mutate } = useSWR<List>('/api/journal', fetcher, {
-    refreshInterval: 0,        // manual; Pulse handles background refresh
-    revalidateOnFocus: true,
-  });
+  const { data, isLoading, mutate } = useSWR<ListResponse>(
+    "/api/journal",
+    fetcher,
+    {
+      revalidateOnFocus: true,
+      refreshInterval: 0,
+    }
+  );
 
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState("");
   const [saving, setSaving] = useState(false);
-  const [msg, setMsg] = useState<string | null>(null);
+  const [msg, setMsg] = useState<{
+    text: string;
+    type: "success" | "error";
+  } | null>(null);
 
-  async function onSubmit(e: React.FormEvent) {
+  async function onSave(e: React.FormEvent) {
     e.preventDefault();
     if (!content.trim()) return;
+
     setSaving(true);
     setMsg(null);
-    try {
-      const r = await fetch('/api/journal', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content }),
-      });
-      if (!r.ok) throw new Error('Save failed');
 
-      setContent('');
-      // Optimistic refresh of the list
-      await mutate(); await mutateSWR('/prime/pulse');  // ⟵ immediately refresh Prime Pulse
-    } catch (err: any) {
-      setMsg(err.message || 'Error');
+    const tempId = `temp-${Date.now()}`;
+    const optimisticEntry: Entry = {
+      _id: tempId,
+      content: content.trim(),
+      createdAt: new Date().toISOString(),
+      mood: "neutral",
+    };
+
+    // Optimistic UI
+    mutate(
+      (curr) => ({
+        items: [optimisticEntry, ...(curr?.items || [])],
+      }),
+      false
+    );
+
+    try {
+      const res = await fetch("/api/journal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: content.trim() }),
+      });
+
+      if (!res.ok) throw new Error("Failed to save");
+
+      const { item } = await res.json();
+
+      // Replace temp with real
+      mutate(
+        (curr) => ({
+          items: [item, ...(curr?.items || []).filter((i) => i._id !== tempId)],
+        }),
+        false
+      );
+
+      // Refresh Prime Pulse
+      await globalMutate("/api/prime/pulse");
+
+      setContent("");
+      setMsg({ text: "Saved + analyzed", type: "success" });
+      setTimeout(() => setMsg(null), 3000);
+    } catch (err) {
+      setMsg({ text: "Save failed", type: "error" });
+      mutate(); // rollback
     } finally {
       setSaving(false);
-      setMsg('Saved + analyzed ✅');
     }
   }
 
-  const items = data?.items ?? [];
+  const entries = data?.items ?? [];
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-8 space-y-6">
-      <h1 className="eol-heading text-5xl font-bold">Journal</h1>
-      <form onSubmit={onSubmit} className="space-y-3">
+    <main className="mx-auto max-w-3xl px-4 py-8 space-y-8">
+      {/* Header */}
+      <header className="text-center space-y-2">
+        <h1 className="text-5xl font-bold bg-linear-to-r from-cyan-400 to-sky-600 bg-clip-text text-transparent">
+          Journal
+        </h1>
+        <p className="text-sm opacity-70">
+          Capture thoughts. Uncover Elements. Grow your Tree.
+        </p>
+      </header>
+
+      {/* Form */}
+      <form onSubmit={onSave} className="eol-panel space-y-4">
         <textarea
-          className="w-full rounded-xl border border-slate-700/30 bg-slate-900/40 p-3"
-          rows={5}
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="Write something… bullets (- [ ] to-do), dates, $ amounts, tickers…"
+          placeholder="• Use - [ ] for to-dos&#10;• $100, AAPL, 3pm — I’ll detect it&#10;• Just write. I’ll listen."
+          className="w-full rounded-2xl border border-slate-700/20 bg-slate-900/30 dark:bg-slate-950/50 p-4 text-sm placeholder:opacity-60 resize-none focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all"
+          rows={6}
+          disabled={saving}
         />
-        <button
-          disabled={saving || !content.trim()}
-          className="rounded-xl px-4 py-2 bg-cyan-600 text-slate-500 disabled:opacity-50"
-        >
-          {saving ? 'Saving…' : 'Save'}
-        </button>
-        {msg && <div className="text-sm opacity-90">{msg}</div>}
+
+        <div className="flex items-center justify-between">
+          <EOLButton variant="primary" disabled={saving || !content.trim()}>
+            {saving ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Saving…
+              </>
+            ) : (
+              <>
+                <CheckCircle2 className="w-4 h-4" />
+                Save Entry
+              </>
+            )}
+          </EOLButton>
+
+          {msg && (
+            <span
+              className={`text-sm font-medium flex items-center gap-1 ${
+                msg.type === "success" ? "text-emerald-400" : "text-rose-400"
+              }`}
+            >
+              {msg.type === "success" ? "Check" : "Warning"} {msg.text}
+            </span>
+          )}
+        </div>
       </form>
 
-      <section className="space-y-3">
-        {isLoading && <div className="opacity-70">Loading…</div>}
-        {!isLoading && !items.length && <div className="opacity-70">No entries yet.</div>}
-        {items.map((it) => (
-          <article key={it._id} className="rounded-xl border border-slate-700/30 p-3">
-            <div className="text-xs opacity-70">{new Date(it.createdAt).toLocaleString()}</div>
-            <p className="whitespace-pre-wrap mt-1">{it.content}</p>
+      {/* Entries List */}
+      <section className="space-y-4">
+        {isLoading && !entries.length && (
+          <div className="eol-panel p-8 text-center opacity-70">
+            <Loader2 className="w-6 h-6 mx-auto animate-spin" />
+            <p className="mt-2">Loading your thoughts…</p>
+          </div>
+        )}
+
+        {!isLoading && !entries.length && (
+          <div className="eol-panel p-8 text-center opacity-70">
+            <p>No entries yet. Start writing to grow your Tree</p>
+          </div>
+        )}
+
+        {entries.map((entry) => (
+          <article
+            key={entry._id}
+            className="eol-panel group relative overflow-hidden transition-all hover:scale-[1.005] hover:shadow-xl"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1">
+                <p className="whitespace-pre-wrap text-sm leading-relaxed">
+                  {entry.content}
+                </p>
+              </div>
+
+              {/* Mood Indicator */}
+              {entry.mood && (
+                <div
+                  className={`w-2 h-2 rounded-full pulse-dot ${
+                    entry.mood === "positive"
+                      ? "positive"
+                      : entry.mood === "negative"
+                        ? "negative"
+                        : "neutral"
+                  }`}
+                  title={entry.mood}
+                />
+              )}
+            </div>
+
+            <time className="text-xs opacity-60 mt-2 block">
+              {format(new Date(entry.createdAt), "MMM d, yyyy • h:mm a")}
+            </time>
           </article>
         ))}
       </section>

@@ -132,3 +132,33 @@
     @apply bg-slate-400 dark:bg-slate-300;
   }
 }
+/* ========================================
+   BACKGROUND DECOR — FORTRESS VINES & TREE
+   ======================================== */
+@layer utilities {
+  .decor-image {
+    @apply opacity-20 dark:opacity-30;
+    mask-image: radial-gradient(65% 65% at 65% 65%, #000 65%, transparent 100%);
+    -webkit-mask-image: radial-gradient(
+      65% 65% at 65% 65%,
+      #000 65%,
+      transparent 100%
+    );
+    transform: translateZ(0);
+    transition: opacity 0.3s ease;
+  }
+
+  /* Optional: Subtle pulse on load (ties to Prime Pulse vibe) */
+  .decor-image {
+    animation: decor-fade-in 2s ease-out forwards;
+  }
+
+  @keyframes decor-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}

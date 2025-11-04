@@ -1,26 +1,35 @@
-// Server-only DB connect for Next 15.x (Node runtime)
-import mongoose from 'mongoose';
+// src/lib/db.ts
+import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_URI!;
+
 if (!MONGODB_URI) {
-  throw new Error('Missing MONGODB_URI');
+  throw new Error("Please define MONGODB_URI in .env.local");
 }
 
-let cached = (global as any)._mongoose as { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null };
+let cached = global.mongoose;
 
 if (!cached) {
-  cached = (global as any)._mongoose = { conn: null, promise: null };
+  cached = global.mongoose = { conn: null, promise: null };
 }
 
 export async function dbConnect() {
-  if (cached.conn) return cached.conn;
-  if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI, {
-      // @ts-ignore (types vary by driver version)
-      bufferCommands: false,
-      serverSelectionTimeoutMS: 15000
-    }).then((m) => m);
+  if (cached.conn) {
+    return cached.conn;
   }
-  cached.conn = await cached.promise;
+
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(MONGODB_URI).then((mongoose) => {
+      return mongoose;
+    });
+  }
+
+  try {
+    cached.conn = await cached.promise;
+  } catch (e) {
+    cached.promise = null;
+    throw e;
+  }
+
   return cached.conn;
 }
