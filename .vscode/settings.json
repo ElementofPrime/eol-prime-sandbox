@@ -82,5 +82,32 @@
 	"prettier.endOfLine": "auto",
 	"prettier.tabWidth": 4,
 	"prettier.useTabs": true,
-	"prettier.withNodeModules": false
+	"prettier.withNodeModules": false,
+	"editor.aiStats.enabled": true,
+	"editor.autoIndentOnPaste": true,
+	"editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+	"editor.experimental.asyncTokenizationVerification": true,
+	"editor.experimental.preferTreeSitter.css": true,
+	"editor.experimentalGpuAcceleration": "on",
+	"editor.guides.bracketPairs": false,
+	"workbench.commandPalette.experimental.suggestCommands": true,
+	"workbench.externalBrowser": "firefox",
+	"workbench.editor.autoLockGroups": {
+		"workbench.editor.chatSession": false,
+		"workbench.editor.processExplorer": false,
+		"terminalEditor": false,
+		"mainThreadWebview-simpleBrowser.view": false,
+		"mainThreadWebview-browserPreview": false
+	},
+	"workbench.editor.limit.excludeDirty": true,
+	"workbench.settings.editor": "json",
+	"workbench.settings.useSplitJSON": true,
+	"explorer.sortOrderReverse": false,
+	"search.defaultViewMode": "list",
+	"debug.closeReadonlyTabsOnEnd": true,
+	"debug.confirmOnExit": "always",
+	"terminal.integrated.enableImages": true,
+	"mergeEditor.showDeletionMarkers": false,
+	"grokIntegration.model": "grok-4",
+	"html.format.indentInnerHtml": true
 }
