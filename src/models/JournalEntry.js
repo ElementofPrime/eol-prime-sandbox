@@ -1,2 +1,2 @@
 // src/models/JournalEntry.js
-export { default as JournalEntry } from "./JournalEntry.ts";
+export { default } from "./JournalEntry.ts";

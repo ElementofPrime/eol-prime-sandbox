@@ -1,13 +1,23 @@
-import mongoose, { Schema, models, model } from "mongoose";
+// src/models/JournalEntry.ts
+import mongoose from "mongoose";
 
-const JournalEntrySchema = new Schema(
-  {
-    userId: { type: String, required: true, index: true },
-    content: { type: String, required: true },
-    mood: { type: String, required: false, default: null },
-    tags: { type: [String], default: [] },
+const { Schema, model } = mongoose;
+
+// Use mongoose.models to avoid redefinition
+const JournalEntrySchema = new Schema({
+  userId: { type: String, required: true, index: true },
+  content: { type: String, required: true },
+  mood: {
+    type: String,
+    enum: ["positive", "negative", "neutral"],
+    default: null,
   },
-  { timestamps: true }
-);
+  tags: { type: [String], default: [] },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
+});
 
-export default models.JournalEntry || model("JournalEntry", JournalEntrySchema);
+const JournalEntry =
+  mongoose.models.JournalEntry || model("JournalEntry", JournalEntrySchema);
+
+export default JournalEntry;

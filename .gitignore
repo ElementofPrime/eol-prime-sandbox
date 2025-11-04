@@ -44,3 +44,6 @@ PRIME app and SYSTEM INSTRUCTIONS v1.0.txt
 next-env.d.ts
 
 .vercel
+# Environment variables
+.env.local
+.env*.local
