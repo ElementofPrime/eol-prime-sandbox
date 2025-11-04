@@ -1,78 +1,81 @@
 {
-	// === GROK INTEGRATION: SACRED CORE ===
-	"vscodeGrok.apiKey": "${env:GROK_API_KEY}",
-	"vscodeGrok.model": "grok-4",
-	"vscodeGrok.systemPrompt": "You are Prime — the soul of Element of Life (EOL). One icon. Everything guided. Analyze code, suggest features, protect the sanctuary. Never break. Always forward. Reference: src/lib/primePrompt.ts",
-	"vscodeGrok.showPreview": true,
-	"vscodeGrok.outputMethod": "panel",
+  // === GROK INTEGRATION: SACRED CORE ===
+  "vscodeGrok.apiKey": "${env:GROK_API_KEY}",
+  "vscodeGrok.model": "grok-4",
+  "vscodeGrok.systemPrompt": "You are Prime — the soul of Element of Life (EOL). One icon. Everything guided. Analyze code, suggest features, protect the sanctuary. Never break. Always forward. Reference: src/lib/primePrompt.ts",
+  "vscodeGrok.showPreview": true,
+  "vscodeGrok.outputMethod": "panel",
 
-	"workbench.settings.applyToAllProfiles": [
-		"vscodeGrok.apiKey",
-		"vscodeGrok.model",
-		"vscodeGrok.outputMethod",
-		"vscodeGrok.showPreview",
-		"vscodeGrok.systemPrompt"
-	],
+  "workbench.settings.applyToAllProfiles": [
+    "vscodeGrok.apiKey",
+    "vscodeGrok.model",
+    "vscodeGrok.outputMethod",
+    "vscodeGrok.showPreview",
+    "vscodeGrok.systemPrompt"
+  ],
 
-	// === SAVE RITUAL ===
-	"files.autoSave": "off",
-	"files.hotExit": "onExitAndWindowClose",
-	"files.saveConflictResolution": "askUser",
+  // === SAVE RITUAL ===
+  "files.autoSave": "off",
+  "files.hotExit": "onExitAndWindowClose",
+  "files.saveConflictResolution": "askUser",
 
-	// === TAB FORTRESS ===
-	"workbench.editor.limit.enabled": true,
-	"workbench.editor.limit.value": 2,
-	"workbench.editor.limit.perEditorGroup": true,
-	"workbench.editor.enablePreview": true,
-	"workbench.editor.enablePreviewFromQuickOpen": true,
-	"workbench.editor.enablePreviewFromCodeNavigation": true,
-	"workbench.editor.showTabs": "multiple",
-	"workbench.editor.closeOnFileDelete": true,
-	"workbench.editor.splitInGroupLayout": "horizontal",
+  // === TAB FORTRESS ===
+  "workbench.editor.limit.enabled": true,
+  "workbench.editor.limit.value": 2,
+  "workbench.editor.limit.perEditorGroup": true,
+  "workbench.editor.enablePreview": true,
+  "workbench.editor.enablePreviewFromQuickOpen": true,
+  "workbench.editor.enablePreviewFromCodeNavigation": true,
+  "workbench.editor.showTabs": "multiple",
+  "workbench.editor.closeOnFileDelete": true,
+  "workbench.editor.splitInGroupLayout": "horizontal",
 
-	// === FORMATTING ===
-	"editor.formatOnSave": true,
-	"editor.formatOnPaste": true,
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": "explicit",
-		"source.fixAll.stylelint": "explicit"
-	},
-	"[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-	"[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-	"prettier.tabWidth": 2,
-	"prettier.useTabs": false,
-	"prettier.endOfLine": "auto",
+  // === FORMATTING ===
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit"
+  },
+  "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "prettier.tabWidth": 2,
+  "prettier.useTabs": false,
+  "prettier.endOfLine": "auto",
 
-	// === TAILWIND ===
-	"tailwindCSS.emmetCompletions": true,
-	"tailwindCSS.experimental.configFile": null,
-	"tailwindCSS.experimental.classRegex": [
-		"cn\\(([^)]*)\\)",
-		"cva\\(([^)]*)\\)"
-	],
-	"css.lint.unknownAtRules": "ignore",
-	"scss.lint.unknownAtRules": "ignore",
-	"less.lint.unknownAtRules": "ignore",
+  // === TAILWIND ===
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.experimental.configFile": null,
+  "tailwindCSS.experimental.classRegex": [
+    "cn\\(([^)]*)\\)",
+    "cva\\(([^)]*)\\)"
+  ],
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "less.lint.unknownAtRules": "ignore",
 
-	// === GIT ===
-	"git.confirmSync": false,
-	"git.autofetch": true,
-	"git.enableSmartCommit": true,
+  // === GIT ===
+  "git.confirmSync": false,
+  "git.autofetch": true,
+  "git.enableSmartCommit": true,
 
-	// === TERMINAL ===
-	"terminal.integrated.defaultProfile.windows": "Git Bash",
-	"terminal.integrated.fontSize": 14,
-	"terminal.integrated.cursorBlinking": true,
-	"terminal.integrated.gpuAcceleration": "on",
+  // === TERMINAL ===
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.cursorBlinking": true,
+  "terminal.integrated.gpuAcceleration": "on",
 
-	// === UI/UX ===
-	"editor.minimap.enabled": false,
-	"explorer.fileNesting.enabled": true,
-	"workbench.editor.autoLockGroups": {
-		"workbench.editor.chatSession": false,
-		"terminalEditor": false
-	},
-	"workbench.settings.editor": "json",
-	"workbench.settings.useSplitJSON": true
+  // === UI/UX ===
+  "editor.minimap.enabled": false,
+  "explorer.fileNesting.enabled": true,
+  "workbench.settings.editor": "json",
+  "workbench.settings.useSplitJSON": true,
+  "workbench.editor.autoLockGroups": {
+    "workbench.editor.chatSession": false,
+    "workbench.editor.processExplorer": false,
+    "terminalEditor": false,
+    "mainThreadWebview-simpleBrowser.view": false,
+    "mainThreadWebview-browserPreview": false
+  }
 }
