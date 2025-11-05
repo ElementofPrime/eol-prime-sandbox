@@ -8,7 +8,7 @@ import PrimePulseTile from "@/components/PrimePulseTile";
 const elements = [
   { title: "Chat", icon: "💬", link: "/chat" },
   { title: "Journal", icon: "📔", link: "/journal" },
-  { title: "To-Do", icon: "✅", link: "/todo" }, // keep if your folder is /todo
+  { title: "ToDo", icon: "✅", link: "/ToDo" }, // keep if your folder is /ToDo
   { title: "Reminders", icon: "⏰", link: "/reminders" },
   { title: "Fix-It", icon: "🛠️", link: "/fix-it" }, // <-- was /fix-it; corrected to /fixit
   { title: "New Beginning", icon: "🧠", link: "/new-beginning" },

@@ -1,4 +1,4 @@
-// src/app/(app)/to-do/page.tsx
+// src/app/(app)/ToDo/page.tsx
 "use client";
 
 import useSWR from "swr";
@@ -99,7 +99,7 @@ function SortableItem({
 
 export default function ToDoPage() {
   const { data, mutate, isValidating } = useSWR<{ ok: true; items: ToDo[] }>(
-    "/api/to-dos",
+    "/api/ToDos",
     fetcher,
     {
       revalidateOnFocus: true,
@@ -129,7 +129,7 @@ export default function ToDoPage() {
 
     await mutate(
       async (curr) => {
-        const res = await fetch("/api/to-dos", {
+        const res = await fetch("/api/ToDos", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ title: title.trim() }),
@@ -167,7 +167,7 @@ export default function ToDoPage() {
       mutate({ ok: true, items: newItems }, false);
 
       // Sync order to backend
-      await fetch("/api/to-dos/reorder", {
+      await fetch("/api/ToDos/reorder", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -184,7 +184,7 @@ export default function ToDoPage() {
     <main className="mx-auto max-w-3xl px-4 py-8 space-y-8">
       <header className="text-center space-y-2">
         <h1 className="text-5xl font-bold bg-linear-to-r from-cyan-400 to-sky-600 bg-clip-text text-transparent">
-          To-Do
+          ToDo
         </h1>
         <p className="text-sm opacity-70">Drag to reorder. Build momentum.</p>
       </header>
@@ -197,7 +197,7 @@ export default function ToDoPage() {
           className="flex-1 rounded-xl border border-slate-700/20 bg-slate-900/30 dark:bg-slate-950/50 px-4 py-3 text-sm placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
         />
         <EOLButton variant="primary" disabled={!title.trim()}>
-          Add To-Do
+          Add ToDo
         </EOLButton>
       </form>
 
@@ -214,13 +214,13 @@ export default function ToDoPage() {
             {isValidating && !items.length && (
               <div className="eol-panel p-8 text-center opacity-70">
                 <Loader2 className="w-6 h-6 mx-auto animate-spin" />
-                <p className="mt-2">Loading your To-Dos…</p>
+                <p className="mt-2">Loading your ToDos…</p>
               </div>
             )}
 
             {!items.length && !isValidating && (
               <div className="eol-panel p-8 text-center opacity-70">
-                <p>No To-Dos yet. Start building momentum!</p>
+                <p>No ToDos yet. Start building momentum!</p>
               </div>
             )}
 

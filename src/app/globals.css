@@ -1,9 +1,7 @@
 /* styles/globals.css */
 
 /* === TAILWIND V4 CORE === */
-@import "tailwindcss/preflight";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import "tailwindcss";
 
 /* ========================================
    PRIME THEME: DARK FIRST — FORTRESS FOUNDATION

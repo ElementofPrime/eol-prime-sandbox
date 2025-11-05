@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import PrimePulseTile from '@/components/PrimePulseTile';
+import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import PrimePulseTile from "@/components/PrimePulseTile";
 
 const elements = [
-  { title: 'Chat', icon: '💬', link: '/chat' },
-  { title: 'Journal', icon: '📔', link: '/journal' },
-  { title: 'To-Do', icon: '✅', link: '/todo' },
-  { title: 'Reminders', icon: '⏰', link: '/reminders' },
-  { title: 'Fix-It', icon: '🛠️', link: '/fix-it' },
-  { title: 'New Beginning', icon: '🧠', link: '/new-beginning' },
-  { title: 'Core', icon: '🌿', link: '/core' },
-  { title: 'About', icon: '✨', link: '/about' },
+  { title: "Chat", icon: "💬", link: "/chat" },
+  { title: "Journal", icon: "📔", link: "/journal" },
+  { title: "ToDo", icon: "✅", link: "/ToDo" },
+  { title: "Reminders", icon: "⏰", link: "/reminders" },
+  { title: "Fix-It", icon: "🛠️", link: "/fix-it" },
+  { title: "New Beginning", icon: "🧠", link: "/new-beginning" },
+  { title: "Core", icon: "🌿", link: "/core" },
+  { title: "About", icon: "✨", link: "/about" },
 ];
 
 export default function Home() {
@@ -24,7 +24,7 @@ export default function Home() {
         className="relative isolate mx-auto mb-8 mt-2 sm:mt-4 w-36 sm:w-48 md:w-56 eol-breathe"
         initial={{ opacity: 0, scale: 1.08 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.9, ease: 'easeOut' }}
+        transition={{ duration: 0.9, ease: "easeOut" }}
       >
         {/* circular aura (decorative) */}
         <div
@@ -32,9 +32,9 @@ export default function Home() {
           className="pointer-events-none absolute inset-0 -z-10 rounded-full eol-pulse-glow"
           style={{
             background:
-              'radial-gradient(50% 50% at 50% 50%, rgba(34,211,238,.28) 0%, rgba(59,130,246,.16) 40%, transparent 70%)',
-            filter: 'blur(16px)',
-            transform: 'translateZ(0)',
+              "radial-gradient(50% 50% at 50% 50%, rgba(34,211,238,.28) 0%, rgba(59,130,246,.16) 40%, transparent 70%)",
+            filter: "blur(16px)",
+            transform: "translateZ(0)",
           }}
         />
         <Image
@@ -57,9 +57,12 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
         >
-          <span className="font-medium text-zinc-800 dark:text-zinc-200">Welcome to Element of Life —</span>{' '}
-          the foundation where <span className="text-cyan-500 dark:text-cyan-400">focus</span> becomes growth, and
-          growth becomes transformation.
+          <span className="font-medium text-zinc-800 dark:text-zinc-200">
+            Welcome to Element of Life —
+          </span>{" "}
+          the foundation where{" "}
+          <span className="text-cyan-500 dark:text-cyan-400">focus</span>{" "}
+          becomes growth, and growth becomes transformation.
         </motion.p>
 
         <motion.h2
@@ -81,11 +84,13 @@ export default function Home() {
           <Link key={el.title} href={el.link} aria-label={el.title}>
             <motion.div
               whileHover={{ scale: 1.06, y: -2 }}
-              transition={{ type: 'spring', stiffness: 250, damping: 14 }}
+              transition={{ type: "spring", stiffness: 250, damping: 14 }}
               className="eol-panel p-4"
             >
               <div className="text-2xl sm:text-3xl mb-2">{el.icon}</div>
-              <h3 className="text-sm sm:text-base font-semibold text-slate-700">{el.title}</h3>
+              <h3 className="text-sm sm:text-base font-semibold text-slate-700">
+                {el.title}
+              </h3>
             </motion.div>
           </Link>
         ))}

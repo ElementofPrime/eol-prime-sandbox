@@ -1,4 +1,4 @@
-// src/app/(app)/api/to-dos/route.ts
+// src/app/(app)/api/ToDos/route.ts
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
