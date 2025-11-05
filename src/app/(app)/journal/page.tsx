@@ -1,3 +1,4 @@
+// src/app/(app)/journal/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -5,7 +6,9 @@ import { fetcher } from "@/lib/fetcher";
 import useSWR, { mutate as globalMutate } from "swr";
 import { format } from "date-fns";
 import { Loader2, CheckCircle2 } from "lucide-react";
+import EOLButton from "@/components/EOLButton";
 
+// === TYPES ===
 type Entry = {
   _id: string;
   content: string;
@@ -16,6 +19,19 @@ type Entry = {
 
 type ListResponse = { items: Entry[] };
 
+// === POST HELPER ===
+async function postJournal(content: string) {
+  const res = await fetch("/api/journal", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ content }),
+  });
+
+  if (!res.ok) throw new Error("Failed to save");
+  return res.json();
+}
+
+// === MAIN COMPONENT ===
 export default function JournalPage() {
   const { data, isLoading, mutate } = useSWR<ListResponse>(
     "/api/journal",
@@ -32,6 +48,8 @@ export default function JournalPage() {
     text: string;
     type: "success" | "error";
   } | null>(null);
+
+  const entries = data?.items ?? [];
 
   async function onSave(e: React.FormEvent) {
     e.preventDefault();
@@ -57,15 +75,7 @@ export default function JournalPage() {
     );
 
     try {
-      const res = await fetch("/api/journal", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: content.trim() }),
-      });
-
-      if (!res.ok) throw new Error("Failed to save");
-
-      const { item } = await res.json();
+      const { item } = await postJournal(content.trim());
 
       // Replace temp with real
       mutate(
@@ -81,15 +91,13 @@ export default function JournalPage() {
       setContent("");
       setMsg({ text: "Saved + analyzed", type: "success" });
       setTimeout(() => setMsg(null), 3000);
-    } catch (err) {
+    } catch {
       setMsg({ text: "Save failed", type: "error" });
       mutate(); // rollback
     } finally {
       setSaving(false);
     }
   }
-
-  const entries = data?.items ?? [];
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-8 space-y-8">
@@ -104,11 +112,11 @@ export default function JournalPage() {
       </header>
 
       {/* Form */}
-      <form onSubmit={onSave} className="eol-panel space-y-4">
+      <form onSubmit={onSave} className="eol-panel space-y-4 p-4">
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="• Use - [ ] for to-dos&#10;• $100, AAPL, 3pm — I’ll detect it&#10;• Just write. I’ll listen."
+          placeholder="• Use - [ ] for to-dos\n• $100, AAPL, 3pm — I’ll detect it\n• Just write. I’ll listen."
           className="w-full rounded-2xl border border-slate-700/20 bg-slate-900/30 dark:bg-slate-950/50 p-4 text-sm placeholder:opacity-60 resize-none focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all"
           rows={6}
           disabled={saving}

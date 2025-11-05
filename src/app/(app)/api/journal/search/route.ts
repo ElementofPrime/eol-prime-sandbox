@@ -22,7 +22,10 @@ export async function GET(req: NextRequest) {
   })
     .sort({ score: { $meta: "textScore" } })
     .limit(20)
-    .lean();
+    .lean<{ _id: string; content: string; createdAt: string }[]>() // ← ARRAY + FIELDS
+    .exec();
 
-  return json({ items: items.map((i) => ({ ...i, _id: i._id.toString() })) });
+  return json({
+    items: items.map((i) => ({ ...i, _id: i._id.toString() })),
+  });
 }
