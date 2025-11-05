@@ -39,7 +39,7 @@
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "@eslint/js": "^9.39.0",
-    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/postcss": "^4.1.16",
     "@types/dompurify": "^3.0.5",
     "@types/mongodb": "^4.0.6",
     "@types/mongoose": "^5.11.97",

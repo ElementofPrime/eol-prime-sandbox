@@ -1,5 +1,5 @@
 // src/lib/authOptions.ts
-import type { NextAuthOptions } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import { mongoClientPromise } from "@/lib/mongo";
@@ -27,13 +27,15 @@ export const authOptions: NextAuthOptions = {
   ],
 
   pages: {
-    signIn: "/signin",          // OK if you have this page; otherwise remove
+    signIn: "/signin", // OK if you have this page; otherwise remove
     verifyRequest: "/signin/verify",
   },
 
   callbacks: {
-    async session({ session, user }) {
-      if (session?.user && user?.id) (session.user as any).id = user.id;
+    session: ({ session, token }) => {
+      if (session.user && token.sub) {
+        session.user.id = token.sub;
+      }
       return session;
     },
   },
