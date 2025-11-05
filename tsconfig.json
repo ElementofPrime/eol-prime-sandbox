@@ -12,16 +12,12 @@
     "isolatedModules": true,
     "noEmit": true,
     "types": ["node"],
+    "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     }
   },
-  "include": [
-    "src/**/*",
-    "scripts/**/*",
-    "next-env.d.ts"
-    // Remove .next/types — it’s generated
-  ],
+  "include": ["src/**/*", "scripts/**/*", "next-env.d.ts"],
   "exclude": ["node_modules", ".next"]
 }
