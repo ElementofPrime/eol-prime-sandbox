@@ -2,7 +2,7 @@
 "use client";
 
 import { useSession, signIn, signOut } from "next-auth/react";
-import { Loader2, LogIn, LogOut } from "lucide-react";
+import { Loader2, LogIn, LogOut, CheckCircle2 } from "lucide-react";
 
 type EOLButtonProps =
   | {
@@ -21,7 +21,6 @@ export default function EOLButton(props: EOLButtonProps) {
   const { data: session, status } = useSession();
   const loading = status === "loading";
 
-  // ——— AUTH VARIANT ———
   if (props.variant === "auth") {
     if (loading) {
       return (
@@ -59,9 +58,7 @@ export default function EOLButton(props: EOLButtonProps) {
     );
   }
 
-  // ——— PRIMARY / SECONDARY ———
   const { variant, children, onClick, disabled, className } = props;
-
   const base = "btn-primary flex items-center justify-center gap-2";
   const variantClass =
     variant === "secondary"
