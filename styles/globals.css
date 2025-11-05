@@ -2,8 +2,8 @@
 
 /* === TAILWIND V4 CORE === */
 @import "tailwindcss/preflight";
-@tailwind utilities;
-@import "tailwindcss/theme"; /* ← THIS UNLOCKS @apply FOR BUILT-IN CLASSES */
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 /* ========================================
    PRIME THEME: DARK FIRST — FORTRESS FOUNDATION
@@ -50,54 +50,50 @@
 }
 
 /* ========================================
+   BACKGROUND DECOR — FORTRESS VINES & TREE
+   ======================================== */
+@layer utilities {
+  .decor-image {
+    @apply opacity-20 dark:opacity-30;
+    mask-image: radial-gradient(65% 65% at 65% 65%, #000 65%, transparent 100%);
+    -webkit-mask-image: radial-gradient(
+      65% 65% at 65% 65%,
+      #000 65%,
+      transparent 100%
+    );
+    transform: translateZ(0);
+    transition: opacity 0.3s ease;
+    animation: decor-fade-in 2s ease-out forwards;
+  }
+
+  @keyframes decor-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* ========================================
    PRIME POLISH: GLOBAL COMPONENT CLASSES
    ======================================== */
 @layer components {
-  /* ——— EOL PANEL — THE FORTRESS TILE ——— */
   .eol-panel {
-    @apply relative 
-      rounded-3xl 
-      border 
-      border-black/10 
-      dark:border-white/10 
-      bg-white/60 
-      dark:bg-black/60 
-      backdrop-blur-md 
-      p-5 
-      shadow-[0_0_80px_rgba(56,189,248,0.12)] 
-      transition-all 
-      duration-300;
+    @apply relative rounded-3xl border border-black/10 dark:border-white/10 bg-white/60 dark:bg-black/60 backdrop-blur-md p-5 shadow-[0_0_80px_rgba(56,189,248,0.12)] transition-all duration-300;
   }
   .eol-panel:hover {
-    @apply shadow-[0_0_100px_rgba(56,189,248,0.20)] 
-      bg-white/70 
-      dark:bg-black/70;
+    @apply shadow-[0_0_100px_rgba(56,189,248,0.20)] bg-white/70 dark:bg-black/70;
   }
 
-  /* ——— BTN PRIMARY — FORWARD MOMENTUM ——— */
   .btn-primary {
-    @apply inline-flex 
-      items-center 
-      justify-center 
-      rounded-xl 
-      px-4 
-      py-2 
-      text-sm 
-      font-medium 
-      bg-linear-to-r 
-      from-sky-600 
-      to-cyan-700 
-      text-white 
-      shadow-md 
-      hover:shadow-lg 
-      hover:from-sky-500 
-      hover:to-cyan-600 
-      focus:outline-none 
-      focus-visible:outline-2 
-      focus-visible:outline-offset-2 
-      focus-visible:outline-cyan-500 
-      transition-all 
-      duration-200;
+    @apply inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-medium text-white shadow-md hover:shadow-lg focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 transition-all duration-200;
+    background: linear-gradient(to right, #0ea5e9, #06b6d4);
+  }
+  .btn-primary:hover {
+    background: linear-gradient(to right, #0ea5e9, #06b6d4);
+    filter: brightness(1.1);
   }
   .btn-primary:disabled {
     @apply opacity-60 cursor-not-allowed;
@@ -106,7 +102,6 @@
     @apply scale-95;
   }
 
-  /* ——— PULSE DOT — LIVE INDICATOR ——— */
   .pulse-dot {
     @apply relative inline-flex h-2.5 w-2.5;
   }
@@ -130,35 +125,5 @@
   .pulse-dot.neutral::before,
   .pulse-dot.neutral::after {
     @apply bg-slate-400 dark:bg-slate-300;
-  }
-}
-/* ========================================
-   BACKGROUND DECOR — FORTRESS VINES & TREE
-   ======================================== */
-@layer utilities {
-  .decor-image {
-    @apply opacity-20 dark:opacity-30;
-    mask-image: radial-gradient(65% 65% at 65% 65%, #000 65%, transparent 100%);
-    -webkit-mask-image: radial-gradient(
-      65% 65% at 65% 65%,
-      #000 65%,
-      transparent 100%
-    );
-    transform: translateZ(0);
-    transition: opacity 0.3s ease;
-  }
-
-  /* Optional: Subtle pulse on load (ties to Prime Pulse vibe) */
-  .decor-image {
-    animation: decor-fade-in 2s ease-out forwards;
-  }
-
-  @keyframes decor-fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
   }
 }

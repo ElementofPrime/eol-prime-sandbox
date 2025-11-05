@@ -1,41 +1,27 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "module": "esnext",
-    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
+    "noEmit": true,
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "@styles/*": ["styles/*"],
       "@/*": ["src/*"]
-    },
-    "plugins": [{ "name": "next" }]
+    }
   },
   "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "src/models/JournalEntry.js",
-    "src/lib/db.js",
     "src/**/*",
     "scripts/**/*",
     "next-env.d.ts"
+    // Remove .next/types — it’s generated
   ],
-  "ts-node": {
-    "esm": true
-  },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", ".next"]
 }
