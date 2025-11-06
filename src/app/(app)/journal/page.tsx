@@ -6,7 +6,7 @@ import { fetcher } from "@/lib/fetcher";
 import useSWR, { mutate as globalMutate } from "swr";
 import { format } from "date-fns";
 import { Loader2, CheckCircle2 } from "lucide-react";
-import EOLButton from "@/components/EOLButton";
+import { EOLButton } from "@/components/EOLButton";
 
 // === TYPES ===
 type Entry = {

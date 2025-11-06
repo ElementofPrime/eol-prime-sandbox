@@ -7,7 +7,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import useSWR from "swr";
 import { useMemo } from "react";
 import { Moon, Sun } from "lucide-react";
-import EOLButton from "@/components/EOLButton";
+import { EOLButton } from "@/components/EOLButton";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 

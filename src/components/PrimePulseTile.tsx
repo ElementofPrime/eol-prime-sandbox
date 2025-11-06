@@ -6,17 +6,17 @@ import Link from "next/link";
 import { subscribeToPulse, getPrimePulse } from "@/lib/prime/pulse";
 import { motion } from "framer-motion";
 import { useSession, signIn } from "next-auth/react";
+import { EOLButton } from "@/components/EOLButton";
 
-// === LOCAL SUB-COMPONENTS (Fixes "Cannot find name") ===
 function UnauthTile() {
   return (
     <div className="eol-panel p-6 text-center">
       <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
         Sign in to see your Prime Pulse.
       </p>
-      <button onClick={() => signIn()} className="btn-primary">
+      <EOLButton variant="primary" onClick={() => signIn()}>
         Sign In
-      </button>
+      </EOLButton>
     </div>
   );
 }
@@ -34,7 +34,7 @@ function LoadingTile() {
 }
 
 function PulseDot({ mood }: { mood: string }) {
-  return <div className={`pulse-dot ${mood}`} />;
+  return <div className={`w-3 h-3 rounded-full pulse-dot ${mood}`} />;
 }
 
 function LivePulseTile({
@@ -78,19 +78,19 @@ function LivePulseTile({
       </p>
 
       <div className="mt-4">
-        <Link href="/journal" className="btn-primary text-sm">
-          Reflect
-        </Link>
+        <EOLButton variant="primary" asChild>
+          <Link href="/journal">Reflect</Link>
+        </EOLButton>
       </div>
     </motion.div>
   );
 }
 
-// === MAIN COMPONENT ===
 export default function PrimePulseTile() {
   const { status } = useSession();
-  const [pulse, setPulse] =
-    useState<Awaited<ReturnType<typeof getPrimePulse>>>(null);
+  const [pulse, setPulse] = useState<Awaited<
+    ReturnType<typeof getPrimePulse>
+  > | null>(null);
 
   useEffect(() => {
     getPrimePulse().then(setPulse);

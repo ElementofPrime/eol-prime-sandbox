@@ -1,77 +1,45 @@
 // src/components/EOLButton.tsx
 "use client";
 
-import { useSession, signIn, signOut } from "next-auth/react";
-import { Loader2, LogIn, LogOut, CheckCircle2 } from "lucide-react";
+import { Slot } from "@radix-ui/react-slot";
+import { cn } from "@/lib/utils";
+import type { ComponentPropsWithoutRef } from "react";
 
-type EOLButtonProps =
-  | {
-      variant: "auth";
-      loadingText?: string;
-    }
-  | {
-      variant: "primary" | "secondary";
-      onClick?: () => void;
-      disabled?: boolean;
-      children: React.ReactNode;
-      className?: string;
-    };
+type BaseProps = {
+  variant?: "primary" | "secondary";
+  className?: string;
+  children: React.ReactNode;
+};
 
-export default function EOLButton(props: EOLButtonProps) {
-  const { data: session, status } = useSession();
-  const loading = status === "loading";
+type ButtonProps = BaseProps &
+  ComponentPropsWithoutRef<"button"> & {
+    asChild?: false | undefined;
+  };
 
-  if (props.variant === "auth") {
-    if (loading) {
-      return (
-        <button
-          disabled
-          className="btn-primary flex items-center gap-2 opacity-70"
-        >
-          <Loader2 className="w-4 h-4 animate-spin" />
-          {props.loadingText || "Loading..."}
-        </button>
-      );
-    }
+type SlotProps = BaseProps & {
+  asChild: true;
+};
 
-    if (!session) {
-      return (
-        <button
-          onClick={() => signIn()}
-          className="btn-primary flex items-center gap-2"
-        >
-          <LogIn className="w-4 h-4" />
-          Sign In
-        </button>
-      );
-    }
+type EOLButtonProps = ButtonProps | SlotProps;
 
-    return (
-      <button
-        onClick={() => signOut()}
-        className="btn-primary flex items-center gap-2 bg-rose-600 hover:bg-rose-500"
-        title={session.user?.email ?? undefined}
-      >
-        <LogOut className="w-4 h-4" />
-        Sign Out
-      </button>
-    );
-  }
-
-  const { variant, children, onClick, disabled, className } = props;
-  const base = "btn-primary flex items-center justify-center gap-2";
-  const variantClass =
-    variant === "secondary"
-      ? "bg-zinc-600 hover:bg-zinc-500 text-slate-300"
-      : "bg-cyan-600 hover:bg-cyan-500";
+export function EOLButton(props: EOLButtonProps) {
+  const { variant = "primary", className, children, asChild, ...rest } = props;
+  const Comp = asChild ? Slot : "button";
 
   return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={`${base} ${variantClass} ${className || ""}`}
+    <Comp
+      className={cn(
+        "inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-semibold transition-all",
+        "focus:outline-none focus-visible:ring-4 focus-visible:ring-cyan-500/50",
+        "disabled:opacity-50 disabled:cursor-not-allowed",
+        variant === "primary"
+          ? "bg-cyan-600 text-white hover:bg-cyan-500 active:bg-cyan-700"
+          : "bg-slate-700 text-slate-200 hover:bg-slate-600 active:bg-slate-800",
+        className
+      )}
+      {...rest}
     >
       {children}
-    </button>
+    </Comp>
   );
 }

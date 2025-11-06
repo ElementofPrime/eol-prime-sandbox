@@ -3,35 +3,38 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function ThemeToggle() {
-	const { resolvedTheme, setTheme } = useTheme();
-	const [mounted, setMounted] = useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-	useEffect(() => {
-		setMounted(true);
-		console.log("Theme:", resolvedTheme); // ← DEBUG
-	}, [resolvedTheme]);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-	if (!mounted) return null;
+  if (!mounted) return null;
 
-	const isDark = resolvedTheme === "dark";
+  const isDark = resolvedTheme === "dark";
 
-	return (
-		<button
-			onClick={() => {
-				setTheme(isDark ? "light" : "dark");
-				console.log("Toggled to:", isDark ? "light" : "dark"); // ← DEBUG
-			}}
-			className={cn(
-				"rounded-full border px-3 py-1.5 text-sm transition-all",
-				"border-white/10 bg-white/10 text-slate-500 hover:bg-white/20",
-				"dark:border-black/20 dark:bg-black/10 dark:hover:bg-black/20"
-			)}
-			aria-label="Toggle dark mode"
-		>
-			{isDark ? "🌙" : "☀️"}
-		</button>
-	);
+  return (
+    <button
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      className={cn(
+        "rounded-full p-2 transition-all duration-200",
+        "bg-white/10 dark:bg-black/20",
+        "hover:bg-cyan-600/20 dark:hover:bg-cyan-600/30",
+        "border border-white/10 dark:border-black/20",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/50"
+      )}
+      aria-label="Toggle dark mode"
+    >
+      {isDark ? (
+        <Moon className="w-5 h-5 text-cyan-300" />
+      ) : (
+        <Sun className="w-5 h-5 text-yellow-400" />
+      )}
+    </button>
+  );
 }
