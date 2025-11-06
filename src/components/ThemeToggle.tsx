@@ -14,7 +14,7 @@ export default function ThemeToggle() {
     setMounted(true);
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted) return <div className="p-2 rounded-full bg-white/10" />;
 
   const isDark = resolvedTheme === "dark";
 
@@ -29,6 +29,7 @@ export default function ThemeToggle() {
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/50"
       )}
       aria-label="Toggle dark mode"
+      suppressHydrationWarning // ← FIX: Suppress warning
     >
       {isDark ? (
         <Moon className="w-5 h-5 text-cyan-300" />
