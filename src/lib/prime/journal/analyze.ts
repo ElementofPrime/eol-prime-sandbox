@@ -31,12 +31,12 @@ const TICKER = /\b(BTC|ETH|SOL|XRP|SUI|LINK|SPY|QQQ|ES|MES|NQ|MNQ)\b/gi;
 const MONEY = /(?:\$\s?\d[\d,]*(?:\.\d{1,2})?|\d+(?:\.\d+)?%)/g;
 const DATE =
   /\b(today|tomorrow|monday|tuesday|wednesday|thursday|friday|saturday|sunday|\d{4}-\d{2}-\d{2}|\d{1,2}\/\d{1,2}(?:\/\d{2,4})?)\b/gi;
-const ToDo = /(?:^|[\n\r])\s*(?:- \[? ?\]?|•|\*)\s+(.+)/g; // markdown bullets
+const To-Do = /(?:^|[\n\r])\s*(?:- \[? ?\]?|•|\*)\s+(.+)/g; // markdown bullets
 const PERSON = /@([A-Za-z0-9_\.\-]+)/g; // simple handle/mention
 const HASH = /#([A-Za-z0-9_\-]+)/g;
 
 export function quickExtract(text: string): QuickExtract {
-  const ToDos: string[] = [];
+  const To-Do: string[] = [];
   const dates = (text.match(DATE) || []).map((s) => s.trim());
   const amounts = (text.match(MONEY) || []).map((s) => s.trim());
   const tickers = Array.from(
@@ -44,8 +44,8 @@ export function quickExtract(text: string): QuickExtract {
   );
   const people = Array.from(text.matchAll(PERSON), (m) => m[1]);
   const hashtags = Array.from(text.matchAll(HASH), (m) => m[1]);
-  for (const m of text.matchAll(ToDo)) ToDos.push(m[1].trim());
-  return { ToDos, dates, amounts, tickers, people, hashtags };
+  for (const m of text.matchAll(To-Do)) To-Do.push(m[1].trim());
+  return { To-Do, dates, amounts, tickers, people, hashtags };
 }
 
 export function roughSentiment(text: string): {
@@ -76,8 +76,8 @@ export function makePrimePrompts({
   topics: string[];
 }): string[] {
   const prompts: string[] = [];
-  if (extract.ToDos.length)
-    prompts.push(`Want me to schedule or remind: ${extract.ToDos[0]}?`);
+  if (extract.To-Do.length)
+    prompts.push(`Want me to schedule or remind: ${extract.To-Do[0]}?`);
   if (topics.includes("finance") && extract.tickers.length)
     prompts.push(`Log a trade plan for ${extract.tickers.join(", ")}?`);
   if (topics.includes("build"))

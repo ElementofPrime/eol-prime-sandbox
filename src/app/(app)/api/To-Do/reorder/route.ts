@@ -1,10 +1,10 @@
-// src/app/(app)/api/ToDos/reorder/route.ts
+// src/app/(app)/api/T-Do/reorder/route.ts
 
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { dbConnect } from "@/lib/db";
-import ToDo from "@/models/ToDo";
+import To-Do from "@/models/To-Do";
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     },
   }));
 
-  await ToDo.bulkWrite(bulkOps);
+  await To-Do.bulkWrite(bulkOps);
 
   return NextResponse.json({ ok: true });
 }

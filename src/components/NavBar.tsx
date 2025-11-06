@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
-import useSWR from "swr";
 import { useSession, signIn, signOut } from "next-auth/react";
-import ThemeToggle from "@/components/ThemeToggle";
+import useSWR from "swr";
+import { useMemo } from "react";
+import { Moon, Sun } from "lucide-react";
+import EOLButton from "@/components/EOLButton";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -28,13 +30,11 @@ function NavPill({
       href={href}
       aria-current={active ? "page" : undefined}
       className={cx(
-        "rounded-full px-3 py-1.5 text-sm font-medium transition-colors border",
-        // base surfaces (light/dark)
+        "rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 border-2",
         active
-          ? "bg-cyan-600/15 text-cyan-700 dark:text-cyan-300 border-cyan-500/30 hover:bg-cyan-600/25"
-          : "bg-white/40 dark:bg-black/40 text-slate-700 dark:text-slate-300 border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/15",
-        // focus ring for a11y
-        "focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
+          ? "bg-cyan-600 text-white border-cyan-500 shadow-lg shadow-cyan-500/25 ring-4 ring-cyan-500/30"
+          : "bg-white/60 dark:bg-black/60 border-transparent text-slate-700 dark:text-slate-300 hover:bg-white/80 dark:hover:bg-black/80 hover:border-cyan-500/50",
+        "focus:outline-none focus-visible:ring-4 focus-visible:ring-cyan-500/50"
       )}
     >
       {children}
@@ -44,9 +44,10 @@ function NavPill({
 
 export default function NavBar() {
   const pathname = usePathname() || "/";
+  const { theme, setTheme } = useTheme();
   const { data: session } = useSession();
   const email = useMemo(
-    () => (session?.user?.email ? session.user.email.toLowerCase() : ""),
+    () => session?.user?.email?.toLowerCase() ?? "",
     [session?.user?.email]
   );
   const { data } = useSWR(
@@ -56,109 +57,74 @@ export default function NavBar() {
   const displayName = (data?.profile?.displayName as string | undefined) || "";
 
   return (
-    <div className="absolute inset-x-0 top-0 z-50 bg-transparent">
-      {/* Grid keeps center pills perfectly centered regardless of left/right widths */}
-      <nav
-        className={cx(
-          "mx-auto w-full max-w-6xl px-4 py-4",
-          "grid grid-cols-[1fr_auto_1fr] items-center gap-3"
-        )}
-      >
-        {/* LEFT — brand */}
-        <div className="min-w-0">
-          <Link
-            href="/"
-            className={cx(
-              "block truncate font-semibold tracking-wide",
-              "text-slate-900 dark:text-slate-100",
-              "hover:text-cyan-600 dark:hover:text-cyan-300",
-              "focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
-            )}
-            title="EOL—Prime Labs OS"
-          >
-            EOL-Prime Labs OS
+    <nav className="fixed inset-x-0 top-0 z-50 bg-linear-to-b from-slate-900/95 to-slate-900/80 backdrop-blur-xl border-b border-white/10">
+      <div className="mx-auto max-w-7xl px-4 py-4">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+          {/* LEFT — Brand */}
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="text-2xl font-bold bg-linear-to-r from-cyan-400 to-sky-600 bg-clip-text text-transparent">
+              EOL-Prime Labs OS
+            </div>
           </Link>
-        </div>
 
-        {/* CENTER — pills (hidden on xs) */}
-        <div className="hidden sm:flex items-center justify-center gap-2">
-          <NavPill href="/" currentPath={pathname}>
-            Home
-          </NavPill>
-          <NavPill href="/chat" currentPath={pathname}>
-            Chat
-          </NavPill>
-          <NavPill href="/journal" currentPath={pathname}>
-            Journal
-          </NavPill>
-          <NavPill href="/ToDo" currentPath={pathname}>
-            ToDo
-          </NavPill>
-          <NavPill href="/reminders" currentPath={pathname}>
-            Reminders
-          </NavPill>
-          <NavPill href="/fix-it" currentPath={pathname}>
-            Fix-It
-          </NavPill>
-          <NavPill href="/core" currentPath={pathname}>
-            Core
-          </NavPill>
-          <NavPill href="/about" currentPath={pathname}>
-            About
-          </NavPill>
-        </div>
-
-        {/* RIGHT — theme + auth */}
-        <div className="flex items-center justify-end gap-3">
-          <ThemeToggle />
-          {displayName && (
-            <Link
-              href="/settings"
-              className={cx(
-                "hidden sm:inline rounded-full px-3 py-1.5 text-sm font-medium",
-                "border border-cyan-500/30 text-cyan-700 dark:text-cyan-300",
-                "hover:bg-cyan-600/15",
-                "focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
-              )}
-              title="Edit profile"
-            >
-              Welcome back, {displayName}
-            </Link>
-          )}
-
-          {!session ? (
-            <button
-              onClick={() => signIn()}
-              className={cx(
-                "rounded-full px-4 py-1.5 text-sm font-semibold",
-                "bg-cyan-700 text-white hover:bg-cyan-600 active:bg-cyan-700",
-                "dark:bg-cyan-600 dark:hover:bg-cyan-500 dark:active:bg-cyan-600",
-                "focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
-              )}
-            >
-              Sign In
-            </button>
-          ) : (
-            <>
-              <NavPill href="/settings" currentPath={pathname}>
-                Settings
+          {/* CENTER — Pills */}
+          <div className="hidden md:flex items-center justify-center gap-3">
+            {[
+              { href: "/", label: "Home" },
+              { href: "/chat", label: "Chat" },
+              { href: "/journal", label: "Journal" },
+              { href: "/to-do", label: "To-Do" },
+              { href: "/reminders", label: "Reminders" },
+              { href: "/fix-it", label: "Fix-It" },
+              { href: "/core", label: "Core" },
+              { href: "/about", label: "About" },
+            ].map(({ href, label }) => (
+              <NavPill key={href} href={href} currentPath={pathname}>
+                {label}
               </NavPill>
-              <button
-                onClick={() => signOut()}
-                className={cx(
-                  "rounded-full px-3 py-1.5 text-sm font-medium",
-                  "border border-black/10 dark:border-white/10",
-                  "bg-white/40 dark:bg-black/40 text-slate-700 dark:text-slate-300",
-                  "hover:bg-black/5 dark:hover:bg-white/15",
-                  "focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
-                )}
-              >
-                Sign Out
-              </button>
-            </>
-          )}
+            ))}
+          </div>
+
+          {/* RIGHT — Theme + Auth */}
+          <div className="flex items-center justify-end gap-4">
+            <button
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="p-2 rounded-full bg-white/10 dark:bg-black/20 hover:bg-cyan-600/20 transition-all"
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? (
+                <Sun className="w-5 h-5 text-yellow-400" />
+              ) : (
+                <Moon className="w-5 h-5 text-slate-700" />
+              )}
+            </button>
+
+            {displayName && (
+              <span className="hidden lg:block text-sm font-medium text-cyan-400">
+                Welcome, {displayName}
+              </span>
+            )}
+
+            {!session ? (
+              <EOLButton variant="primary" onClick={() => signIn()}>
+                Sign In
+              </EOLButton>
+            ) : (
+              <div className="flex items-center gap-3">
+                <NavPill href="/settings" currentPath={pathname}>
+                  Settings
+                </NavPill>
+                <button
+                  onClick={() => signOut()}
+                  className="text-sm font-medium text-rose-400 hover:text-rose-300 transition"
+                >
+                  Sign Out
+                </button>
+              </div>
+            )}
+          </div>
         </div>
-      </nav>
-    </div>
+      </div>
+    </nav>
   );
 }

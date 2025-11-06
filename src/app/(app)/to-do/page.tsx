@@ -1,4 +1,4 @@
-// src/app/(app)/ToDo/page.tsx
+// src/app/(app)/To-Do/page.tsx
 "use client";
 
 import useSWR from "swr";
@@ -26,7 +26,7 @@ import { Loader2, GripVertical, Trash2 } from "lucide-react";
 const fetcher = (url: string) =>
   fetch(url, { cache: "no-store" }).then((r) => r.json());
 
-type ToDo = {
+type To-Do = {
   _id: string;
   title: string;
   done: boolean;
@@ -39,7 +39,7 @@ function SortableItem({
   onToggle,
   onRemove,
 }: {
-  item: ToDo;
+  item: To-Do;
   onToggle: () => void;
   onRemove: () => void;
 }) {
@@ -97,9 +97,9 @@ function SortableItem({
   );
 }
 
-export default function ToDoPage() {
-  const { data, mutate, isValidating } = useSWR<{ ok: true; items: ToDo[] }>(
-    "/api/ToDos",
+export default function To-DoPage() {
+  const { data, mutate, isValidating } = useSWR<{ ok: true; items: To-Do[] }>(
+    "/api/To-Do",
     fetcher,
     {
       revalidateOnFocus: true,
@@ -116,7 +116,7 @@ export default function ToDoPage() {
     })
   );
 
-  async function addToDo(e: React.FormEvent) {
+  async function addTo-Do(e: React.FormEvent) {
     e.preventDefault();
     if (!title.trim()) return;
 
@@ -129,7 +129,7 @@ export default function ToDoPage() {
 
     await mutate(
       async (curr) => {
-        const res = await fetch("/api/ToDos", {
+        const res = await fetch("/api/To-Do", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ title: title.trim() }),
@@ -167,7 +167,7 @@ export default function ToDoPage() {
       mutate({ ok: true, items: newItems }, false);
 
       // Sync order to backend
-      await fetch("/api/ToDos/reorder", {
+      await fetch("/api/To-Do/reorder", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -184,12 +184,12 @@ export default function ToDoPage() {
     <main className="mx-auto max-w-3xl px-4 py-8 space-y-8">
       <header className="text-center space-y-2">
         <h1 className="text-5xl font-bold bg-linear-to-r from-cyan-400 to-sky-600 bg-clip-text text-transparent">
-          ToDo
+          To-Do
         </h1>
         <p className="text-sm opacity-70">Drag to reorder. Build momentum.</p>
       </header>
 
-      <form onSubmit={addToDo} className="eol-panel flex gap-3 p-4">
+      <form onSubmit={addTo-Do} className="eol-panel flex gap-3 p-4">
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -197,7 +197,7 @@ export default function ToDoPage() {
           className="flex-1 rounded-xl border border-slate-700/20 bg-slate-900/30 dark:bg-slate-950/50 px-4 py-3 text-sm placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
         />
         <EOLButton variant="primary" disabled={!title.trim()}>
-          Add ToDo
+          Add To-Do
         </EOLButton>
       </form>
 
@@ -214,13 +214,13 @@ export default function ToDoPage() {
             {isValidating && !items.length && (
               <div className="eol-panel p-8 text-center opacity-70">
                 <Loader2 className="w-6 h-6 mx-auto animate-spin" />
-                <p className="mt-2">Loading your ToDos…</p>
+                <p className="mt-2">Loading your To-Do…</p>
               </div>
             )}
 
             {!items.length && !isValidating && (
               <div className="eol-panel p-8 text-center opacity-70">
-                <p>No ToDos yet. Start building momentum!</p>
+                <p>No To-Do yet. Start building momentum!</p>
               </div>
             )}
 

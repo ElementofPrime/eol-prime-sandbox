@@ -88,7 +88,7 @@ function mapMoodToAura(
 
 // === HELPER: Calculate streak (stub) ===
 function calculateStreak(entries: any[]): number {
-  // ToDo: implement real streak logic
+  // To-Do: implement real streak logic
   return entries.length >= 3 ? 3 : entries.length;
 }
 

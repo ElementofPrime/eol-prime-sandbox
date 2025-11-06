@@ -1,7 +1,7 @@
 import { Schema, model, models, Types } from "mongoose";
 
 export interface QuickExtract {
-  ToDos: string[];
+  To-Do: string[];
   dates: string[]; // ISO or natural language
   amounts: string[]; // $123, 12.5%, etc.
   tickers: string[]; // BTC, ETH, SPY, etc.
@@ -43,7 +43,7 @@ const PrimeInsightSchema = new Schema<PrimeInsight>(
     sentimentScore: { type: Number, required: true },
     topics: { type: [String], default: [] },
     extract: {
-      ToDos: [String],
+      To-Do: [String],
       dates: [String],
       amounts: [String],
       tickers: [String],

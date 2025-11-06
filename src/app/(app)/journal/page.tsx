@@ -116,14 +116,18 @@ export default function JournalPage() {
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="• Use - [ ] for ToDos\n• $100, AAPL, 3pm — I’ll detect it\n• Just write. I’ll listen."
+          placeholder="• Use - [ ] for To-Do\n• $100, AAPL, 3pm — I’ll detect it\n• Just write. I’ll listen."
           className="w-full rounded-2xl border border-slate-700/20 bg-slate-900/30 dark:bg-slate-950/50 p-4 text-sm placeholder:opacity-60 resize-none focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all"
           rows={6}
           disabled={saving}
         />
 
         <div className="flex items-center justify-between">
-          <EOLButton variant="primary" disabled={saving || !content.trim()}>
+          <EOLButton
+            variant="primary"
+            className="animate-pulse"
+            disabled={saving}
+          >
             {saving ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
