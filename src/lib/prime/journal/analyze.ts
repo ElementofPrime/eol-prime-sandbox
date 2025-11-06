@@ -1,10 +1,10 @@
+// src/lib/prime/journal/analyze.ts
 import type { QuickExtract } from "@/models/PrimeInsight";
 
 const POS = /(grateful|confident|excited|progress|win|blessed|joy|peace|calm)/i;
 const NEG = /(stressed|anxious|worried|sad|angry|overwhelmed|tired|lost|pain)/i;
 
 const TOPIC_MAP: Record<string, string> = {
-  // loose keyword→topic
   trading: "finance",
   stock: "finance",
   crypto: "finance",
@@ -31,12 +31,12 @@ const TICKER = /\b(BTC|ETH|SOL|XRP|SUI|LINK|SPY|QQQ|ES|MES|NQ|MNQ)\b/gi;
 const MONEY = /(?:\$\s?\d[\d,]*(?:\.\d{1,2})?|\d+(?:\.\d+)?%)/g;
 const DATE =
   /\b(today|tomorrow|monday|tuesday|wednesday|thursday|friday|saturday|sunday|\d{4}-\d{2}-\d{2}|\d{1,2}\/\d{1,2}(?:\/\d{2,4})?)\b/gi;
-const TODOS = /(?:^|[\n\r])\s*(?:- \[? ?\]?|•|\*)\s+(.+)/g; // markdown bullets
-const PERSON = /@([A-Za-z0-9_\.\-]+)/g; // simple handle/mention
+const TODOS = /(?:^|[\n\r])\s*(?:- \[? ?\]?|•|\*)\s+(.+)/g;
+const PERSON = /@([A-Za-z0-9_\.\-]+)/g;
 const HASH = /#([A-Za-z0-9_\-]+)/g;
 
 export function quickExtract(text: string): QuickExtract {
-  const ToDo: string[] = [];
+  const ToDos: string[] = []; // ← MATCH MODEL
   const dates = (text.match(DATE) || []).map((s) => s.trim());
   const amounts = (text.match(MONEY) || []).map((s) => s.trim());
   const tickers = Array.from(
@@ -44,8 +44,12 @@ export function quickExtract(text: string): QuickExtract {
   );
   const people = Array.from(text.matchAll(PERSON), (m) => m[1]);
   const hashtags = Array.from(text.matchAll(HASH), (m) => m[1]);
-  for (const m of text.matchAll(ToDo)) ToDo.push(m[1].trim());
-  return { ToDo, dates, amounts, tickers, people, hashtags };
+
+  for (const m of text.matchAll(TODOS)) {
+    ToDos.push(m[1].trim());
+  }
+
+  return { ToDos, dates, amounts, tickers, people, hashtags }; // ← ToDos
 }
 
 export function roughSentiment(text: string): {
@@ -76,8 +80,8 @@ export function makePrimePrompts({
   topics: string[];
 }): string[] {
   const prompts: string[] = [];
-  if (extract.ToDo.length)
-    prompts.push(`Want me to schedule or remind: ${extract.ToDo[0]}?`);
+  if (extract.ToDos.length)
+    prompts.push(`Want me to schedule or remind: ${extract.ToDos[0]}?`);
   if (topics.includes("finance") && extract.tickers.length)
     prompts.push(`Log a trade plan for ${extract.tickers.join(", ")}?`);
   if (topics.includes("build"))
