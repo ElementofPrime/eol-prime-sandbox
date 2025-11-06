@@ -11,7 +11,7 @@ export default function RemindersPage() {
 
   async function refresh() {
     try {
-      const r = await fetch("/api/To-Do?kind=reminder", { cache: "no-store" });
+      const r = await fetch("/api/to-do?kind=reminder", { cache: "no-store" });
       const data = await r.json();
       setItems(Array.isArray(data?.items) ? data.items : []);
     } catch {
@@ -28,7 +28,7 @@ export default function RemindersPage() {
     if (!body.text) return;
     setText("");
     setDueAt("");
-    await fetch("/api/To-Do", {
+    await fetch("/api/to-do", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -38,7 +38,7 @@ export default function RemindersPage() {
 
   async function remove(id?: string) {
     if (!id) return;
-    await fetch(`/api/To-Do?id=${id}`, { method: "DELETE" });
+    await fetch(`/api/to-do?id=${id}`, { method: "DELETE" });
     refresh();
   }
 

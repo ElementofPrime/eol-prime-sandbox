@@ -1,4 +1,4 @@
-// src/app/(app)/To-Do/page.tsx
+// src/app/(app)/to-do/page.tsx
 "use client";
 
 import useSWR from "swr";
@@ -26,12 +26,12 @@ import { Loader2, GripVertical, Trash2 } from "lucide-react";
 const fetcher = (url: string) =>
   fetch(url, { cache: "no-store" }).then((r) => r.json());
 
-type To-Do = {
+type ToDo = {
   _id: string;
   title: string;
   done: boolean;
-  createdAt: string;
   order?: number;
+  createdAt: string;
 };
 
 function SortableItem({
@@ -39,7 +39,7 @@ function SortableItem({
   onToggle,
   onRemove,
 }: {
-  item: To-Do;
+  item: ToDo;
   onToggle: () => void;
   onRemove: () => void;
 }) {
@@ -97,9 +97,9 @@ function SortableItem({
   );
 }
 
-export default function To-DoPage() {
-  const { data, mutate, isValidating } = useSWR<{ ok: true; items: To-Do[] }>(
-    "/api/To-Do",
+export default function ToDoPage() {
+  const { data, mutate, isValidating } = useSWR<{ ok: true; items: ToDo[] }>(
+    "/api/to-do",
     fetcher,
     {
       revalidateOnFocus: true,
@@ -116,7 +116,7 @@ export default function To-DoPage() {
     })
   );
 
-  async function addTo-Do(e: React.FormEvent) {
+  async function addToDo(e: React.FormEvent) {
     e.preventDefault();
     if (!title.trim()) return;
 
@@ -129,7 +129,7 @@ export default function To-DoPage() {
 
     await mutate(
       async (curr) => {
-        const res = await fetch("/api/To-Do", {
+        const res = await fetch("/api/to-do", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ title: title.trim() }),
@@ -167,7 +167,7 @@ export default function To-DoPage() {
       mutate({ ok: true, items: newItems }, false);
 
       // Sync order to backend
-      await fetch("/api/To-Do/reorder", {
+      await fetch("/api/to-do/reorder", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -184,12 +184,12 @@ export default function To-DoPage() {
     <main className="mx-auto max-w-3xl px-4 py-8 space-y-8">
       <header className="text-center space-y-2">
         <h1 className="text-5xl font-bold bg-linear-to-r from-cyan-400 to-sky-600 bg-clip-text text-transparent">
-          To-Do
+          ToDo
         </h1>
         <p className="text-sm opacity-70">Drag to reorder. Build momentum.</p>
       </header>
 
-      <form onSubmit={addTo-Do} className="eol-panel flex gap-3 p-4">
+      <form onSubmit={addToDo} className="eol-panel flex gap-3 p-4">
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -197,7 +197,7 @@ export default function To-DoPage() {
           className="flex-1 rounded-xl border border-slate-700/20 bg-slate-900/30 dark:bg-slate-950/50 px-4 py-3 text-sm placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
         />
         <EOLButton variant="primary" disabled={!title.trim()}>
-          Add To-Do
+          Add ToDo
         </EOLButton>
       </form>
 

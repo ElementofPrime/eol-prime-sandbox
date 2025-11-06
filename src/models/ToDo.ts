@@ -1,7 +1,7 @@
-// src/models/To-Do.ts
+// src/models/ToDo.ts
 import mongoose from "mongoose";
 
-const To-DoSchema = new mongoose.Schema({
+const ToDoSchema = new mongoose.Schema({
   userId: { type: String, required: true, index: true },
   title: { type: String, required: true },
   done: { type: Boolean, default: false },
@@ -9,6 +9,6 @@ const To-DoSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-const To-Do = mongoose.models.To-Do || mongoose.model("To-Do", To-DoSchema);
+const ToDo = mongoose.models.ToDo || mongoose.model("ToDo", ToDoSchema);
 
-export default To-Do;
+export default ToDo;

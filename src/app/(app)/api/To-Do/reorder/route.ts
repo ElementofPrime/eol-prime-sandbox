@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { dbConnect } from "@/lib/db";
-import To-Do from "@/models/To-Do";
+import ToDo from "@/models/ToDo";
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     },
   }));
 
-  await To-Do.bulkWrite(bulkOps);
+  await ToDo.bulkWrite(bulkOps);
 
   return NextResponse.json({ ok: true });
 }

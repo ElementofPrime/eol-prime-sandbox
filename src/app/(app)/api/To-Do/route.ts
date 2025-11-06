@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { dbConnect } from "@/lib/db";
-import To-Do from "@/models/To-Do";
+import ToDo from "@/models/ToDo";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
