@@ -1,4 +1,4 @@
-// src/app/(app)/api/journal/route.ts
+// src/app/api/journal/route.ts
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
@@ -17,11 +17,30 @@ const JournalSchema = z.object({
 
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id)
-    return NextResponse.json(
-      { ok: false, error: "Unauthorized" },
-      { status: 401 }
-    );
+
+  // DEMO MODE (signed out): return sample payload
+  if (!session?.user?.id) {
+    return NextResponse.json({
+      demo: true,
+      items: [
+        {
+          _id: "demo-1",
+          title: "Welcome to Element of Life",
+          content: "Start journaling your wins.",
+          createdAt: Date.now() - 86_400_000,
+        },
+        {
+          _id: "demo-2",
+          title: "Prime nudges",
+          content: "Try a 2-minute reflection.",
+          createdAt: Date.now() - 43_200_000,
+        },
+      ],
+      page: 1,
+      totalPages: 1,
+      note: "Create an account to save entries, sync insights, and unlock memory.",
+    });
+  }
 
   await dbConnect();
 
@@ -41,6 +60,7 @@ export async function GET(req: Request) {
 
   return NextResponse.json({
     ok: true,
+    demo: false,
     items,
     page,
     totalPages: Math.ceil(total / limit),
@@ -49,11 +69,12 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id)
+  if (!session?.user?.id) {
     return NextResponse.json(
       { ok: false, error: "Unauthorized" },
       { status: 401 }
     );
+  }
 
   await dbConnect();
 
@@ -85,7 +106,9 @@ export async function POST(req: Request) {
             { role: "system", content: PRIME_SYSTEM_PROMPT },
             {
               role: "user",
-              content: `Analyze: "${content}". Return JSON: { mood: "positive|negative|neutral", tags: ["tag1"], nudge: "2-sentence insight" }`,
+              content:
+                `Analyze: "${content}". Return JSON: ` +
+                `{ "mood": "positive|negative|neutral", "tags": ["tag1"], "nudge": "2-sentence insight" }`,
             },
           ],
           temperature: 0.7,
@@ -104,7 +127,7 @@ export async function POST(req: Request) {
       }
     } catch (err) {
       console.warn("Grok analysis failed:", err);
-      // Silent fail — never block save
+      // Non-blocking
     }
   }
 

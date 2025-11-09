@@ -1,9 +1,10 @@
-// src/app/(app)/api/pulse/route.ts
+// src/app/api/pulse/route.ts
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { getDb } from "@/lib/mongo";
+import { isSignedIn } from "@/lib/demo";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -36,7 +37,6 @@ function analyze(t: string) {
   let score = 0;
   for (const w of pos) if (txt.includes(w)) score++;
   for (const w of neg) if (txt.includes(w)) score--;
-
   const mood = score > 0 ? "positive" : score < 0 ? "negative" : "neutral";
   const prompt =
     mood === "negative"
@@ -44,11 +44,9 @@ function analyze(t: string) {
       : mood === "positive"
         ? "Momentum is up—what tiny action compounds it today?"
         : "What would make today 1% better?";
-
   return { mood, sentimentScore: score, prompt };
 }
 
-// === MOVE generateElementPrompt OUTSIDE analyze() ===
 async function generateElementPrompt({
   mood,
   streak,
@@ -62,19 +60,15 @@ async function generateElementPrompt({
   userId: string;
   lastAction?: string;
 }) {
-  // Placeholder — implement getUserElements() later
+  // Placeholder — plug real user context later
   const userElements: string[] = [];
-  // const userElements = await getUserElements(userId);
-
   return `Your ${mood} energy is growing. With a ${streak}-day streak, let's build on ${userElements[0] || "your light"}.`;
 }
 
-// === HELPER: Normalize score to 0–1 ===
 function norm(score: number): number {
-  return Math.max(0, Math.min(1, (score + 8) / 16)); // assuming -8 to +8 range
+  return Math.max(0, Math.min(1, (score + 8) / 16)); // assuming -8..+8
 }
 
-// === HELPER: Map mood to aura ===
 function mapMoodToAura(
   mood: string
 ): "calm" | "excited" | "reflective" | "stressed" | "neutral" {
@@ -86,13 +80,11 @@ function mapMoodToAura(
   return map[mood] || "neutral";
 }
 
-// === HELPER: Calculate streak (stub) ===
 function calculateStreak(entries: any[]): number {
-  // To-Do: implement real streak logic
+  // TODO: implement real streak logic
   return entries.length >= 3 ? 3 : entries.length;
 }
 
-// === HELPER: Get trend (stub) ===
 function getTrend(moods: string[]): "rising" | "falling" | "steady" {
   if (moods.length < 2) return "steady";
   const recent = moods.slice(0, 3);
@@ -104,38 +96,41 @@ function getTrend(moods: string[]): "rising" | "falling" | "steady" {
       : "steady";
 }
 
-/** Lightweight tone heuristic for chat aura */
 function toneFromText(text: string) {
   const t = (text || "").toLowerCase();
   let tone: "calm" | "excited" | "reflective" | "stressed" | "neutral" =
     "neutral";
-
   if (/[!?]{2,}/.test(t) || /(wow|let's go|on fire)/.test(t)) tone = "excited";
   else if (/(thank|grateful|breathe|peace)/.test(t)) tone = "calm";
   else if (/(hmm|thinking|reflect|journal)/.test(t)) tone = "reflective";
   else if (/(stressed|anxious|worried|help)/.test(t)) tone = "stressed";
-
   return tone;
 }
 
 /**
  * GET /api/pulse
- * Auth required.
- * Returns the most recent insight (auto-creates one from latest journal entry if missing).
+ * - Demo payload when not signed in
+ * - Live pulse from latest journal insight when signed in (stubbed)
  */
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json(
-        { ok: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+    if (!isSignedIn(session)) {
+      return NextResponse.json({
+        demo: true,
+        pulse: {
+          mood: "demo",
+          energy: 0.72,
+          ts: Date.now(),
+          hint: "Sign in for live Prime Pulse",
+        },
+      });
     }
-    const userId = (session.user as any).id;
+
+    const userId = (session!.user as any).id as string;
     const db = await getDb();
 
-    // Add streak detection
+    // Pull recent entries for streak/trend calc
     const entries = await db
       .collection("journalentries")
       .find({ userId })
@@ -150,49 +145,24 @@ export async function GET() {
     const trend = getTrend(moodHistory);
 
     const latest = entries[0];
-    let lastInsight =
-      latest &&
-      (await db
-        .collection("primeinsights")
-        .find({ userId, entryId: latest._id })
-        .sort({ createdAt: -1 })
-        .limit(1)
-        .next());
-
     let a = {
       mood: "neutral",
       sentimentScore: 0,
       prompt: "What matters to you most right now?",
     };
 
-    if (latest && !lastInsight) {
-      a = analyze(latest.content || "");
-      const ins = {
-        entryId: latest._id,
-        userId,
-        mood: a.mood,
-        sentimentScore: a.sentimentScore,
-        topics: [] as string[],
-        extract: {} as Record<string, unknown>,
-        primePrompts: [a.prompt],
-        primeSuggestions: [] as string[],
-        createdAt: new Date(),
-      };
-      const r = await db.collection("primeinsights").insertOne(ins);
-      lastInsight = { _id: r.insertedId, ...ins } as any;
-    }
+    if (latest) a = analyze(latest.content || "");
 
-    // Generate prompt with user context
     const prompt = await generateElementPrompt({
       mood: a.mood,
       streak,
       trend,
       userId,
-      lastAction: entries[0]?.tags?.[0],
+      lastAction: (entries[0] as any)?.tags?.[0],
     });
 
     return NextResponse.json({
-      ok: true,
+      demo: false,
       pulse: {
         mood: a.mood,
         strength: norm(a.sentimentScore),
@@ -201,6 +171,7 @@ export async function GET() {
         prompt,
         aura: mapMoodToAura(a.mood),
         glowIntensity: norm(a.sentimentScore),
+        ts: Date.now(),
       },
     });
   } catch (err) {
@@ -214,12 +185,12 @@ export async function GET() {
 /**
  * POST /api/pulse
  * Modes:
- *  - Tone check (no auth): { text }
+ *  - Tone check (no auth required): { text }
  *  - Create insight (auth): { entryId? } -> analyzes specified or latest entry
  */
 export async function POST(req: Request) {
   try {
-    const body = await req.json().catch(() => ({}) as any);
+    const body = (await req.json().catch(() => ({}))) as any;
     const { text, entryId } = body || {};
 
     // Tone-only flow (no auth required)
@@ -236,10 +207,10 @@ export async function POST(req: Request) {
         { status: 401 }
       );
     }
-    const userId = (session.user as any).id;
+    const userId = (session.user as any).id as string;
     const db = await getDb();
 
-    // Fetch the target entry: explicit by id, else latest
+    // Fetch target entry: explicit by id, else latest
     const entry = entryId
       ? await db
           .collection("journalentries")

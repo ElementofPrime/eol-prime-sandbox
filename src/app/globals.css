@@ -2,7 +2,9 @@
 
 /* === TAILWIND V4 CORE === */
 @import "tailwindcss";
-
+html {
+  color-scheme: light dark;
+}
 /* ========================================
    PRIME THEME: DARK FIRST — FORTRESS FOUNDATION
    ======================================== */

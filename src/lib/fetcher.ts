@@ -1,5 +1,11 @@
-export async function fetcher<T = any>(input: RequestInfo, init?: RequestInit): Promise<T> {
-  const res = await fetch(input, { cache: 'no-store', ...init });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
-}
+export const fetcher = async (url: string, init?: RequestInit) => {
+  const res = await fetch(url, { credentials: "include", ...init });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const err: any = new Error("API error");
+    err.status = res.status;
+    err.info = data;
+    throw err;
+  }
+  return data;
+};

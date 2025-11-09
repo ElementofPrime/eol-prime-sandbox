@@ -1,7 +1,7 @@
-// src/app/layout.tsx
 import "./globals.css";
 import { Inter, Great_Vibes } from "next/font/google";
-import ClientProviders from "./ClientProviders";
+import Providers from "./Providers";
+import AppShell from "@/components/AppShell";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,11 +27,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
       <body
-        className={`${inter.variable} ${greatVibes.variable} font-sans min-h-screen antialiased bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900`}
+        className={`${inter.variable} ${greatVibes.variable} font-sans min-h-screen antialiased
+                    bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900`}
       >
-        <ClientProviders>{children}</ClientProviders>
+        <Providers>
+          <AppShell>{children}</AppShell>
+        </Providers>
       </body>
     </html>
   );

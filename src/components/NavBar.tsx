@@ -1,13 +1,13 @@
+// src/components/NavBar.tsx
 "use client";
 
 import Link from "next/link";
-import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
 import useSWR from "swr";
 import { useMemo } from "react";
-import { Moon, Sun } from "lucide-react";
 import { EOLButton } from "@/components/EOLButton";
+import ThemeToggle from "@/components/ThemeToggle"; // ← add this
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -44,7 +44,6 @@ function NavPill({
 
 export default function NavBar() {
   const pathname = usePathname() || "/";
-  const { theme, setTheme } = useTheme();
   const { data: session } = useSession();
   const email = useMemo(
     () => session?.user?.email?.toLowerCase() ?? "",
@@ -87,24 +86,12 @@ export default function NavBar() {
 
           {/* RIGHT — Theme + Auth */}
           <div className="flex items-center justify-end gap-4">
-            <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-2 rounded-full bg-white/10 dark:bg-black/20 hover:bg-cyan-600/20 transition-all"
-              aria-label="Toggle theme"
-            >
-              {theme === "dark" ? (
-                <Sun className="w-5 h-5 text-yellow-400" />
-              ) : (
-                <Moon className="w-5 h-5 text-slate-700" />
-              )}
-            </button>
-
+            <ThemeToggle /> {/* ← hydration-safe */}
             {displayName && (
               <span className="hidden lg:block text-sm font-medium text-cyan-400">
                 Welcome, {displayName}
               </span>
             )}
-
             {!session ? (
               <EOLButton variant="primary" onClick={() => signIn()}>
                 Sign In

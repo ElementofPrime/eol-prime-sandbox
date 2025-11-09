@@ -21,3 +21,8 @@ const JournalEntry =
   mongoose.models.JournalEntry || model("JournalEntry", JournalEntrySchema);
 
 export default JournalEntry;
+
+JournalEntrySchema.index(
+  { content: "text", tags: "text" },
+  { weights: { content: 10, tags: 5 }, name: "journal_search" }
+);
