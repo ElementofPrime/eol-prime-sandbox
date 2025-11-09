@@ -5,7 +5,7 @@ import { ThemeProvider } from "next-themes";
 import { SessionProvider } from "next-auth/react";
 import BackgroundDecor from "@/components/BackgroundDecor";
 import NavBar from "@/components/NavBar";
-import ClientLayout from "@/components/ClientLayout"; // ← YOUR ORIGINAL
+import ClientLayout from "@/components/ClientLayout";
 
 export default function ClientProviders({
   children,
