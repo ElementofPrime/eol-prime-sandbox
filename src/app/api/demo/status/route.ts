@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "@/lib/authOptions";
 import { DEMO_CHAT_LIMIT, getDemoCounters, isSignedIn } from "@/lib/demo";
 
 export async function GET() {
