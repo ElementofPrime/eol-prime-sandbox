@@ -1,10 +1,4 @@
 {
-  // === GROK INTEGRATION: SACRED CORE ===
-  "vscodeGrok.apiKey": "${env:GROK_API_KEY}",
-  "vscodeGrok.model": "grok-4",
-  "vscodeGrok.systemPrompt": "You are Prime — the soul of Element of Life (EOL). One icon. Everything guided. Analyze code, suggest features, protect the sanctuary. Never break. Always forward. Reference: src/lib/primePrompt.ts",
-  "vscodeGrok.showPreview": true,
-  "vscodeGrok.outputMethod": "panel",
 
   "workbench.settings.applyToAllProfiles": [
     "vscodeGrok.apiKey",
