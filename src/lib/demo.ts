@@ -1,8 +1,8 @@
 // /src/lib/demo.ts
 import { cookies } from "next/headers";
-import { DEMO_CHAT_LIMIT } from "@/constants"; // ← Already imported
+import { DEMO_CHAT_LIMIT } from "@/constants";
 
-export { DEMO_CHAT_LIMIT }; // ← ADD THIS LINE
+export { DEMO_CHAT_LIMIT };
 
 export async function getDemoCounters() {
   const store = await cookies();
