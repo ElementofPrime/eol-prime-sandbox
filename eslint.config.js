@@ -11,7 +11,7 @@ export default [
   ...tsEslint.configs.recommended,
   react.configs.recommended,
   reactHooks.configs.recommended,
-  next.configs.recommended, // ← FIXED
+  next.configs.recommended,
   {
     files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
     plugins: {
