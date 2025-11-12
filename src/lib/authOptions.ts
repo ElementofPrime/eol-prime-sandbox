@@ -2,10 +2,10 @@
 import { NextAuthOptions } from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import { mongoClientPromise } from "@/lib/mongo";
+import { clientPromise } from "@/lib/mongo";
 
 export const authOptions: NextAuthOptions = {
-  adapter: MongoDBAdapter(mongoClientPromise),
+  adapter: MongoDBAdapter(clientPromise),
 
   // Use DB sessions (MongoDBAdapter will manage the sessions collection)
   session: { strategy: "database" },
