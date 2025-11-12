@@ -2,7 +2,6 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
-// ← DELETE: import { isSignedIn } from "@/lib/demo";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
