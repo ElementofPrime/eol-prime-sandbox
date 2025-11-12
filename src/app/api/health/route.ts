@@ -1,14 +1,47 @@
-import { NextResponse } from 'next/server';
-import { dbConnect } from '@/lib/db';
+// src/app/api/health/route.ts
+import { NextResponse } from "next/server";
+import { clientPromise } from "@/lib/mongo";
 
-export const dynamic = 'force-dynamic';
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const hasMongoUri = !!process.env.MONGODB_URI;
+  const start = Date.now();
+
   try {
-    await dbConnect();
-    return NextResponse.json({ ok: true, env: { MONGODB_URI: hasMongoUri } }, { status: 200 });
-  } catch (e: any) {
-    return NextResponse.json({ ok: false, env: { MONGODB_URI: hasMongoUri }, error: e?.message }, { status: 500 });
+    const client = await clientPromise;
+    const db = client.db("eol_prime_dev");
+
+    // Test DB connection (only if real DB)
+    if (process.env.MONGODB_URI) {
+      await db.command({ ping: 1 });
+      const latency = Date.now() - start;
+
+      return NextResponse.json({
+        status: "healthy",
+        db: "connected",
+        latency: `${latency}ms`,
+        timestamp: new Date().toISOString(),
+      });
+    }
+
+    // DEMO MODE: No DB, but still healthy
+    return NextResponse.json({
+      status: "healthy (demo mode)",
+      db: "mock",
+      latency: "0ms",
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error("Health check failed:", error);
+    return NextResponse.json(
+      {
+        status: "degraded",
+        db: "error",
+        error: error instanceof Error ? error.message : "Unknown",
+        timestamp: new Date().toISOString(),
+      },
+      { status: 500 }
+    );
   }
 }

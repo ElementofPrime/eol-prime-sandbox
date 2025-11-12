@@ -1,31 +1,41 @@
-// src/app/(app)/api/journal/search/route.ts
-import { NextRequest } from "next/server";
+// src/app/api/journal/search/route.ts
+import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
-import { dbConnect } from "@/lib/db";
-import JournalEntry from "@/models/JournalEntry";
-import { json, error } from "@/lib/http";
+import { clientPromise } from "@/lib/mongo";
 
-export async function GET(req: NextRequest) {
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic"; // ← NO PRERENDER
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const q = searchParams.get("q")?.trim();
+
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id) return error("Unauthorized", 401);
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-  const { searchParams } = new URL(req.url);
-  const q = (searchParams.get("q") || "").trim();
-  if (!q) return json({ items: [] });
+  if (!q) {
+    return NextResponse.json({ results: [] });
+  }
 
-  await dbConnect();
+  try {
+    const client = await clientPromise;
+    const db = client.db("eol_prime_dev");
 
-  const items = await JournalEntry.find({
-    userId: session.user.id,
-    $text: { $search: q },
-  })
-    .sort({ score: { $meta: "textScore" } })
-    .limit(20)
-    .lean<{ _id: string; content: string; createdAt: string }[]>() // ← ARRAY + FIELDS
-    .exec();
+    const results = await db
+      .collection("journal_entries")
+      .find({
+        userId: session.user.id,
+        $text: { $search: q },
+      })
+      .limit(10)
+      .toArray();
 
-  return json({
-    items: items.map((i) => ({ ...i, _id: i._id.toString() })),
-  });
+    return NextResponse.json({ results });
+  } catch (error) {
+    console.error("Journal search error:", error);
+    return NextResponse.json({ error: "Search failed" }, { status: 500 });
+  }
 }

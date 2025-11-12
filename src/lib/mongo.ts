@@ -1,45 +1,34 @@
-// src/lib/mongo.ts
+// src/lib/mongo.ts — FINAL
 import { MongoClient } from "mongodb";
 
 const uri = process.env.MONGODB_URI;
 
-if (!uri) {
-  console.log("MONGODB_URI not set — running in DEMO MODE (in-memory mock)");
-}
-
 let clientPromise: Promise<MongoClient>;
 
-// === DEMO MODE: In-memory mock ===
 if (!uri) {
+  console.log("MONGODB_URI not set — DEMO MODE");
   const mockDb = {
     collection: () => ({
       findOne: async () => null,
-      insertOne: async (doc: any) => ({
-        insertedId: `mock-${Date.now()}`,
-        ...doc,
-      }),
+      insertOne: async () => ({ insertedId: "mock-id" }),
       updateOne: async () => ({ modifiedCount: 1 }),
-      deleteOne: async () => ({ deletedCount: 1 }),
+      deleteOne: async () => ({ deletedCount: 0 }),
+      bulkWrite: async () => ({ modifiedCount: 0 }),
       find: () => ({
-        toArray: async () => [],
+        sort: () => ({
+          limit: () => ({
+            toArray: async () => [],
+          }),
+        }),
       }),
     }),
+    command: async () => ({ ok: 1 }),
   };
-
-  const mockClient = {
-    db: () => mockDb,
-    close: async () => {},
-  } as unknown as MongoClient;
-
+  const mockClient = { db: () => mockDb } as unknown as MongoClient;
   clientPromise = Promise.resolve(mockClient);
-}
-// === REAL DB: Connect ===
-else {
+} else {
   const client = new MongoClient(uri);
-  clientPromise = client.connect().catch((err) => {
-    console.error("MongoDB connection failed:", err);
-    process.exit(1);
-  });
+  clientPromise = client.connect();
 }
 
 export { clientPromise };

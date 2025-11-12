@@ -1,28 +1,39 @@
-// src/app/(app)/api/T-Do/reorder/route.ts
-
+// src/app/api/to-do/reorder/route.ts
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
-import { dbConnect } from "@/lib/db";
-import ToDo from "@/models/ToDo";
+import { clientPromise } from "@/lib/mongo";
 
-export async function POST(req: Request) {
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic"; // ← NO PRERENDER
+
+export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id)
-    return NextResponse.json({ ok: false }, { status: 401 });
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-  const { items } = await req.json();
+  const { items } = await request.json();
+  if (!Array.isArray(items)) {
+    return NextResponse.json({ error: "Invalid data" }, { status: 400 });
+  }
 
-  await dbConnect();
+  try {
+    const client = await clientPromise;
+    const db = client.db("eol_prime_dev");
 
-  const bulkOps = items.map(({ id, order }: { id: string; order: number }) => ({
-    updateOne: {
-      filter: { _id: id, userId: session.user.id },
-      update: { $set: { order } },
-    },
-  }));
+    const bulkOps = items.map((item: any, index: number) => ({
+      updateOne: {
+        filter: { _id: item.id, userId: session.user.id },
+        update: { $set: { order: index } },
+      },
+    }));
 
-  await ToDo.bulkWrite(bulkOps);
+    await db.collection("todo_items").bulkWrite(bulkOps);
 
-  return NextResponse.json({ ok: true });
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("To-do reorder error:", error);
+    return NextResponse.json({ error: "Failed to reorder" }, { status: 500 });
+  }
 }

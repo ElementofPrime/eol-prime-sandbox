@@ -1,59 +1,88 @@
-import { NextRequest } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/authOptions'
-import { dbConnect } from '@/lib/db'
-import JournalEntry from '@/models/JournalEntry'
-import { JournalUpdateSchema } from '@/lib/validation/journal'
-import { json, error } from '@/lib/http'
+// src/app/api/journal/[id]/route.ts
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOptions";
+import { clientPromise } from "@/lib/mongo";
+import { ObjectId } from "mongodb";
 
-// 👇 Next 15 checker expects params to be a Promise
-type RouteContext = { params: Promise<{ id: string }> }
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
-async function ensureOwner(userId: string, id: string) {
-  const doc = await JournalEntry.findById(id)
-  if (!doc) throw new Error('Not found')
-  if (doc.userId !== userId) throw new Error('Forbidden')
-  return doc
+export async function GET(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { id } = params;
+  if (!id || !ObjectId.isValid(id)) {
+    return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+  }
+
+  try {
+    const client = await clientPromise;
+    const db = client.db("eol_prime_dev");
+
+    const entry = await db.collection("journal_entries").findOne({
+      _id: new ObjectId(id),
+      userId: session.user.id,
+    });
+
+    if (!entry) {
+      return NextResponse.json({ error: "Entry not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      id: entry._id.toString(),
+      content: entry.content,
+      date: entry.date,
+    });
+  } catch (error) {
+    console.error("Journal entry error:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch entry" },
+      { status: 500 }
+    );
+  }
 }
 
-export async function GET(_req: NextRequest, context: RouteContext) {
-  const session = await getServerSession(authOptions)
-  if (!session?.user?.id) return error('Unauthorized', 401)
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-  const { id } = await context.params
-  await dbConnect()
-  const doc = await JournalEntry.findOne({ _id: id, userId: session.user.id })
-  if (!doc) return error('Not found', 404)
-  return json({ item: doc })
-}
+  const { id } = params;
+  if (!id || !ObjectId.isValid(id)) {
+    return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+  }
 
-export async function PATCH(req: NextRequest, context: RouteContext) {
-  const session = await getServerSession(authOptions)
-  if (!session?.user?.id) return error('Unauthorized', 401)
+  try {
+    const client = await clientPromise;
+    const db = client.db("eol_prime_dev");
 
-  const { id } = await context.params
-  await dbConnect()
-  const doc = await ensureOwner(session.user.id, id).catch(() => null)
-  if (!doc) return error('Not found', 404)
+    const result = await db.collection("journal_entries").deleteOne({
+      _id: new ObjectId(id),
+      userId: session.user.id,
+    });
 
-  const body = await req.json()
-  const parsed = JournalUpdateSchema.safeParse(body)
-  if (!parsed.success) return error(parsed.error.issues[0]?.message || 'Invalid body', 422)
+    if (result.deletedCount === 0) {
+      return NextResponse.json({ error: "Entry not found" }, { status: 404 });
+    }
 
-  Object.assign(doc, parsed.data)
-  await doc.save()
-  return json({ item: doc })
-}
-
-export async function DELETE(_req: NextRequest, context: RouteContext) {
-  const session = await getServerSession(authOptions)
-  if (!session?.user?.id) return error('Unauthorized', 401)
-
-  const { id } = await context.params
-  await dbConnect()
-  const doc = await ensureOwner(session.user.id, id).catch(() => null)
-  if (!doc) return error('Not found', 404)
-
-  await doc.deleteOne()
-  return json({ ok: true })
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Journal delete error:", error);
+    return NextResponse.json(
+      { error: "Failed to delete entry" },
+      { status: 500 }
+    );
+  }
 }

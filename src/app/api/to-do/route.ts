@@ -1,105 +1,82 @@
-// src/app/(app)/api/to-do/route.ts
+// src/app/api/to-do/route.ts
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
-import { dbConnect } from "@/lib/db";
-import ToDo from "@/models/ToDo";
+import { clientPromise } from "@/lib/mongo";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
-    return NextResponse.json(
-      { ok: false, error: "Unauthorized" },
-      { status: 401 }
-    );
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  await dbConnect();
-  const items = await ToDo.find({ userId: session.user.id })
-    .sort({ done: 1, createdAt: -1 })
-    .limit(100)
-    .lean();
+  try {
+    const client = await clientPromise;
+    const db = client.db("eol_prime_dev");
 
-  return NextResponse.json({ ok: true, items });
+    const items = await db
+      .collection("todo_items")
+      .find({ userId: session.user.id })
+      .sort({ order: 1 })
+      .toArray();
+
+    return NextResponse.json({ items });
+  } catch (error) {
+    console.error("To-do GET error:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch items" },
+      { status: 500 }
+    );
+  }
 }
 
-export async function POST(req: Request) {
+export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
-    return NextResponse.json(
-      { ok: false, error: "Unauthorized" },
-      { status: 401 }
-    );
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { title } = await req.json();
-  if (!title?.trim()) {
-    return NextResponse.json(
-      { ok: false, error: "Title required" },
-      { status: 400 }
-    );
+  const { title } = await request.json();
+  if (!title) {
+    return NextResponse.json({ error: "Title required" }, { status: 400 });
   }
 
-  await dbConnect();
-  const doc = new ToDo({
-    userId: session.user.id,
-    title: title.trim(),
-    done: false,
-    createdAt: new Date(),
-  });
-  await doc.save();
+  try {
+    const client = await clientPromise;
+    const db = client.db("eol_prime_dev");
 
-  return NextResponse.json({ ok: true, item: doc.toObject() }, { status: 201 });
-}
+    const maxOrder = await db
+      .collection("todo_items")
+      .find({ userId: session.user.id })
+      .sort({ order: -1 })
+      .limit(1)
+      .toArray();
 
-export async function PATCH(req: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
+    const order = maxOrder.length > 0 ? maxOrder[0].order + 1 : 0;
+
+    const result = await db.collection("todo_items").insertOne({
+      userId: session.user.id,
+      title,
+      order,
+      completed: false,
+      createdAt: new Date(),
+    });
+
+    return NextResponse.json({
+      id: result.insertedId,
+      title,
+      order,
+      completed: false,
+    });
+  } catch (error) {
+    console.error("To-do POST error:", error);
     return NextResponse.json(
-      { ok: false, error: "Unauthorized" },
-      { status: 401 }
+      { error: "Failed to create item" },
+      { status: 500 }
     );
   }
-
-  const { id, done } = await req.json();
-  if (!id) {
-    return NextResponse.json(
-      { ok: false, error: "id required" },
-      { status: 400 }
-    );
-  }
-
-  await dbConnect();
-  await ToDo.updateOne(
-    { _id: id, userId: session.user.id },
-    { $set: { done: !!done } }
-  );
-
-  return NextResponse.json({ ok: true });
-}
-
-export async function DELETE(req: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
-    return NextResponse.json(
-      { ok: false, error: "Unauthorized" },
-      { status: 401 }
-    );
-  }
-
-  const { id } = await req.json();
-  if (!id) {
-    return NextResponse.json(
-      { ok: false, error: "id required" },
-      { status: 400 }
-    );
-  }
-
-  await dbConnect();
-  await ToDo.deleteOne({ _id: id, userId: session.user.id });
-
-  return NextResponse.json({ ok: true });
 }

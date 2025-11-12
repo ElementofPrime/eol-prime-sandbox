@@ -1,13 +1,71 @@
-import { NextResponse } from 'next/server';
-import { MongoClient } from 'mongodb';
-export const runtime='nodejs'; export const dynamic='force-dynamic'; export const revalidate=0; export const fetchCache='force-no-store';
+// src/app/api/reminders/route.ts
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOptions";
+import { clientPromise } from "@/lib/mongo";
 
-let c: MongoClient | null = null; async function D(){ if(!c){ c=new MongoClient(process.env.MONGODB_URI!); await c.connect(); } return c.db(process.env.MONGODB_DB || 'eol'); }
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
 
-export async function POST(req: Request){
-  const { text, when } = await req.json();
-  if(!text?.trim()) return NextResponse.json({ ok:false, error:'Text required' }, { status:400 });
-  const db = await D(); const doc = { text: text.trim(), when: when ? new Date(when) : null, createdAt:new Date() };
-  const r = await db.collection('reminders').insertOne(doc);
-  return NextResponse.json({ ok:true, item:{ _id:r.insertedId, ...doc } }, { status:201 });
+export async function GET() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const client = await clientPromise;
+    const db = client.db("eol_prime_dev");
+
+    const reminders = await db
+      .collection("reminders")
+      .find({ userId: session.user.id, dismissed: false })
+      .sort({ triggerAt: 1 })
+      .toArray();
+
+    return NextResponse.json({ reminders });
+  } catch (error) {
+    console.error("Reminders GET error:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch reminders" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: Request) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { message, triggerAt } = await request.json();
+  if (!message || !triggerAt) {
+    return NextResponse.json(
+      { error: "Message and triggerAt required" },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const client = await clientPromise;
+    const db = client.db("eol_prime_dev");
+
+    const result = await db.collection("reminders").insertOne({
+      userId: session.user.id,
+      message,
+      triggerAt: new Date(triggerAt),
+      dismissed: false,
+      createdAt: new Date(),
+    });
+
+    return NextResponse.json({ id: result.insertedId, message, triggerAt });
+  } catch (error) {
+    console.error("Reminders POST error:", error);
+    return NextResponse.json(
+      { error: "Failed to create reminder" },
+      { status: 500 }
+    );
+  }
 }

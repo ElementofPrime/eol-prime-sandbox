@@ -22,13 +22,23 @@ const nextConfig: NextConfig = {
       fullUrl: true,
     },
   },
+  // BLOCK PRERENDER FOR ALL API ROUTES
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "/api/:path*",
+      },
+    ];
+  },
 
   // === SECURITY HEADERS ===
   async headers() {
     return [
       {
-        source: "/(.*)",
+        source: "/api/:path*",
         headers: [
+          { key: "Cache-Control", value: "no-store, max-age=0" },
           ...securityHeaders,
           {
             key: "Content-Security-Policy",

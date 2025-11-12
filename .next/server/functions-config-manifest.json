@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "functions": {
+    "/api/auth/[...nextauth]": {},
+    "/api/health": {},
+    "/api/journal/[id]/insights": {},
+    "/api/journal/[id]": {},
+    "/api/journal": {},
+    "/api/journal/search": {},
+    "/api/profile": {},
+    "/api/pulse": {},
+    "/api/reminders": {},
+    "/api/tasks": {},
+    "/api/prime": {},
+    "/api/to-do/reorder": {},
+    "/api/to-do": {}
+  }
+}
