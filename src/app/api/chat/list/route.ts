@@ -1,27 +1,24 @@
+// /src/app/api/chat/list/route.ts
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
-import { isSignedIn } from "@/lib/demo";
+
+// Define chat structure — Prime's memory
+interface Chat {
+  id: string;
+  title: string;
+  createdAt: string;
+  lastMessage?: string;
+}
 
 export async function GET() {
   const session = await getServerSession(authOptions);
-  if (!isSignedIn(session)) {
-    return NextResponse.json({
-      demo: true,
-      items: [
-        {
-          id: "demo-a",
-          title: "Getting started with Prime",
-          preview: "What can you do?",
-        },
-        {
-          id: "demo-b",
-          title: "Journaling prompts",
-          preview: "Help me reflect on today…",
-        },
-      ],
-    });
+  if (!session?.user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  // TODO: return user’s chat threads from DB
-  return NextResponse.json({ demo: false, items: [] });
+
+  // TODO: Fetch from DB — typed!
+  const chats: Chat[] = []; // ← EXPLICIT TYPE
+
+  return NextResponse.json({ chats });
 }
