@@ -1,15 +1,49 @@
 // src/app/api/pulse/route.ts
-import { NextResponse } from "next/server";
-import { ObjectId } from "mongodb";
+import { NextRequest, NextResponse } from "next/server";
+//import { ObjectId } from "mongodb";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
-import { getDb } from "@/lib/mongo";
+import { clientPromise } from "@/lib/mongo";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const revalidate = 0;
-export const fetchCache = "force-no-store";
+//export const revalidate = 0;
+//export const fetchCache = "force-no-store";
+export async function GET(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
+  try {
+    const client = await clientPromise;
+    const db = client.db("eol_prime_dev"); // Use real DB in prod
+    const entries = await db
+      .collection("journal_entries")
+      .find({ userId: session.user.id })
+      .sort({ date: -1 })
+      .limit(5)
+      .toArray();
+
+    // Mock insight if no entries or demo mode
+    const insight =
+      entries.length > 0
+        ? { mood: "focused", clarity_score: 8 }
+        : { mood: "neutral", clarity_score: 5 };
+
+    return NextResponse.json({
+      health: "online",
+      insight,
+      pulse: Math.sin(Date.now() / 10000) * 30 + 70,
+    });
+  } catch (error) {
+    console.error("Pulse API error:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
 /** Simple journal sentiment + nudge prompt */
 function analyze(t: string) {
   const txt = (t || "").toLowerCase();
@@ -111,71 +145,71 @@ function toneFromText(text: string) {
  * - Demo payload when not signed in
  * - Live pulse from latest journal insight when signed in (stubbed)
  */
-export async function GET() {
-  const session = await getServerSession(authOptions);
-  const isAuthed = !!session?.user;
-  if (session) {
-    return NextResponse.json({
-      demo: true,
-      pulse: {
-        mood: "demo",
-        energy: 0.72,
-        ts: Date.now(),
-        hint: "Sign in for live Prime Pulse",
-      },
-    });
-  }
+//export async function GET() {
+const session = await getServerSession(authOptions);
+const isAuthed = !!session?.user;
+// if (session) {
+//  return NextResponse.json({
+//   demo: true,
+//   pulse: {
+//     mood: "demo",
+//     energy: 0.72,
+//     ts: Date.now(),
+//     hint: "Sign in for live Prime Pulse",
+//    },
+// });
+//}
 
-  const userId = (session!.user as any).id as string;
-  const db = await getDb();
-  const health = isAuthed ? 85 : 60;
+const userId = (session!.user as any).id as string;
+//const db = await getDb();
+const health = isAuthed ? 85 : 60;
 
-  // Pull recent entries for streak/trend calc
-  const entries = await db
-    .collection("journalentries")
-    .find({ userId })
-    .sort({ createdAt: -1 })
-    .limit(30)
-    .toArray();
+// Pull recent entries for streak/trend calc
+//const entries = await db
+// .collection("journalentries")
+// .find({ userId })
+//.sort({ createdAt: -1 })
+// .limit(30)
+// .toArray();
 
-  const streak = calculateStreak(entries);
-  const moodHistory = entries
-    .slice(0, 7)
-    .map((e) => analyze(e.content || "").mood);
-  const trend = getTrend(moodHistory);
+//const streak = calculateStreak(entries);
+//const moodHistory = entries
+// .slice(0, 7)
+// .map((e) => analyze(e.content || "").mood);
+//const trend = getTrend(moodHistory);
 
-  const latest = entries[0];
-  let a = {
-    mood: "neutral",
-    sentimentScore: 0,
-    prompt: "What matters to you most right now?",
-  };
+// const latest = entries[0];
+// let a = {
+// mood: "neutral",
+//  sentimentScore: 0,
+//  prompt: "What matters to you most right now?",
+//};
 
-  if (latest) a = analyze(latest.content || "");
+//if (latest) a = analyze(latest.content || "");
 
-  const prompt = await generateElementPrompt({
-    mood: a.mood,
-    streak,
-    trend,
-    userId,
-    lastAction: (entries[0] as any)?.tags?.[0],
-  });
-  return NextResponse.json({ health, isAuthed });
+// const prompt = await generateElementPrompt({
+//   mood: a.mood,
+//    streak,
+//    trend,
+//    userId,
+//   lastAction: (entries[0] as any)?.tags?.[0],
+// });
+// return NextResponse.json({ health, isAuthed });
 
-  return NextResponse.json({
-    demo: false,
-    pulse: {
-      mood: a.mood,
-      strength: norm(a.sentimentScore),
-      streak,
-      trend,
-      prompt,
-      aura: mapMoodToAura(a.mood),
-      glowIntensity: norm(a.sentimentScore),
-      ts: Date.now(),
-    },
-  });
-}
+// return NextResponse.json({
+//   demo: false,
+//   pulse: {
+//     mood: a.mood,
+//     strength: norm(a.sentimentScore),
+//    streak,
+//    trend,
+//     prompt,
+//     aura: mapMoodToAura(a.mood),
+//    glowIntensity: norm(a.sentimentScore),
+//    ts: Date.now(),
+//   },
+// });
+//}
 
 /**
  * POST /api/pulse
@@ -201,45 +235,45 @@ export async function POST(req: Request) {
         { ok: false, error: "Unauthorized" },
         { status: 401 }
       );
-    }
-    const userId = (session.user as any).id as string;
-    const db = await getDb();
+      //}
+      // const userId = (session.user as any).id as string;
+      //const db = await getDb();
 
-    // Fetch target entry: explicit by id, else latest
-    const entry = entryId
-      ? await db
-          .collection("journalentries")
-          .findOne({ _id: new ObjectId(entryId), userId })
-      : await db
-          .collection("journalentries")
-          .find({ userId })
-          .sort({ createdAt: -1 })
-          .limit(1)
-          .next();
+      // Fetch target entry: explicit by id, else latest
+      // const entry = entryId
+      //   ? await db
+      //      .collection("journalentries")
+      //      .findOne({ _id: new ObjectId(entryId), userId })
+      //    : await db
+      //        .collection("journalentries")
+      //        .find({ userId })
+      //        .sort({ createdAt: -1 })
+      //        .limit(1)
+      //        .next();
 
-    if (!entry) {
+      //  if (!entry) {
       return NextResponse.json(
         { ok: false, error: "No journal entry found" },
         { status: 404 }
       );
     }
 
-    const a = analyze(entry.content || "");
+    // const a = analyze(entry.content || "");
     const ins = {
-      entryId: entry._id,
+      //  entryId: entry._id,
       userId,
-      mood: a.mood,
-      sentimentScore: a.sentimentScore,
+      // mood: a.mood,
+      // sentimentScore: a.sentimentScore,
       topics: [] as string[],
       extract: {} as Record<string, unknown>,
-      primePrompts: [a.prompt],
+      // primePrompts: [a.prompt],
       primeSuggestions: [] as string[],
       createdAt: new Date(),
     };
 
-    const r = await db.collection("primeinsights").insertOne(ins);
+    // const r = await db.collection("primeinsights").insertOne(ins);
     return NextResponse.json(
-      { ok: true, insight: { _id: r.insertedId, ...ins } },
+      // { ok: true, insight: { _id: r.insertedId, ...ins } },
       { status: 201 }
     );
   } catch (err) {
