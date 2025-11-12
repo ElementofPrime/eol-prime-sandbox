@@ -4,7 +4,6 @@ import { ObjectId } from "mongodb";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { getDb } from "@/lib/mongo";
-import { isSignedIn } from "@/lib/demo";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -113,73 +112,69 @@ function toneFromText(text: string) {
  * - Live pulse from latest journal insight when signed in (stubbed)
  */
 export async function GET() {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!isSignedIn(session)) {
-      return NextResponse.json({
-        demo: true,
-        pulse: {
-          mood: "demo",
-          energy: 0.72,
-          ts: Date.now(),
-          hint: "Sign in for live Prime Pulse",
-        },
-      });
-    }
-
-    const userId = (session!.user as any).id as string;
-    const db = await getDb();
-
-    // Pull recent entries for streak/trend calc
-    const entries = await db
-      .collection("journalentries")
-      .find({ userId })
-      .sort({ createdAt: -1 })
-      .limit(30)
-      .toArray();
-
-    const streak = calculateStreak(entries);
-    const moodHistory = entries
-      .slice(0, 7)
-      .map((e) => analyze(e.content || "").mood);
-    const trend = getTrend(moodHistory);
-
-    const latest = entries[0];
-    let a = {
-      mood: "neutral",
-      sentimentScore: 0,
-      prompt: "What matters to you most right now?",
-    };
-
-    if (latest) a = analyze(latest.content || "");
-
-    const prompt = await generateElementPrompt({
-      mood: a.mood,
-      streak,
-      trend,
-      userId,
-      lastAction: (entries[0] as any)?.tags?.[0],
-    });
-
+  const session = await getServerSession(authOptions);
+  const isAuthed = !!session?.user;
+  if (session) {
     return NextResponse.json({
-      demo: false,
+      demo: true,
       pulse: {
-        mood: a.mood,
-        strength: norm(a.sentimentScore),
-        streak,
-        trend,
-        prompt,
-        aura: mapMoodToAura(a.mood),
-        glowIntensity: norm(a.sentimentScore),
+        mood: "demo",
+        energy: 0.72,
         ts: Date.now(),
+        hint: "Sign in for live Prime Pulse",
       },
     });
-  } catch (err) {
-    return NextResponse.json(
-      { ok: false, error: "Server error" },
-      { status: 500 }
-    );
   }
+
+  const userId = (session!.user as any).id as string;
+  const db = await getDb();
+  const health = isAuthed ? 85 : 60;
+
+  // Pull recent entries for streak/trend calc
+  const entries = await db
+    .collection("journalentries")
+    .find({ userId })
+    .sort({ createdAt: -1 })
+    .limit(30)
+    .toArray();
+
+  const streak = calculateStreak(entries);
+  const moodHistory = entries
+    .slice(0, 7)
+    .map((e) => analyze(e.content || "").mood);
+  const trend = getTrend(moodHistory);
+
+  const latest = entries[0];
+  let a = {
+    mood: "neutral",
+    sentimentScore: 0,
+    prompt: "What matters to you most right now?",
+  };
+
+  if (latest) a = analyze(latest.content || "");
+
+  const prompt = await generateElementPrompt({
+    mood: a.mood,
+    streak,
+    trend,
+    userId,
+    lastAction: (entries[0] as any)?.tags?.[0],
+  });
+  return NextResponse.json({ health, isAuthed });
+
+  return NextResponse.json({
+    demo: false,
+    pulse: {
+      mood: a.mood,
+      strength: norm(a.sentimentScore),
+      streak,
+      trend,
+      prompt,
+      aura: mapMoodToAura(a.mood),
+      glowIntensity: norm(a.sentimentScore),
+      ts: Date.now(),
+    },
+  });
 }
 
 /**
