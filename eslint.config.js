@@ -4,6 +4,7 @@ import tsParser from "@typescript-eslint/parser";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import next from "eslint-plugin-next";
+import nextPlugin from "eslint-plugin-next";
 
 // Export the ESLint configuration array
 export default [
@@ -17,6 +18,7 @@ export default [
   reactHooks.configs.recommended,
   // Next.js recommended rules
   next.configs.recommended,
+  nextPlugin.configs.recommended,
   {
     // Apply these settings to all JS/TS files
     files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
