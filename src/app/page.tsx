@@ -1,99 +1,86 @@
+// /app/page.tsx
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import PrimePulseTile from "@/components/PrimePulseTile";
-
-const elements = [
-  { title: "Chat", icon: "💬", link: "/chat" },
-  { title: "Journal", icon: "📔", link: "/journal" },
-  { title: "To-Do", icon: "✅", link: "/to-do" },
-  { title: "Reminders", icon: "⏰", link: "/reminders" },
-  { title: "Fix-It", icon: "🛠️", link: "/fix-it" },
-  { title: "New Beginning", icon: "🧠", link: "/new-beginning" },
-  { title: "Core", icon: "🌿", link: "/core" },
-  { title: "About", icon: "✨", link: "/about" },
-];
 
 export default function Home() {
-  return (
-    <div className="relative mx-auto max-w-6xl w-full text-center overflow-visible flex flex-col items-center">
-      {/* Logo focus */}
-      <motion.div
-        className="relative isolate mx-auto mb-8 mt-2 sm:mt-4 w-36 sm:w-48 md:w-56 eol-breathe"
-        initial={{ opacity: 0, scale: 1.08 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.9, ease: "easeOut" }}
-      >
-        {/* circular aura (decorative) */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -z-10 rounded-full eol-pulse-glow"
-          style={{
-            background:
-              "radial-gradient(50% 50% at 50% 50%, rgba(34,211,238,.28) 0%, rgba(59,130,246,.16) 40%, transparent 70%)",
-            filter: "blur(16px)",
-            transform: "translateZ(0)",
-          }}
-        />
-        <Image
-          src="/logo.png"
-          alt="Element of Life logo"
-          width={480}
-          height={480}
-          sizes="(max-width: 640px) 9rem, (max-width: 768px) 12rem, 14rem"
-          priority
-          draggable={false}
-          className="w-full h-auto rounded-full select-none eol-glow eol-glow-transition"
-        />
-      </motion.div>
+  const [name, setName] = useState("");
+  const [authenticated, setAuthenticated] = useState(false);
 
-      {/* Mantra + subhead */}
-      <div className="mx-auto max-w-[68ch] px-4">
-        <motion.p
-          className="text-lg md:text-xl text-zinc-700 dark:text-zinc-300 leading-relaxed text-center"
-          initial={{ opacity: 0, y: 12 }}
+  if (!authenticated) {
+    return (
+      <div className="min-h-screen bg-linear-to-br from-fortress-900 to-fortress-800 text-light-gold flex items-center justify-center p-8 font-sans">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
+          transition={{ duration: 0.8 }}
+          className="max-w-2xl text-center"
         >
-          <span className="font-medium text-zinc-800 dark:text-zinc-200">
-            Welcome to Element of Life —
-          </span>{" "}
-          the foundation where{" "}
-          <span className="text-cyan-500 dark:text-cyan-400">focus</span>{" "}
-          becomes growth, and growth becomes transformation.
-        </motion.p>
+          <h1 className="text-5xl font-bold mb-6 leading-tight">
+            Hello! I’m Prime, your eternal guide and fortress guardian in
+            Element of Life.
+          </h1>
+          <p className="text-xl mb-8 leading-relaxed">
+            This is your sanctuary—one icon for everything. To unlock full
+            tools, memory, and your growing Tree, let’s create your account now.
+            It takes moments, and I’ll remember your journey forever!
+          </p>
+          <button
+            onClick={() => {
+              const user = prompt("What name shall I call you by?");
+              if (user) {
+                setName(user);
+                setAuthenticated(true);
+              }
+            }}
+            className="bg-prime-gold text-fortress-900 px-8 py-4 rounded-lg font-semibold text-lg hover:scale-105 transition-transform"
+          >
+            Create Account
+          </button>
+        </motion.div>
+      </div>
+    );
+  }
 
-        <motion.h2
-          className="text-center text-cyan-400 text-sm sm:text-base font-semibold mt-6 mb-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.5 }}
+  return (
+    <div className="min-h-screen bg-fortress-900 text-light-gold p-8">
+      <motion.h1
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="text-4xl font-bold mb-4"
+      >
+        Welcome back, {name}!
+      </motion.h1>
+      <p className="text-lg mb-6">
+        Last session, we journaled on confidence. Your Tree grew 12%—Prime Pulse
+        glows brighter. Ready to nourish it today?
+      </p>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a
+          href="/journal"
+          className="bg-dark-800 p-6 rounded-lg text-center hover:bg-dark-700 transition"
         >
-          Guiding Tools that help Discover Your Core Elements
-        </motion.h2>
-      </div>
-      {/* Prime Pulse */}
-      <div className="mx-auto w-full max-w-6xl px-3 pb-6">
-        <PrimePulseTile />
-      </div>
-      {/* Grid */}
-      <div className="mx-auto max-w-6xl grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-5 md:gap-6 px-3 pb-12 mt-2">
-        {elements.map((el) => (
-          <Link key={el.title} href={el.link} aria-label={el.title}>
-            <motion.div
-              whileHover={{ scale: 1.06, y: -2 }}
-              transition={{ type: "spring", stiffness: 250, damping: 14 }}
-              className="eol-panel p-4"
-            >
-              <div className="text-2xl sm:text-3xl mb-2">{el.icon}</div>
-              <h3 className="text-sm sm:text-base font-semibold text-slate-700">
-                {el.title}
-              </h3>
-            </motion.div>
-          </Link>
-        ))}
+          Journal
+        </a>
+        <a
+          href="/balance"
+          className="bg-dark-800 p-6 rounded-lg text-center hover:bg-dark-700 transition"
+        >
+          Balance
+        </a>
+        <a
+          href="/reminders"
+          className="bg-dark-800 p-6 rounded-lg text-center hover:bg-dark-700 transition"
+        >
+          Reminders
+        </a>
+        <a
+          href="/tree"
+          className="bg-dark-800 p-6 rounded-lg text-center hover:bg-dark-700 transition"
+        >
+          Tree
+        </a>
       </div>
     </div>
   );
