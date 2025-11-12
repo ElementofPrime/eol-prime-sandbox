@@ -1,20 +1,20 @@
 // eslint.config.js
 import js from "@eslint/js";
-import tsEslint from "typescript-eslint";
+import { parser as tsParser, plugin as tsPlugin } from "typescript-eslint";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import nextPlugin from "eslint-plugin-next";
 
 export default [
-  // Base configs
+  // Base recommended configs
   js.configs.recommended,
-  ...tsEslint.configs.recommended,
+  ...tsPlugin.configs.recommended,
   react.configs.recommended,
   reactHooks.configs.recommended,
   nextPlugin.configs.recommended,
   nextPlugin.configs["core-web-vitals"],
 
-  // Custom config
+  // Custom project config
   {
     files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
     ignores: [
@@ -28,7 +28,7 @@ export default [
       "next-env.d.ts",
     ],
     languageOptions: {
-      parser: tsEslint.parser,
+      parser: tsParser,
       parserOptions: {
         ecmaFeatures: { jsx: true },
         project: "./tsconfig.json",
@@ -38,7 +38,7 @@ export default [
       },
     },
     plugins: {
-      "@typescript-eslint": tsEslint.plugin,
+      "@typescript-eslint": tsPlugin,
       react,
       "react-hooks": reactHooks,
       "@next/next": nextPlugin,
