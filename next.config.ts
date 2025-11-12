@@ -16,16 +16,11 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  // === TOP-LEVEL LOGGING (fetches) ===
+  // === TOP-LEVEL LOGGING: FULL FETCH URLS ===
   logging: {
     fetches: {
       fullUrl: true,
     },
-  },
-
-  // === EXPERIMENTAL: VERBOSE LOGS ===
-  experimental: {
-    logging: "verbose" as const, // ← STRING, not object
   },
 
   // === SECURITY HEADERS ===
