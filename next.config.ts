@@ -1,12 +1,11 @@
+// next.config.ts (or .js)
 import type { NextConfig } from "next";
 
 const securityHeaders = [
-  // Force HTTPS for 6 months (adjust if needed)
   {
     key: "Strict-Transport-Security",
-    value: "max-age=15552000; includeSubDomains; preload",
+    value: "max-age=31536000; includeSubDomains; preload",
   },
-  // Basic hardening (tune CSP as you add domains)
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
@@ -17,6 +16,19 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // === TOP-LEVEL LOGGING (fetches) ===
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
+
+  // === EXPERIMENTAL: VERBOSE LOGS ===
+  experimental: {
+    logging: "verbose" as const, // ← STRING, not object
+  },
+
+  // === SECURITY HEADERS ===
   async headers() {
     return [
       {
@@ -25,8 +37,18 @@ const nextConfig: NextConfig = {
           ...securityHeaders,
           {
             key: "Content-Security-Policy",
-            value:
-              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://api.x.ai;",
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: blob:",
+              "font-src 'self'",
+              "connect-src 'self' https://api.x.ai https://*.vercel.app wss:",
+              "frame-src 'self'",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self'",
+            ].join("; "),
           },
         ],
       },
