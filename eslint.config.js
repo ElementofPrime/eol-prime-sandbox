@@ -28,7 +28,6 @@ export default [
     rules: {
       "react-hooks/rules-of-hooks": "error",
       "@next/next/no-server-import-in-page": "error",
-      "next/no-server-import-in-page": "error",
     },
   },
 ];
