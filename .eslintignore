@@ -1,8 +1,0 @@
-node_modules/
-.next/
-out/
-dist/
-coverage/
-public/
-.next/types/**
-next-env.d.ts
