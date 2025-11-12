@@ -1,32 +1,45 @@
-import { MongoClient, Db } from "mongodb";
+// src/lib/mongo.ts
+import { MongoClient } from "mongodb";
 
-const uri = process.env.MONGODB_URI!;
-if (!uri) throw new Error("MONGODB_URI is not set");
+const uri = process.env.MONGODB_URI;
 
-let _client: MongoClient;
-let _clientPromise: Promise<MongoClient>;
-
-declare global {
-  // eslint-disable-next-line no-var
-  var _eolMongoPromise: Promise<MongoClient> | undefined;
+if (!uri) {
+  console.log("MONGODB_URI not set — running in DEMO MODE (in-memory mock)");
 }
 
-if (process.env.NODE_ENV === "development") {
-  if (!global._eolMongoPromise) {
-    _client = new MongoClient(uri);
-    global._eolMongoPromise = _client.connect();
-  }
-  _clientPromise = global._eolMongoPromise!;
-} else {
-  _client = new MongoClient(uri);
-  _clientPromise = _client.connect();
+let clientPromise: Promise<MongoClient>;
+
+// === DEMO MODE: In-memory mock ===
+if (!uri) {
+  const mockDb = {
+    collection: () => ({
+      findOne: async () => null,
+      insertOne: async (doc: any) => ({
+        insertedId: `mock-${Date.now()}`,
+        ...doc,
+      }),
+      updateOne: async () => ({ modifiedCount: 1 }),
+      deleteOne: async () => ({ deletedCount: 1 }),
+      find: () => ({
+        toArray: async () => [],
+      }),
+    }),
+  };
+
+  const mockClient = {
+    db: () => mockDb,
+    close: async () => {},
+  } as unknown as MongoClient;
+
+  clientPromise = Promise.resolve(mockClient);
+}
+// === REAL DB: Connect ===
+else {
+  const client = new MongoClient(uri);
+  clientPromise = client.connect().catch((err) => {
+    console.error("MongoDB connection failed:", err);
+    process.exit(1);
+  });
 }
 
-/** For NextAuth adapter */
-export const mongoClientPromise: Promise<MongoClient> = _clientPromise;
-
-/** For your app/api routes */
-export async function getDb(dbName = "eol"): Promise<Db> {
-  const c = await _clientPromise;
-  return c.db(dbName);
-}
+export { clientPromise };

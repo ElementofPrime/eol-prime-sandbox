@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 16, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/middleware.ts"],"sourcesContent":["export { default } from \"next-auth/middleware\";\r\n\r\nexport const config = {\r\n  matcher: [\"/journal\", \"/To-Do\", \"/reminders\", \"/core\"],\r\n};\r\n"],"names":[],"mappings":";;;;AAAA;;AAEO,MAAM,SAAS;IACpB,SAAS;QAAC;QAAY;QAAU;QAAc;KAAQ;AACxD"}}]
+}
