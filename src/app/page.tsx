@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import PrimePulse from "@/components/PrimePulse";
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -80,6 +81,7 @@ export default function Home() {
           className="bg-dark-800 p-6 rounded-lg text-center hover:bg-dark-700 transition"
         >
           Tree
+          <PrimePulse health={85} />
         </a>
       </div>
     </div>
