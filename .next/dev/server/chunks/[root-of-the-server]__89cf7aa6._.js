@@ -279,7 +279,6 @@ const __TURBOPACK__default__export__ = (0, __TURBOPACK__imported__module__$5b$pr
 "use strict";
 
 // src/app/api/pulse/route.ts
-//import { ObjectId } from "mongodb";
 __turbopack_context__.s([
     "GET",
     ()=>GET,
@@ -298,26 +297,27 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mongo$2e$ts__$
 ;
 const runtime = "nodejs";
 const dynamic = "force-dynamic";
-async function GET(request) {
-    // ← Use `request` param instead of `headers()`
-    const userAgent = request.headers.get("user-agent") ?? "unknown";
+async function GET() {
     const session = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["getServerSession"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$authOptions$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["authOptions"]);
-    if (!session?.user?.id) {
+    // ALLOW DEMO MODE
+    if (!session?.user) {
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: "Unauthorized"
-        }, {
-            status: 401
+            health: "online",
+            insight: {
+                mood: "demo",
+                clarity_score: 3
+            },
+            pulse: 50
         });
     }
     try {
         const client = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mongo$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["clientPromise"];
-        const db = client.db("eol_prime_dev"); // Use real DB in prod
+        const db = client.db("eol_prime_dev");
         const entries = await db.collection("journal_entries").find({
             userId: session.user.id
         }).sort({
             date: -1
         }).limit(5).toArray();
-        // Mock insight if no entries or demo mode
         const insight = entries.length > 0 ? {
             mood: "focused",
             clarity_score: 8
