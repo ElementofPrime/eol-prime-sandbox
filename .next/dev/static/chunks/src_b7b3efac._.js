@@ -331,7 +331,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$swr$2f$dist$2f$index$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/swr/dist/index/index.mjs [app-client] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$EOLButton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/EOLButton.tsx [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ThemeToggle$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ThemeToggle.tsx [app-client] (ecmascript)"); // ← add this
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ThemeToggle$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ThemeToggle.tsx [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
@@ -428,6 +428,11 @@ function NavBar() {
                             {
                                 href: "/about",
                                 label: "About"
+                            },
+                            // TREE OF LIFE — ADDED
+                            {
+                                href: "/tree-of-life",
+                                label: "Tree of Life"
                             }
                         ].map(({ href, label })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(NavPill, {
                                 href: href,
@@ -435,7 +440,7 @@ function NavBar() {
                                 children: label
                             }, href, false, {
                                 fileName: "[project]/src/components/NavBar.tsx",
-                                lineNumber: 81,
+                                lineNumber: 83,
                                 columnNumber: 15
                             }, this))
                     }, void 0, false, {
@@ -448,10 +453,9 @@ function NavBar() {
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ThemeToggle$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                                 fileName: "[project]/src/components/NavBar.tsx",
-                                lineNumber: 89,
+                                lineNumber: 91,
                                 columnNumber: 13
                             }, this),
-                            " ",
                             displayName && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 className: "hidden lg:block text-sm font-medium text-cyan-400",
                                 children: [
@@ -460,7 +464,7 @@ function NavBar() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/NavBar.tsx",
-                                lineNumber: 91,
+                                lineNumber: 93,
                                 columnNumber: 15
                             }, this),
                             !session ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$EOLButton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["EOLButton"], {
@@ -469,7 +473,7 @@ function NavBar() {
                                 children: "Sign In"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/NavBar.tsx",
-                                lineNumber: 96,
+                                lineNumber: 98,
                                 columnNumber: 15
                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "flex items-center gap-3",
@@ -480,7 +484,7 @@ function NavBar() {
                                         children: "Settings"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/NavBar.tsx",
-                                        lineNumber: 101,
+                                        lineNumber: 103,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -489,19 +493,19 @@ function NavBar() {
                                         children: "Sign Out"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/NavBar.tsx",
-                                        lineNumber: 104,
+                                        lineNumber: 106,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/NavBar.tsx",
-                                lineNumber: 100,
+                                lineNumber: 102,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/NavBar.tsx",
-                        lineNumber: 88,
+                        lineNumber: 90,
                         columnNumber: 11
                     }, this)
                 ]

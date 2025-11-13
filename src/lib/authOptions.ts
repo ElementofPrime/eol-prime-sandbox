@@ -1,42 +1,49 @@
 // src/lib/authOptions.ts
-import { NextAuthOptions } from "next-auth";
+import NextAuth, { type AuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 import EmailProvider from "next-auth/providers/email";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import { clientPromise } from "@/lib/mongo";
 
-export const authOptions: NextAuthOptions = {
+const isDev = process.env.NODE_ENV === "development";
+const hasSMTP = !!process.env.EMAIL_SERVER;
+
+export const authOptions: AuthOptions = {
   adapter: MongoDBAdapter(clientPromise),
-
-  // Use DB sessions (MongoDBAdapter will manage the sessions collection)
-  session: { strategy: "database" },
-
   providers: [
-    EmailProvider({
-      server: {
-        host: process.env.EMAIL_SERVER_HOST!,
-        port: Number(process.env.EMAIL_SERVER_PORT!),
-        auth: {
-          user: process.env.EMAIL_SERVER_USER!,
-          pass: process.env.EMAIL_SERVER_PASSWORD!,
-        },
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
-      from: process.env.EMAIL_FROM!,
-      // Magic link validity (seconds). Adjust if you want longer links.
-      maxAge: 10 * 60,
+      async authorize(credentials) {
+        if (!process.env.MONGODB_URI) {
+          if (credentials?.email) {
+            return { id: "demo", name: "Demo User", email: credentials.email };
+          }
+          return null;
+        }
+        return null;
+      },
     }),
+    ...(hasSMTP
+      ? [
+          EmailProvider({
+            server: process.env.EMAIL_SERVER,
+            from: process.env.EMAIL_FROM,
+          }),
+        ]
+      : []),
   ],
-
   pages: {
-    signIn: "/signin", // OK if you have this page; otherwise remove
-    verifyRequest: "/signin/verify",
+    signIn: "/signin",
+    error: "/signin",
   },
-
-  callbacks: {
-    session: ({ session, token }) => {
-      if (session.user && token.sub) {
-        session.user.id = token.sub;
-      }
-      return session;
-    },
+  session: {
+    strategy: "jwt" as const, // ← EXPLICIT
   },
+  secret: process.env.NEXTAUTH_SECRET,
 };
+
+export default NextAuth(authOptions);

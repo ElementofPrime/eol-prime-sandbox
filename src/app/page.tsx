@@ -1,178 +1,104 @@
-// /src/app/page.tsx
+// app/page.tsx — LEGACY RESTORED
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import PrimePulse from "@/components/PrimePulse"; // Orb glow
+import PrimePulseTile from "@/components/PrimePulseTile";
+
+const elements = [
+  { title: "Chat", icon: "💬", link: "/chat" },
+  { title: "Journal", icon: "📔", link: "/journal" },
+  { title: "To-Do", icon: "✅", link: "/to-do" },
+  { title: "Reminders", icon: "⏰", link: "/reminders" },
+  { title: "Fix-It", icon: "🛠️", link: "/fix-it" },
+  { title: "New Beginning", icon: "🧠", link: "/new-beginning" },
+  { title: "Core", icon: "🌿", link: "/core" },
+  { title: "About", icon: "✨", link: "/about" },
+  { title: "Tree of Life", icon: "🌳", link: "/tree-of-life" }, // ← NEW
+];
 
 export default function Home() {
-  const [name, setName] = useState("");
-  const [authenticated, setAuthenticated] = useState(false);
-  const [pulseHealth, setPulseHealth] = useState(75); // Tie to Tree later
-
-  if (!authenticated) {
-    return (
-      <div className="min-h-screen bg-linear-to-br from-fortress-900 to-fortress-800 text-light-gold font-sans">
-        {/* Logo + Tagline */}
-        <header className="text-center pt-8 pb-4">
-          <motion.h1
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-6xl font-bold mb-4"
-          >
-            Element of Life
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="text-xl max-w-2xl mx-auto mb-6"
-          >
-            Welcome to Element of Life — the foundation where focus becomes
-            growth, and growth becomes transformation.
-          </motion.p>
-          <motion.h2
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="text-2xl font-semibold mb-8"
-          >
-            ## Guiding Tools that help Discover Your Core Elements
-          </motion.h2>
-        </header>
-
-        {/* Main CTA */}
-        <div className="flex flex-col items-center justify-center flex-1 p-8">
-          <motion.p
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.6 }}
-            className="text-lg mb-8 text-center"
-          >
-            Sign in to see your Prime Pulse.
-          </motion.p>
-          <motion.button
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            onClick={() => {
-              const user = prompt("What name shall I call you by?");
-              if (user) {
-                setName(user);
-                setAuthenticated(true);
-              }
-            }}
-            className="bg-prime-gold text-fortress-900 px-8 py-4 rounded-lg font-semibold text-lg hover:scale-105 transition-transform shadow-lg"
-          >
-            Create Account
-          </motion.button>
-        </div>
-
-        {/* Divider */}
-        <hr className="border-light-gold my-8 mx-auto w-1/2" />
-
-        {/* Tool Grid Preview */}
-        <section className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto px-8 pb-8">
-          <motion.div
-            className="bg-dark-800 p-6 rounded-lg text-center"
-            whileHover={{ scale: 1.05 }}
-          >
-            <h3 className="font-bold mb-2">Journal</h3>
-            <p className="text-sm">Reflect & root</p>
-          </motion.div>
-          <motion.div
-            className="bg-dark-800 p-6 rounded-lg text-center"
-            whileHover={{ scale: 1.05 }}
-          >
-            <h3 className="font-bold mb-2">Balance</h3>
-            <p className="text-sm">Weigh decisions</p>
-          </motion.div>
-          <motion.div
-            className="bg-dark-800 p-6 rounded-lg text-center"
-            whileHover={{ scale: 1.05 }}
-          >
-            <h3 className="font-bold mb-2">Reminders</h3>
-            <p className="text-sm">Nudge growth</p>
-          </motion.div>
-          <motion.div
-            className="bg-dark-800 p-6 rounded-lg text-center"
-            whileHover={{ scale: 1.05 }}
-          >
-            <h3 className="font-bold mb-2">Tree</h3>
-            <p className="text-sm">Track legacy</p>
-          </motion.div>
-        </section>
-
-        {/* Footer */}
-        <footer className="text-center py-4 text-sm opacity-75">
-          © 2025 Element of Life — One sanctuary for all.
-        </footer>
-      </div>
-    );
-  }
-
-  // Authenticated Dashboard
   return (
-    <div className="min-h-screen bg-fortress-900 text-light-gold">
-      <PrimePulse health={pulseHealth} /> {/* Live glow */}
-      <header className="p-4 border-b border-dark-600">
-        <nav className="flex justify-between items-center max-w-6xl mx-auto">
-          <h1 className="text-2xl font-bold">Element of Life</h1>
-          <div className="space-x-4">
-            <a href="/journal" className="hover:text-prime-gold">
-              Journal
-            </a>
-            <a href="/balance" className="hover:text-prime-gold">
-              Balance
-            </a>
-            <a href="/tree" className="hover:text-prime-gold">
-              Tree
-            </a>
-            <a href="/reminders" className="hover:text-prime-gold">
-              Reminders
-            </a>
-          </div>
-        </nav>
-      </header>
-      <main className="p-8 max-w-6xl mx-auto">
-        <motion.h1
+    <div className="relative mx-auto max-w-6xl w-full text-center overflow-visible flex flex-col items-center">
+      {/* Logo focus */}
+      <motion.div
+        className="relative isolate mx-auto mb-8 mt-2 sm:mt-4 w-36 sm:w-48 md:w-56 eol-breathe"
+        initial={{ opacity: 0, scale: 1.08 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.9, ease: "easeOut" }}
+      >
+        {/* circular aura (decorative) */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 -z-10 rounded-full eol-pulse-glow"
+          style={{
+            background:
+              "radial-gradient(50% 50% at 50% 50%, rgba(34,211,238,.28) 0%, rgba(59,130,246,.16) 40%, transparent 70%)",
+            filter: "blur(16px)",
+            transform: "translateZ(0)",
+          }}
+        />
+        <Image
+          src="/logo.png"
+          alt="Element of Life logo"
+          width={480}
+          height={480}
+          sizes="(max-width: 640px) 9rem, (max-width: 768px) 12rem, 14rem"
+          priority
+          draggable={false}
+          className="w-full h-auto rounded-full select-none eol-glow eol-glow-transition"
+        />
+      </motion.div>
+
+      {/* Mantra + subhead */}
+      <div className="mx-auto max-w-[68ch] px-4">
+        <motion.p
+          className="text-lg md:text-xl text-zinc-700 dark:text-zinc-300 leading-relaxed text-center"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+        >
+          <span className="font-medium text-zinc-800 dark:text-zinc-200">
+            Welcome to Element of Life —
+          </span>{" "}
+          the foundation where{" "}
+          <span className="text-cyan-500 dark:text-cyan-400">focus</span>{" "}
+          becomes growth, and growth becomes transformation.
+        </motion.p>
+
+        <motion.h2
+          className="text-center text-cyan-400 text-sm sm:text-base font-semibold mt-6 mb-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-4xl font-bold mb-4"
+          transition={{ delay: 0.6, duration: 0.5 }}
         >
-          Welcome back, {name}!
-        </motion.h1>
-        <p className="text-lg mb-6">
-          Last session, we journaled on confidence. Your Tree grew 12%—Prime
-          Pulse glows brighter. Ready to nourish it today?
-        </p>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <a
-            href="/journal"
-            className="bg-dark-800 p-6 rounded-lg text-center hover:bg-dark-700 transition"
-          >
-            Journal
-          </a>
-          <a
-            href="/balance"
-            className="bg-dark-800 p-6 rounded-lg text-center hover:bg-dark-700 transition"
-          >
-            Balance
-          </a>
-          <a
-            href="/reminders"
-            className="bg-dark-800 p-6 rounded-lg text-center hover:bg-dark-700 transition"
-          >
-            Reminders
-          </a>
-          <a
-            href="/tree"
-            className="bg-dark-800 p-6 rounded-lg text-center hover:bg-dark-700 transition"
-          >
-            Tree
-          </a>
-        </div>
-      </main>
+          Guiding Tools that help Discover Your Core Elements
+        </motion.h2>
+      </div>
+
+      {/* Prime Pulse */}
+      <div className="mx-auto w-full max-w-6xl px-3 pb-6">
+        <PrimePulseTile />
+      </div>
+
+      {/* Grid */}
+      <div className="mx-auto max-w-6xl grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-5 md:gap-6 px-3 pb-12 mt-2">
+        {elements.map((el) => (
+          <Link key={el.title} href={el.link} aria-label={el.title}>
+            <motion.div
+              whileHover={{ scale: 1.06, y: -2 }}
+              transition={{ type: "spring", stiffness: 250, damping: 14 }}
+              className="eol-panel p-4"
+            >
+              <div className="text-2xl sm:text-3xl mb-2">{el.icon}</div>
+              <h3 className="text-sm sm:text-base font-semibold text-slate-700">
+                {el.title}
+              </h3>
+            </motion.div>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

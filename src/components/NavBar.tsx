@@ -7,7 +7,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import useSWR from "swr";
 import { useMemo } from "react";
 import { EOLButton } from "@/components/EOLButton";
-import ThemeToggle from "@/components/ThemeToggle"; // ← add this
+import ThemeToggle from "@/components/ThemeToggle";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -77,6 +77,8 @@ export default function NavBar() {
               { href: "/fix-it", label: "Fix-It" },
               { href: "/core", label: "Core" },
               { href: "/about", label: "About" },
+              // TREE OF LIFE — ADDED
+              { href: "/tree-of-life", label: "Tree of Life" },
             ].map(({ href, label }) => (
               <NavPill key={href} href={href} currentPath={pathname}>
                 {label}
@@ -86,7 +88,7 @@ export default function NavBar() {
 
           {/* RIGHT — Theme + Auth */}
           <div className="flex items-center justify-end gap-4">
-            <ThemeToggle /> {/* ← hydration-safe */}
+            <ThemeToggle />
             {displayName && (
               <span className="hidden lg:block text-sm font-medium text-cyan-400">
                 Welcome, {displayName}

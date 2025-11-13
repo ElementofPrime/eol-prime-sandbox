@@ -1,1 +1,19 @@
-{}
+{
+  "/(app)/about/page": "app/(app)/about/page.js",
+  "/(app)/chat/page": "app/(app)/chat/page.js",
+  "/(app)/core/page": "app/(app)/core/page.js",
+  "/(app)/fix-it/page": "app/(app)/fix-it/page.js",
+  "/(app)/journal/page": "app/(app)/journal/page.js",
+  "/(app)/reminders/page": "app/(app)/reminders/page.js",
+  "/(app)/signin/page": "app/(app)/signin/page.js",
+  "/(app)/to-do/page": "app/(app)/to-do/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/journal/route": "app/api/journal/route.js",
+  "/api/profile/route": "app/api/profile/route.js",
+  "/api/pulse/route": "app/api/pulse/route.js",
+  "/api/to-do/route": "app/api/to-do/route.js",
+  "/manifest.webmanifest/route": "app/manifest.webmanifest/route.js",
+  "/page": "app/page.js",
+  "/tree-of-life/page": "app/tree-of-life/page.js"
+}

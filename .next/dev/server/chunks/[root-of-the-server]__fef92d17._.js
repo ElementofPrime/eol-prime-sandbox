@@ -158,7 +158,7 @@ module.exports = mod;
 "[project]/src/lib/mongo.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-// src/lib/mongo.ts
+// src/lib/mongo.ts — FINAL
 __turbopack_context__.s([
     "clientPromise",
     ()=>clientPromise
@@ -166,41 +166,43 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/mongodb [external] (mongodb, cjs)");
 ;
 const uri = process.env.MONGODB_URI;
-if (!uri) {
-    console.log("MONGODB_URI not set — running in DEMO MODE (in-memory mock)");
-}
 let clientPromise;
-// === DEMO MODE: In-memory mock ===
 if (!uri) {
+    console.log("MONGODB_URI not set — DEMO MODE");
     const mockDb = {
         collection: ()=>({
                 findOne: async ()=>null,
-                insertOne: async (doc)=>({
-                        insertedId: `mock-${Date.now()}`,
-                        ...doc
+                insertOne: async ()=>({
+                        insertedId: "mock-id"
                     }),
                 updateOne: async ()=>({
                         modifiedCount: 1
                     }),
                 deleteOne: async ()=>({
-                        deletedCount: 1
+                        deletedCount: 0
+                    }),
+                bulkWrite: async ()=>({
+                        modifiedCount: 0
                     }),
                 find: ()=>({
-                        toArray: async ()=>[]
+                        sort: ()=>({
+                                limit: ()=>({
+                                        toArray: async ()=>[]
+                                    })
+                            })
                     })
+            }),
+        command: async ()=>({
+                ok: 1
             })
     };
     const mockClient = {
-        db: ()=>mockDb,
-        close: async ()=>{}
+        db: ()=>mockDb
     };
     clientPromise = Promise.resolve(mockClient);
 } else {
     const client = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](uri);
-    clientPromise = client.connect().catch((err)=>{
-        console.error("MongoDB connection failed:", err);
-        process.exit(1);
-    });
+    clientPromise = client.connect();
 }
 ;
 }),
@@ -210,48 +212,68 @@ if (!uri) {
 // src/lib/authOptions.ts
 __turbopack_context__.s([
     "authOptions",
-    ()=>authOptions
+    ()=>authOptions,
+    "default",
+    ()=>__TURBOPACK__default__export__
 ]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next-auth/index.js [app-route] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$providers$2f$credentials$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next-auth/providers/credentials.js [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$providers$2f$email$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next-auth/providers/email.js [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$next$2d$auth$2f$mongodb$2d$adapter$2f$dist$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@next-auth/mongodb-adapter/dist/index.js [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mongo$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/mongo.ts [app-route] (ecmascript)");
 ;
 ;
 ;
+;
+;
+const isDev = ("TURBOPACK compile-time value", "development") === "development";
+const hasSMTP = !!process.env.EMAIL_SERVER;
 const authOptions = {
     adapter: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$next$2d$auth$2f$mongodb$2d$adapter$2f$dist$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["MongoDBAdapter"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mongo$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["clientPromise"]),
-    // Use DB sessions (MongoDBAdapter will manage the sessions collection)
-    session: {
-        strategy: "database"
-    },
     providers: [
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$providers$2f$email$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"])({
-            server: {
-                host: process.env.EMAIL_SERVER_HOST,
-                port: Number(process.env.EMAIL_SERVER_PORT),
-                auth: {
-                    user: process.env.EMAIL_SERVER_USER,
-                    pass: process.env.EMAIL_SERVER_PASSWORD
+        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$providers$2f$credentials$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"])({
+            name: "Credentials",
+            credentials: {
+                email: {
+                    label: "Email",
+                    type: "email"
+                },
+                password: {
+                    label: "Password",
+                    type: "password"
                 }
             },
-            from: process.env.EMAIL_FROM,
-            // Magic link validity (seconds). Adjust if you want longer links.
-            maxAge: 10 * 60
-        })
+            async authorize (credentials) {
+                if (!process.env.MONGODB_URI) {
+                    if (credentials?.email) {
+                        return {
+                            id: "demo",
+                            name: "Demo User",
+                            email: credentials.email
+                        };
+                    }
+                    return null;
+                }
+                return null;
+            }
+        }),
+        ...hasSMTP ? [
+            (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$providers$2f$email$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"])({
+                server: process.env.EMAIL_SERVER,
+                from: process.env.EMAIL_FROM
+            })
+        ] : []
     ],
     pages: {
         signIn: "/signin",
-        verifyRequest: "/signin/verify"
+        error: "/signin"
     },
-    callbacks: {
-        session: ({ session, token })=>{
-            if (session.user && token.sub) {
-                session.user.id = token.sub;
-            }
-            return session;
-        }
-    }
+    session: {
+        strategy: "jwt"
+    },
+    secret: process.env.NEXTAUTH_SECRET
 };
+const __TURBOPACK__default__export__ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"])(authOptions);
 }),
 "[project]/src/app/api/auth/[...nextauth]/route.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
